@@ -24,6 +24,47 @@ use App\Services\GuardrailService;
 use App\Services\RagSearchService;
 use App\Services\Database;
 
+// Load environment variables from .env
+$envFile = __DIR__ . '/../.env';
+if (file_exists($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if (empty($line) || str_starts_with($line, '#')) continue;
+        if (str_contains($line, '=')) {
+            [$k, $v] = explode('=', $line, 2);
+            $k = trim($k);
+            $v = trim($v, " \t\n\r\0\x0B\"'");
+            putenv("{$k}={$v}");
+            $_ENV[$k] = $v;
+            $_SERVER[$k] = $v;
+        }
+    }
+}
+
+function updateEnvVariable(string $key, string $value): void
+{
+    $envFile = __DIR__ . '/../.env';
+    if (!file_exists($envFile)) {
+        file_put_contents($envFile, "{$key}={$value}\n");
+        putenv("{$key}={$value}");
+        $_ENV[$key] = $value;
+        $_SERVER[$key] = $value;
+        return;
+    }
+
+    $content = file_get_contents($envFile);
+    if (preg_match("/^{$key}=.*/m", $content)) {
+        $content = preg_replace("/^{$key}=.*/m", "{$key}={$value}", $content);
+    } else {
+        $content .= "\n{$key}={$value}";
+    }
+    file_put_contents($envFile, $content);
+    putenv("{$key}={$value}");
+    $_ENV[$key] = $value;
+    $_SERVER[$key] = $value;
+}
+
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 
 // CORS Headers
@@ -248,27 +289,71 @@ if ($uri === '/api/settings') {
     header('Content-Type: application/json');
     $settingsFile = __DIR__ . '/../storage/settings.json';
 
+    $currentSettings = [];
+    if (file_exists($settingsFile)) {
+        $currentSettings = json_decode(file_get_contents($settingsFile), true) ?? [];
+    }
+
+    // Always ensure active API Key & Model from .env are served to Admin Panel
+    $activeApiKey = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? '');
+    $activeModel = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.5-flash-lite');
+
+    if (!empty($activeApiKey)) {
+        $currentSettings['geminiApiKey'] = $activeApiKey;
+    }
+    if (!empty($activeModel)) {
+        $currentSettings['geminiModel'] = $activeModel;
+    }
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $raw = file_get_contents('php://input');
         $incoming = json_decode($raw, true);
         if ($incoming && is_array($incoming)) {
-            $existing = [];
-            if (file_exists($settingsFile)) {
-                $existing = json_decode(file_get_contents($settingsFile), true) ?? [];
+            // Update .env whenever Admin changes AI Key or Model
+            if (!empty($incoming['geminiApiKey'])) {
+                $newKey = trim($incoming['geminiApiKey']);
+                updateEnvVariable('GEMINI_API_KEY', $newKey);
+                $currentSettings['geminiApiKey'] = $newKey;
+
+                // Sync frontend .env as well for hot dev
+                $fEnv = __DIR__ . '/../../frontend/.env';
+                if (file_exists($fEnv)) {
+                    $fc = file_get_contents($fEnv);
+                    if (preg_match('/^VITE_GEMINI_API_KEY=.*/m', $fc)) {
+                        $fc = preg_replace('/^VITE_GEMINI_API_KEY=.*/m', "VITE_GEMINI_API_KEY={$newKey}", $fc);
+                        file_put_contents($fEnv, $fc);
+                    }
+                }
             }
-            $merged = array_merge($existing, $incoming);
-            file_put_contents($settingsFile, json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            if (!empty($incoming['geminiModel'])) {
+                $newModel = trim($incoming['geminiModel']);
+                updateEnvVariable('GEMINI_MODEL', $newModel);
+                $currentSettings['geminiModel'] = $newModel;
+
+                $fEnv = __DIR__ . '/../../frontend/.env';
+                if (file_exists($fEnv)) {
+                    $fc = file_get_contents($fEnv);
+                    if (preg_match('/^VITE_GEMINI_MODEL=.*/m', $fc)) {
+                        $fc = preg_replace('/^VITE_GEMINI_MODEL=.*/m', "VITE_GEMINI_MODEL={$newModel}", $fc);
+                        file_put_contents($fEnv, $fc);
+                    }
+                }
+            }
+
+            $merged = array_merge($currentSettings, $incoming);
+
+            // In settings.json, we don't save raw API key to prevent accidental Git push protection triggers
+            $storageSafe = $merged;
+            $storageSafe['geminiApiKey'] = '';
+            file_put_contents($settingsFile, json_encode($storageSafe, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
             echo json_encode(['ok' => true, 'settings' => $merged]);
             exit();
         }
         echo json_encode(['error' => 'Data settings tidak valid']);
         exit();
     } else {
-        if (file_exists($settingsFile)) {
-            echo file_get_contents($settingsFile);
-        } else {
-            echo json_encode(['ok' => false, 'message' => 'Belum ada settings tersimpan di server']);
-        }
+        echo json_encode($currentSettings);
         exit();
     }
 }

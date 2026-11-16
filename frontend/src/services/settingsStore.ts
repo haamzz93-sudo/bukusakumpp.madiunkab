@@ -113,7 +113,12 @@ export const getStoredSettings = (): AppSettings => {
   try {
     const saved = localStorage.getItem(SETTINGS_KEY);
     if (saved) {
-      return { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+      const parsed = JSON.parse(saved);
+      const envKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
+      if (!parsed.geminiApiKey && envKey) {
+        parsed.geminiApiKey = envKey;
+      }
+      return { ...DEFAULT_SETTINGS, ...parsed };
     }
   } catch (e) {
     console.error('Error loading settings:', e);
@@ -147,7 +152,11 @@ export const syncSettingsFromBackend = async (): Promise<AppSettings> => {
     const res = await fetch(`${BACKEND_URL}/api/settings`);
     if (res.ok) {
       const data = await res.json();
-      if (data && typeof data === 'object' && !data.error && data.heroTitle) {
+      if (data && typeof data === 'object' && !data.error) {
+        const envKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
+        if (!data.geminiApiKey && envKey) {
+          data.geminiApiKey = envKey;
+        }
         const merged = { ...DEFAULT_SETTINGS, ...data };
         localStorage.setItem(SETTINGS_KEY, JSON.stringify(merged));
         window.dispatchEvent(new CustomEvent(SETTINGS_EVENT, { detail: merged }));

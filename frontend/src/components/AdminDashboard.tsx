@@ -74,6 +74,7 @@ import {
 import { 
   getStoredSettings, 
   saveStoredSettings, 
+  syncSettingsFromBackend,
   AppSettings 
 } from '../services/settingsStore';
 import { 
@@ -161,6 +162,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [isAiKeyVisible, setIsAiKeyVisible] = useState(false);
   const [isAiTesting, setIsAiTesting] = useState(false);
   const [aiTestResult, setAiTestResult] = useState<{ status: 'success' | 'error'; latencyMs: number; response: string } | null>(null);
+
+  // Sync settings dynamically from backend on mount
+  useEffect(() => {
+    syncSettingsFromBackend().then((latest) => {
+      if (latest) {
+        setSettings(latest);
+      }
+    });
+  }, []);
 
   // Web Settings Inputs
   const [newChipText, setNewChipText] = useState('');

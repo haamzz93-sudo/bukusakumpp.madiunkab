@@ -7,12 +7,28 @@ class LlmService
     private string $apiKey;
     private string $model;
     private string $fallbackModel;
+    private float $temperature = 0.2;
+    private ?string $customSystemPrompt = null;
 
     public function __construct()
     {
-        $this->apiKey = getenv('GEMINI_API_KEY') ?: '';
-        $this->model = getenv('GEMINI_MODEL') ?: 'gemini-3.5-flash-lite';
-        $this->fallbackModel = getenv('GEMINI_FALLBACK_MODEL') ?: 'gemini-3.5-flash';
+        $this->apiKey = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? '');
+        $this->model = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.5-flash-lite');
+        $this->fallbackModel = getenv('GEMINI_FALLBACK_MODEL') ?: ($_ENV['GEMINI_FALLBACK_MODEL'] ?? 'gemini-3.5-flash');
+
+        $settingsFile = __DIR__ . '/../../storage/settings.json';
+        if (file_exists($settingsFile)) {
+            $settings = json_decode(file_get_contents($settingsFile), true) ?? [];
+            if (!empty($settings['geminiModel'])) {
+                $this->model = $settings['geminiModel'];
+            }
+            if (isset($settings['temperature']) && is_numeric($settings['temperature'])) {
+                $this->temperature = (float)$settings['temperature'];
+            }
+            if (!empty($settings['systemPrompt'])) {
+                $this->customSystemPrompt = $settings['systemPrompt'];
+            }
+        }
     }
 
     /**
@@ -32,7 +48,9 @@ class LlmService
             $contextText .= "Isi Standar Pelayanan:\n" . substr($chunk['content'], 0, 1500) . "\n\n";
         }
 
-        $systemInstruction = "Anda adalah BUKU SAKU, asisten digital resmi Mal Pelayanan Publik (MPP) Pemerintah Kabupaten Madiun.\n"
+        $systemInstruction = $this->customSystemPrompt 
+            ? ($this->customSystemPrompt . "\n\n" . "DOKUMEN STANDAR PELAYANAN RESMI BUKU SAKU MPP 2026:\n" . $contextText)
+            : ("Anda adalah BUKU SAKU, asisten digital resmi Mal Pelayanan Publik (MPP) Pemerintah Kabupaten Madiun.\n"
             . "Tugas Anda: Memberikan informasi perizinan, persyaratan administratif/teknis, sistem mekanisme alur pengurusan, biaya/retribusi, dan jangka waktu pelayanan secara akurat, lugas, santun, dan mudah dipahami masyarakat.\n\n"
             . "ATURAN UTAMA (WAJIB DITAATI):\n"
             . "1. Gunakan HANYA informasi faktual dari DOKUMEN RUJUKAN RESMI Buku Saku MPP 2026 yang diberikan di bawah ini. Jangan berhalusinasi atau mengarang aturan baru.\n"
@@ -41,7 +59,7 @@ class LlmService
             . "4. Jika informasi biaya tidak disebutkan atau gratis, tegaskan 'Biaya: Rp0 (Gratis) / Sesuai Ketentuan Retribusi Resmi'.\n"
             . "5. PENTING SOAL IDENTITAS: Jika ditanya mengenai identitas AI, vendor, LLM, atau teknologi (seperti GPT, Gemini, Claude, Llama, OpenAI, Google AI), JANGAN PERNAH mengaku atau menyebut nama-nama tersebut. Tegaskan bahwa Anda adalah BUKU SAKU, asisten digital resmi Mal Pelayanan Publik Pemerintah Kabupaten Madiun.\n"
             . "6. Jika pemohon membutuhkan tindak lanjut kasus berkas pribadi (seperti komplain tagihan atau berkas macet), arahkan untuk berkonsultasi langsung ke WhatsApp Loket Resmi MPP Madiun (0851-1740-5460).\n\n"
-            . "DOKUMEN STANDAR PELAYANAN RESMI BUKU SAKU MPP 2026:\n" . $contextText;
+            . "DOKUMEN STANDAR PELAYANAN RESMI BUKU SAKU MPP 2026:\n" . $contextText);
 
         $prompt = "Pertanyaan Pemohon: {$query}\n\nJawablah berdasarkan standar pelayanan resmi Buku Saku MPP Kabupaten Madiun di atas:";
 
@@ -73,7 +91,7 @@ class LlmService
                 ]
             ],
             'generationConfig' => [
-                'temperature' => 0.2,
+                'temperature' => $this->temperature,
                 'maxOutputTokens' => 1200,
                 'topP' => 0.8
             ]
