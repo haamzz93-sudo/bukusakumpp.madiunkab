@@ -144,14 +144,24 @@ class RagSearchService
 
         // Deterministic Fallback if LLM API is unavailable
         $primaryChunk = $topChunks[0];
+        $cleanContent = trim(preg_replace('/\s+/', ' ', $primaryChunk['content']));
+        if (mb_strlen($cleanContent) > 1200) {
+            $lastPeriod = mb_strrpos(mb_substr($cleanContent, 0, 1200), '.');
+            $cleanContent = mb_substr($cleanContent, 0, $lastPeriod > 400 ? $lastPeriod + 1 : 1200) . '...';
+        }
+
         $fallbackAnswer = "Berdasarkan rujukan resmi **Buku Saku Mal Pelayanan Publik (MPP) Kabupaten Madiun 2026** (Halaman {$primaryChunk['page']}):\n\n"
             . "### {$primaryChunk['title']}\n"
             . "* **Instansi Pelaksana:** {$primaryChunk['agency']}\n"
-            . "* **Sumber Resmi:** Buku Saku MPP Kabupaten Madiun 2026\n\n"
+            . "* **Dokumen Rujukan:** Standar Pelayanan Publik MPP Kabupaten Madiun 2026 (Hal. {$primaryChunk['page']})\n\n"
             . "---\n\n"
             . "### Ringkasan Standar Pelayanan:\n"
-            . substr($primaryChunk['content'], 0, 900) . "...\n\n"
-            . "> Untuk pengajuan perizinan dan verifikasi berkas, Anda dapat datang langsung ke loket **{$primaryChunk['agency']}** di Gedung MPP Caruban (Jl. Alun-Alun Timur No.3 Caruban) atau hubungi WhatsApp resmi MPP di 0851-1740-5460.";
+            . "{$cleanContent}\n\n"
+            . "---\n\n"
+            . "**Informasi Operasional Gedung Mal Pelayanan Publik (MPP) Kabupaten Madiun:**\n"
+            . "* **Alamat:** Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Kota Madiun, Jawa Timur 63121.\n"
+            . "* **Jam Layanan:** Senin s/d Jumat, pukul 08.00 – 15.00 WIB (Buka pukul 08.00 WIB. Libur Nasional & Akhir Pekan Tutup).\n"
+            . "* **Kontak Resmi:** Telepon (0351) 497206 / 4773980 | WhatsApp Perizinan 0811-3778-776 | WA Pengaduan 0811-3783-785.";
 
         return [
             'ok' => true,

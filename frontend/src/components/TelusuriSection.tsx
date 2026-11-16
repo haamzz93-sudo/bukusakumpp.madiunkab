@@ -165,7 +165,7 @@ export const TelusuriSection: React.FC<TelusuriSectionProps> = ({
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-sm shadow-md transition-all hover:scale-[1.01]"
             >
               <WhatsAppIcon size={18} className="text-white shrink-0" />
-              <span>WhatsApp 0851-1740-5460</span>
+              <span>WhatsApp 0811-3778-776</span>
             </a>
 
             <a
@@ -177,7 +177,7 @@ export const TelusuriSection: React.FC<TelusuriSectionProps> = ({
             </a>
 
             <div className="text-[11px] text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-3">
-              Pelayanan langsung buka setiap hari kerja pukul 08.00 s/d 15.00 WIB di Kantor MPP Caruban.
+              Pelayanan langsung buka setiap hari kerja pukul 08.00 s/d 15.00 WIB di Gedung MPP Kabupaten Madiun (Jl. Aloon-Aloon Utara No. 4, Pangongangan, Madiun).
             </div>
           </div>
 

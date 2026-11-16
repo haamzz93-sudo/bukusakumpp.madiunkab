@@ -1,8 +1,8 @@
 import { ChatMessage, RAGResponse, SourceItem } from '../types/perizinan';
 import { PERIZINAN_MADIUN_ITEMS } from '../data/perizinanMadiunData';
 
-export const WA_NUM_MPP = '6285117405460'; // WhatsApp Resmi Layanan Informasi MPP Kabupaten Madiun
-export const TELP_MPP = '(0351) 383015';
+export const WA_NUM_MPP = '628113778776'; // WhatsApp Resmi Layanan Perizinan MPP Kabupaten Madiun (Buku Saku Hal. 254)
+export const TELP_MPP = '(0351) 497206';
 
 export async function askHybridAi(
   query: string,
@@ -64,7 +64,7 @@ Silakan sampaikan pertanyaan Anda seputar perizinan usaha (OSS), BPHTB, PBB-P2, 
       related: [
         'Apa saja perizinan usaha yang bisa diurus di MPP Madiun?',
         'Bagaimana syarat membuat NIB OSS untuk warung kopi?',
-        'Berapa jam layanan di Mal Pelayanan Publik Caruban?'
+        'Berapa jam layanan di Gedung Mal Pelayanan Publik Kabupaten Madiun?'
       ],
       needs_human: false
     };
@@ -122,7 +122,7 @@ Silakan sampaikan pertanyaan Anda yang berkaitan dengan layanan di atas.`,
 
 ### 3. Alur Pengurusan Izin
 1. **Pendaftaran Mandiri:** Akses laman resmi **oss.go.id**, login menggunakan NIK, lalu masukkan data usaha dengan KBLI 56303.
-2. **Pendaftaran di MPP:** Anda juga bisa datang langsung ke **Meja Layanan Berbantuan DPMPTSP di Mal Pelayanan Publik (MPP) Caruban** (Jl. Alun-Alun Timur No.3 Caruban). Petugas akan membantu proses pembuatan NIB sampai cetak fisik di tempat tanpa antre lama.
+2. **Pendaftaran di MPP:** Anda juga bisa datang langsung ke **Meja Layanan Berbantuan DPMPTSP di Gedung Mal Pelayanan Publik (MPP) Kabupaten Madiun** (Jl. Aloon-Aloon Utara No. 4, Pangongangan, Madiun). Petugas akan membantu proses pembuatan NIB sampai cetak fisik di tempat tanpa antre lama.
 3. **Pernyataan Mandiri:** Sistem akan meminta persetujuan pernyataan mandiri K3 dan SPPL (tata lingkungan) secara digital.
 4. **NIB Terbit Seketika:** Dokumen NIB berformat PDF bertanda tangan elektronik langsung terbit hari itu juga (0 menit).
 
@@ -142,7 +142,7 @@ Jika warung kopi Anda juga mengemas kopi bubuk atau biji kopi dengan merek sendi
         }
       ],
       related: [
-        'Apakah mengurus NIB di MPP Caruban dipungut biaya?',
+        'Apakah mengurus NIB di MPP Kabupaten Madiun dipungut biaya?',
         'Bagaimana cara mengurus SPP-IRT untuk kopi bubuk kemasan?',
         'Apa saja KBLI untuk usaha warung makan dan kuliner?'
       ],
@@ -221,7 +221,7 @@ ${bestMatch.portalUrl ? `\n> Layanan ini dapat diakses secara daring melalui por
     answer: `Terima kasih atas pertanyaan Anda. Untuk informasi terkait **"${query}"** di lingkungan Mal Pelayanan Publik (MPP) Kabupaten Madiun:
 
 1. **Prinsip Pelayanan:** Seluruh proses perizinan dasar di MPP Kabupaten Madiun (seperti NIB OSS, Adminduk KTP/KK, dan PBB) dilayani secara **transparan, cepat, dan bebas pungutan liar**.
-2. **Pelayanan Berbantuan:** Jika Anda mengalami kesulitan dalam menentukan KBLI usaha atau mengisi dokumen online, MPP Kabupaten Madiun menyediakan **Fasilitator Berbantuan** di loket Caruban yang siap memandu secara langsung.
+2. **Pelayanan Berbantuan:** Jika Anda mengalami kesulitan dalam menentukan KBLI usaha atau mengisi dokumen online, MPP Kabupaten Madiun menyediakan **Fasilitator Berbantuan** di loket MPP yang siap memandu secara langsung.
 3. **Dokumen Dasar yang Disiapkan:** Pastikan Anda selalu menyiapkan KTP-el, Kartu Keluarga, NPWP, dan berkas kepemilikan/surat keterangan dari desa sebelum mengajukan perizinan.
 
 ${isPersonalCase ? '\n> [!NOTE]\n> Karena pertanyaan Anda berkaitan dengan pengecekan data spesifik perorangan, kami sarankan untuk berkonsultasi langsung dengan petugas loket resmi MPP melalui tautan WhatsApp di bawah.' : ''}`,

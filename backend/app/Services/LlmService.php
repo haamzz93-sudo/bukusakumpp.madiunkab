@@ -62,16 +62,34 @@ class LlmService
             . "4. Jika informasi biaya tidak disebutkan atau gratis, tegaskan 'Biaya: Rp0 (Gratis) / Sesuai Ketentuan Retribusi Resmi'.\n"
             . "5. PENTING SOAL IDENTITAS: Jika ditanya mengenai identitas AI, vendor, LLM, atau teknologi (seperti GPT, Gemini, Claude, Llama, OpenAI, Google AI), JANGAN PERNAH mengaku atau menyebut nama-nama tersebut. Tegaskan bahwa Anda adalah BUKU SAKU AI Resmi Mal Pelayanan Publik Pemerintah Kabupaten Madiun.\n");
 
-        $operationalFacts = "\n\nINFORMASI OPERASIONAL RESMI MPP KABUPATEN MADIUN (Standar DPMPTSP):\n"
-            . "- Jam Operasional Seluruh Loket Pelayanan: Senin s/d Jumat, pukul 08.00 – 15.00 WIB (Sabtu, Minggu & Hari Libur Nasional TUTUP).\n"
-            . "- Lokasi Pelayanan: Gedung MPP Caruban (Jl. Alun-Alun Timur No.3 Caruban) dan Counter MPP Madiun (Jl. Alun-Alun Utara No.4 Kota Madiun).\n"
-            . "- Kontak Helpdesk WhatsApp Resmi: 0851-1740-5460 | Telepon: (0351) 383015.\n"
-            . "- Jika pemohon bertanya mengenai jam buka, jam tutup, atau jam operasional loket instansi mana pun di MPP (seperti Kantor Pertanahan / ATR BPN, Bapenda, Disdukcapil, Polres, dll.), sampaikan secara pasti bahwa loket beroperasi pada hari Senin – Jumat, pukul 08.00 – 15.00 WIB.\n"
-            . "- Jika pemohon butuh konsultasi berkas pribadi atau konfirmasi khusus, sertakan nomor WhatsApp resmi MPP (0851-1740-5460).\n\n";
+        $operationalFacts = "\n\nINFORMASI RESMI MAL PELAYANAN PUBLIK (MPP) KABUPATEN MADIUN (Buku Saku Hal. 254 & Google Maps Verified):\n"
+            . "- Gedung Mal Pelayanan Publik (MPP) Kabupaten Madiun CUMA SATU: Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Kota Madiun, Jawa Timur 63121.\n"
+            . "- Jam Operasional Seluruh Loket Pelayanan: Senin s/d Jumat, buka pukul 08.00 – 15.00 WIB (Sabtu, Minggu & Hari Libur Nasional TUTUP).\n"
+            . "- Telepon Kantor Resmi MPP: (0351) 497206 / (0351) 4773980\n"
+            . "- Layanan WhatsApp Resmi MPP (Buku Saku Hal. 254):\n"
+            . "  * WhatsApp Layanan Perizinan: 0811-3778-776\n"
+            . "  * WhatsApp Layanan Pengaduan: 0811-3783-785\n"
+            . "  * WhatsApp Layanan LKPM: 0851-5884-5871\n"
+            . "  * Helpdesk Layanan Terpadu: 0811-3778-776\n"
+            . "- Email Resmi: dpmptsp.madiunkab@gmail.com | Website: https://dpmptsp.id\n"
+            . "- KONTAK KHUSUS INSTANSI DI MPP (Dari Buku Saku MPP 2026):\n"
+            . "  * Kantor Pertanahan / ATR BPN: 0811-1068-0000 / 0811-3010-5000 (Hal. 150 & 226)\n"
+            . "  * Bapenda (Pajak PBB-P2 & BPHTB): (0351) 497206 / WA 0811-3778-776 (Hal. 71)\n"
+            . "  * Polres Madiun (SKCK & SIM): 0813-2346-0884 / 0818-0575-1380 (Hal. 96 & 178)\n"
+            . "  * Disdukcapil (KTP, KK, Akta, IKD): 0882-3558-6211 / 0811-3716-691 (Hal. 106 & 125)\n"
+            . "  * Disnaker & Perindustrian: 0822-2860-0020 (Hal. 49 & 51)\n"
+            . "  * Kejaksaan Negeri: 0851-0158-4881 / 0857-8488-4492 (Hal. 134 & 174)\n"
+            . "  * BPJS Kesehatan: 0811-8165-165 (Hal. 139) | BPJS Ketenagakerjaan: (0351) 492018 (Hal. 90)\n"
+            . "  * Dinas Sosial: (0351) 495355 / 0822-9862-1621 (Hal. 142 & 163)\n"
+            . "  * Bank Daerah / Bank Jatim: (0351) 492018 (Hal. 74 & 76)\n"
+            . "  * Pengadilan Agama: 0811-3628-118 (Hal. 171)\n"
+            . "- INSTRUKSI KELENGKAPAN JAWABAN (DILARANG TERPOTONG):\n"
+            . "  * Tuliskan jawaban secara LENGKAP dan TUNTAS sampai selesai. Jangan pernah berhenti di tengah penomoran atau menggantung kalimat.\n"
+            . "  * Selalu uraikan nomor 1, 2, 3... pada Persyaratan Berkas secara utuh, lalu uraikan Alur Prosedur, Waktu Layanan, Biaya (Rp0 Gratis jika tidak dipungut biaya), dan cantumkan kontak loket terkait.\n\n";
 
         $systemInstruction = $basePrompt . $operationalFacts . "DOKUMEN STANDAR PELAYANAN RESMI BUKU SAKU MPP 2026:\n" . $contextText;
 
-        $prompt = "Pertanyaan Pemohon: {$query}\n\nJawablah berdasarkan standar pelayanan resmi Buku Saku MPP Kabupaten Madiun di atas:";
+        $prompt = "Pertanyaan Pemohon: {$query}\n\nJawablah secara LENGKAP, JELAS, TUNTAS (jangan terpotong), dan rapi berdasarkan standar pelayanan resmi Buku Saku MPP Kabupaten Madiun di atas:";
 
         $response = $this->callGeminiApi($this->model, $systemInstruction, $prompt);
 
@@ -102,8 +120,8 @@ class LlmService
             ],
             'generationConfig' => [
                 'temperature' => $this->temperature,
-                'maxOutputTokens' => 1200,
-                'topP' => 0.8
+                'maxOutputTokens' => 3000,
+                'topP' => 0.85
             ]
         ];
 
@@ -115,7 +133,8 @@ class LlmService
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json'
             ],
-            CURLOPT_TIMEOUT => 15,
+            CURLOPT_TIMEOUT => 35,
+            CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_SSL_VERIFYPEER => false
         ]);
 

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   Home, 
   BookOpen, 
@@ -123,6 +123,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [filterJenis, setFilterJenis] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState<number>(15);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Klaster & FAQ State (Telusuri Per Klaster CRUD)
   const [klasterList, setKlasterList] = useState<KategoriPerizinan[]>(getStoredKlaster());
@@ -236,7 +237,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       loadStats();
     }, 15000);
 
+    // Keyboard shortcut (⌘K / Ctrl+K) to focus search
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
       unsubKlaster();
       clearInterval(interval);
     };
@@ -293,9 +305,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setFormCategory('usaha');
     setFormAdminReq('KTP Pemohon\nKartu Keluarga\nNomor Induk Berusaha (NIB)');
     setFormTeknisReq('Dokumen pendukung teknis standar pelayanan');
-    setFormProsedur('Pemohon mengajukan permohonan di loket MPP Caruban\nPetugas melakukan verifikasi berkas\nPenerbitan izin resmi');
+    setFormProsedur('Pemohon mengajukan permohonan di loket Gedung MPP Kabupaten Madiun\nPetugas melakukan verifikasi berkas\nPenerbitan izin resmi');
     setFormPortal('https://oss.go.id');
-    setFormKeywords('izin baru, perizinan madiun, oss, mpp caruban');
+    setFormKeywords('izin baru, perizinan madiun, oss, mpp madiun');
     setIsFormModalOpen(true);
   };
 
@@ -773,12 +785,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 {activeTab === 'klaster' && (
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-emerald-500 rounded-r-full" />
                 )}
-                <div className="flex items-center gap-3 truncate">
+                <div className="flex items-center gap-3 min-w-0">
                   <HelpCircle className={`w-4 h-4 shrink-0 ${activeTab === 'klaster' ? 'text-emerald-400' : 'text-slate-400'}`} />
-                  {sidebarOpen && <span className="truncate">Basis Pengetahuan Klaster</span>}
+                  {sidebarOpen && <span className="truncate whitespace-nowrap">Basis Pengetahuan</span>}
                 </div>
                 {sidebarOpen && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800 shrink-0 ml-2">
                     {klasterList.reduce((acc, c) => acc + (c.questions?.length || 0), 0)} Q
                   </span>
                 )}
@@ -902,15 +914,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div className="relative flex items-center">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
               <input
+                ref={searchInputRef}
                 type="text"
-                placeholder="Cari menu atau data perizinan (Ctrl+K)..."
+                placeholder="Cari menu atau data perizinan..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full text-xs py-2 pl-9 pr-14 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-transparent dark:border-slate-700/60 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all"
               />
-              <span className="absolute right-2.5 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold border border-slate-300/60 dark:border-slate-600">
-                Ctrl+K
-              </span>
+              <button
+                type="button"
+                onClick={() => searchInputRef.current?.focus()}
+                className="absolute right-2.5 flex items-center justify-center px-1.5 py-0.5 rounded-md bg-slate-200/90 dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-sans text-[11px] font-semibold border border-slate-300/80 dark:border-slate-600 shadow-xs hover:bg-slate-300 transition-colors cursor-pointer"
+                title="Tekan ⌘K atau Ctrl+K untuk mencari"
+              >
+                <span className="text-xs leading-none font-normal mr-0.5 select-none">⌘</span>K
+              </button>
             </div>
           </div>
 
@@ -2087,7 +2105,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       <img src="/images/backgrounds/bg_mpp_civic.jpg" alt="Gedung MPP Modern" className="w-full h-full object-cover" />
                     </div>
                     <div className="text-xs font-bold text-slate-900 dark:text-white">Gedung MPP Modern</div>
-                    <div className="text-[10px] text-slate-400">Pelayanan Terpadu Caruban</div>
+                    <div className="text-[10px] text-slate-400">Gedung MPP Kabupaten Madiun</div>
                   </div>
                 </div>
               </div>
@@ -2320,7 +2338,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       value={settings.whatsappNumber}
                       onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
                       className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
-                      placeholder="0851-1740-5460"
+                      placeholder="0811-3778-776"
                     />
                   </div>
 
@@ -2333,7 +2351,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       value={settings.phone}
                       onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
                       className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
-                      placeholder="(0351) 383015"
+                      placeholder="(0351) 497206"
                     />
                   </div>
                 </div>
@@ -2345,10 +2363,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </label>
                     <input
                       type="text"
-                      value={settings.email || 'dpmptsp@madiunkab.go.id'}
+                      value={settings.email || 'dpmptsp.madiunkab@gmail.com'}
                       onChange={(e) => setSettings({ ...settings, email: e.target.value })}
                       className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
-                      placeholder="dpmptsp@madiunkab.go.id"
+                      placeholder="dpmptsp.madiunkab@gmail.com"
                     />
                   </div>
 
@@ -2368,11 +2386,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Alamat Lengkap Gedung MPP Caruban
+                    Alamat Lengkap Gedung Mal Pelayanan Publik (MPP) Kab. Madiun
                   </label>
                   <input
                     type="text"
-                    value={settings.address || 'Gedung MPP Caruban: Jl. Alun-Alun Timur No.3, Caruban, Kabupaten Madiun'}
+                    value={settings.address || 'Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Kota Madiun, Jawa Timur 63121'}
                     onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                     className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
                   />

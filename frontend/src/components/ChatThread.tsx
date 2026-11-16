@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { ChatMessage } from '../types/perizinan';
 import { WA_NUM_MPP, TELP_MPP } from '../services/hybridAiService';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface ChatThreadProps {
   messages: ChatMessage[];
@@ -491,22 +492,22 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
 
               {/* WhatsApp Button */}
               <a
-                href={`https://wa.me/${WA_NUM_MPP}?text=${encodeURIComponent(`Halo Mal Pelayanan Publik (MPP) Kabupaten Madiun, saya butuh informasi perizinan terkait: ${currentQuery}`)}`}
+                href={`https://wa.me/628113778776?text=${encodeURIComponent(`Halo Mal Pelayanan Publik (MPP) Kabupaten Madiun, saya butuh informasi perizinan terkait: ${currentQuery}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.01]"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#008060] hover:bg-[#006e52] text-white font-bold text-sm shadow-md shadow-emerald-900/20 transition-all hover:scale-[1.01]"
               >
-                <MessageCircle className="w-4 h-4" />
-                <span>WhatsApp 0851-1740-5460</span>
+                <WhatsAppIcon size={18} className="text-white shrink-0" />
+                <span>WhatsApp 0811-3778-776</span>
               </a>
 
               {/* Direct Phone */}
               <a
-                href={`tel:${TELP_MPP}`}
+                href="tel:0351497206"
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors"
               >
                 <Phone className="w-3.5 h-3.5" />
-                <span>Telepon: {TELP_MPP}</span>
+                <span>Telepon: (0351) 497206</span>
               </a>
 
               <div className="border-t border-slate-100 dark:border-slate-800 pt-3 space-y-2 text-xs text-slate-500">
@@ -521,9 +522,8 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                 <div className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Lokasi Gedung MPP:</span><br />
-                    1. <strong>MPP Caruban:</strong> Jl. Alun-Alun Timur No.3 Caruban<br />
-                    2. <strong>MPP Counter:</strong> Jl. Alun-Alun Utara No.4 Kota Madiun
+                    <span className="font-semibold text-slate-700 dark:text-slate-300">Gedung MPP Kab. Madiun:</span><br />
+                    Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Madiun 63121
                   </div>
                 </div>
               </div>

@@ -135,11 +135,11 @@ export const PERIZINAN_MADIUN_ITEMS: Perizinan[] = [
       ]
     },
     mekanismeProsedur: [
-      'Pemohon membuat akun di sistem Online Single Submission (OSS RBA) melalui laman oss.go.id atau dibantu langsung oleh petugas loket DPMPTSP di Mal Pelayanan Publik (MPP) Caruban.',
+      'Pemohon membuat akun di sistem Online Single Submission (OSS RBA) melalui laman oss.go.id atau dibantu langsung oleh petugas loket DPMPTSP di Gedung Mal Pelayanan Publik (MPP) Kabupaten Madiun.',
       'Memilih menu Permohonan Baru, mengisi identitas usaha, luas tempat usaha warung kopi, dan modal usaha.',
       'Memilih KBLI 56303 (Restoran/Warung Kopi/Rumah Minum). Karena berstatus Risiko Rendah, izin yang dibutuhkan adalah NIB yang sekaligus berlaku sebagai izin operasional dan legalitas usaha.',
       'Menyetujui surat pernyataan mandiri terkait K3, tata ruang, dan lingkungan secara elektronik.',
-      'NIB terbit seketika dalam format PDF bertanda tangan elektronik (BSrE), dapat dicetak mandiri atau dicetak di loket MPP Caruban.',
+      'NIB terbit seketika dalam format PDF bertanda tangan elektronik (BSrE), dapat dicetak mandiri atau dicetak di loket MPP Kabupaten Madiun.',
       'Warung kopi resmi legal dan siap beroperasi tanpa perlu izin tambahan lainnya.'
     ],
     portalUrl: 'https://oss.go.id',
@@ -148,7 +148,7 @@ export const PERIZINAN_MADIUN_ITEMS: Perizinan[] = [
       { code: '56101', name: 'Restoran / Rumah Makan' },
       { code: '56102', name: 'Warung Makan' }
     ],
-    keywords: ['warung kopi', 'warkop', 'kedai kopi', 'kafe', 'usaha kopi', 'izin usaha mikro', 'kbli 56303', 'nib warung', 'mpp caruban', 'dpmptsp']
+    keywords: ['warung kopi', 'warkop', 'kedai kopi', 'kafe', 'usaha kopi', 'izin usaha mikro', 'kbli 56303', 'nib warung', 'mpp madiun', 'dpmptsp']
   },
 
   // 2. Permohonan Rekomendasi Pemohon Notifikasi Kosmetika (ID 82 di web)
@@ -387,7 +387,7 @@ export const PERIZINAN_MADIUN_ITEMS: Perizinan[] = [
       ]
     },
     mekanismeProsedur: [
-      'Wajib Pajak datang ke loket Bapenda MPP Caruban menyerahkan berkas.',
+      'Wajib Pajak datang ke loket Bapenda Gedung MPP Kabupaten Madiun menyerahkan berkas.',
       'Petugas pelayanan mendaftarkan ke sistem SIMBPHTB username Mandiri Waris.',
       'Verifikasi berkas & penerbitan BAP (Berita Acara Pemeriksaan) yang dikirim via WhatsApp.',
       'Pembayaran di Bank Jatim jika ada nilai terutang (bisa Rp0 jika di bawah NPOPTKP).',
@@ -469,7 +469,7 @@ export const PERIZINAN_MADIUN_ITEMS: Perizinan[] = [
       ]
     },
     mekanismeProsedur: [
-      'Pemohon membawa berkas ke loket Polres Madiun di MPP Caruban.',
+      'Pemohon membawa berkas ke loket Polres Madiun di Gedung MPP Kabupaten Madiun.',
       'Petugas melakukan pencatatan dan pengambilan sidik jari (Unit Ident Reskrim).',
       'Pemeriksaan kesesuaian berkas dan catatan kriminal kepolisian.',
       'Membayar biaya PNBP Rp30.000.',
@@ -621,7 +621,7 @@ export const PERIZINAN_MADIUN_ITEMS: Perizinan[] = [
       ]
     },
     mekanismeProsedur: [
-      'Pemohon membawa KK ke loket Disdukcapil di MPP Caruban.',
+      'Pemohon membawa KK ke loket Disdukcapil di Gedung MPP Kabupaten Madiun.',
       'Perekaman biometrik (foto wajah, iris mata, sidik jari).',
       'Pencetakan fisik KTP-el dan aktivasi QR code IKD di smartphone pemohon.',
       'Penyerahan KTP-el dan akun IKD aktif.'

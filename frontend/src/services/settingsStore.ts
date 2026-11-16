@@ -89,10 +89,10 @@ Aturan Penting:
   stat4Value: '2,4 dtk',
   stat4Label: 'Rata-rata waktu respon',
 
-  whatsappNumber: '0851-1740-5460',
-  phone: '(0351) 383015',
-  email: 'dpmptsp@madiunkab.go.id',
-  address: 'Gedung MPP Caruban: Jl. Alun-Alun Timur No.3, Caruban, Kabupaten Madiun',
+  whatsappNumber: '0811-3778-776',
+  phone: '(0351) 497206',
+  email: 'dpmptsp.madiunkab@gmail.com',
+  address: 'Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Kota Madiun, Jawa Timur 63121',
   workingHours: 'Senin – Jumat, 08.00 – 15.00 WIB',
   footerAbout: 'Panduan digital perizinan resmi dari Mal Pelayanan Publik (MPP) Kabupaten Madiun. Hadir untuk mempermudah masyarakat dan pelaku usaha memperoleh informasi syarat, alur, dan ketentuan perizinan secara cepat, transparan, dan bebas pungutan liar.',
 
@@ -114,6 +114,16 @@ export const getStoredSettings = (): AppSettings => {
     const saved = localStorage.getItem(SETTINGS_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
+      // Auto-migrate outdated contact numbers & addresses in localStorage
+      if (parsed.whatsappNumber === '0851-1740-5460' || !parsed.whatsappNumber) {
+        parsed.whatsappNumber = DEFAULT_SETTINGS.whatsappNumber;
+      }
+      if (parsed.phone === '(0351) 383015' || !parsed.phone) {
+        parsed.phone = DEFAULT_SETTINGS.phone;
+      }
+      if (parsed.address?.includes('Caruban') || !parsed.address) {
+        parsed.address = DEFAULT_SETTINGS.address;
+      }
       const envKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
       if (!parsed.geminiApiKey && envKey) {
         parsed.geminiApiKey = envKey;
