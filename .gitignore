@@ -1,0 +1,38 @@
+# Environment and sensitive keys (Strictly excluded)
+.env
+.env.*
+!.env.example
+*.env
+*.env.*
+!*.env.example
+backend/.env
+frontend/.env
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+vendor/
+backend/vendor/
+
+# Build artifacts
+dist/
+frontend/dist/
+*.local
+
+# Deploy archives
+*.zip
+update_frontend.zip
+update_backend.zip
+
+# Logs & temp
+*.log
+backend/storage/logs/*.log
+storage/logs/*.log
+.cache
+__pycache__/
+
+# Editor & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

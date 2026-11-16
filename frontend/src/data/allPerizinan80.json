@@ -1,0 +1,3138 @@
+[
+  {
+    "id": 82,
+    "title": "Izin PERMOHONAN REKOMENDASI SEBAGAI PEMOHON NOTIFIKASI KOSMETIKA",
+    "slug": "permohonan-rekomendasi-sebagai-pemohon-notifikasi-kosmetika",
+    "instansi": "Loka POM / BPOM",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Sesuai PNBP BPOM (Gratis konsultasi)",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "NIB dengan KBLI 46443, 47111, 47112, 47191, 47911, 47914, 47999",
+        "KTP Direktur dan/atau Pimpinan Perusahaan",
+        "NPWP Perusahaan dan Pribadi",
+        "Surat pernyataan direksi tidak terlibat tindak pidana kosmetik",
+        "Bukti kepemilikan bangunan / perjanjian sewa minimal 1 tahun"
+      ],
+      "teknis": [
+        "Surat perjanjian kerja sama antara PJT dan direktur",
+        "KTP dan Ijazah Penanggung Jawab Teknis (PJT Farmasi/Kimia/Biologi)",
+        "Prosedur tertulis dan form catatan pelabelan serta pengemasan sekunder",
+        "Prosedur penanganan sampel pertinggal dan produk kembalian",
+        "Prosedur tertulis pengadaan, penerimaan dan penyimpanan kaidah FIFO/FEFO",
+        "Prosedur pembersihan sarana dan pengendalian hama"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengajukan PB-UMKU Rekomendasi Pemohon Notifikasi Kosmetika daring via oss.go.id",
+      "Petugas Loka POM mengevaluasi kelengkapan berkas",
+      "Penjadwalan dan pelaksanaan audit sarana oleh tim teknis",
+      "Penerbitan Berita Acara Pemeriksaan (BAP) dan CAPA jika terdapat temuan",
+      "Penerbitan Surat Rekomendasi Notifikasi Kosmetika"
+    ],
+    "portalUrl": "https://oss.go.id",
+    "keywords": [
+      "kosmetik",
+      "notifikasi kosmetik",
+      "bpom",
+      "skincare",
+      "pjt",
+      "izin edar kosmetik"
+    ]
+  },
+  {
+    "id": 81,
+    "title": "Izin PENGADUAN MASYARAKAT DAN INFORMASI OBAT DAN MAKANAN",
+    "slug": "pengaduan-masyarakat-dan-informasi-obat-dan-makanan",
+    "instansi": "Loka POM / BPOM",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Identitas Pelapor (KTP / SIM)",
+        "Data produk obat/makanan yang diadukan (nama produk, nomor izin edar/batch)",
+        "Sampel atau foto produk serta bukti pembelian (struk / nota)",
+        "Uraian kronologi kejadian atau pengaduan secara jelas"
+      ],
+      "teknis": [
+        "Bukti fisik dampak atau reaksi konsumsi jika ada keluhan kesehatan",
+        "Formulir pengaduan resmi Loka POM"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon datang ke loket Loka POM di MPP Madiun atau mengisi formulir pengaduan daring",
+      "Petugas memverifikasi kelengkapan bukti dan mencatat nomor registrasi aduan",
+      "Investigasi dan penelusuran lapangan oleh petugas pengawas obat dan makanan",
+      "Penyampaian tindak lanjut hasil penanganan kepada pengadu"
+    ],
+    "portalUrl": "https://bpom.go.id",
+    "keywords": [
+      "pengaduan obat",
+      "makanan berbahaya",
+      "loka pom",
+      "bpom madiun",
+      "konsultasi obat"
+    ]
+  },
+  {
+    "id": 80,
+    "title": "Izin IZIN PENERAPAN CARA PRODUKSI PANGAN OLAHAN YANG BAIK (IP-CPPOB)",
+    "slug": "izin-penerapan-cara-produksi-pangan-olahan-yang-baik-ip-cppob",
+    "instansi": "Loka POM / BPOM",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Sesuai PNBP BPOM",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "NIB KBLI Industri Pengolahan Makanan",
+        "Surat permohonan pemeriksaan sarana produksi pangan olahan",
+        "Peta lokasi dan denah tata letak (layout) ruang produksi pangan"
+      ],
+      "teknis": [
+        "Panduan manual mutu CPPOB",
+        "Diagram alir proses produksi pangan olahan",
+        "Deskripsi produk dan daftar bahan baku serta bahan tambahan pangan (BTP)",
+        "Prosedur penanganan limbah dan sanitasi sarana"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pengajuan izin melalui sistem e-sertifikasi BPOM via OSS RBA",
+      "Pemeriksaan kelengkapan dokumen teknis CPPOB",
+      "Audit sarana produksi secara luring oleh auditor resmi",
+      "Penerbitan Sertifikat Izin Penerapan CPPOB"
+    ],
+    "portalUrl": "https://oss.go.id",
+    "keywords": [
+      "cppob",
+      "pangan olahan",
+      "bpom",
+      "makanan kemasan",
+      "izin produksi pangan"
+    ]
+  },
+  {
+    "id": 79,
+    "title": "Izin PEMENUHAN ASPEK CARA PEMBUATAN OBAT BAHAN ALAM YANG BAIK SECARA BERTAHAP (CPOBAB)",
+    "slug": "pemenuhan-aspek-cpobab",
+    "instansi": "Loka POM / BPOM",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "4 menit",
+    "biaya": "Sesuai Ketentuan PNBP",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "NIB industri obat tradisional / ekstrak bahan alam (IOT/IEBA/UKOT/UMOT)",
+        "KTP Pimpinan Usaha dan Penanggung Jawab Teknis Kefarmasian",
+        "Status kepemilikan gedung produksi"
+      ],
+      "teknis": [
+        "Denah tata ruang (layout) industri obat bahan alam",
+        "Dokumen SOP sanitasi, higienitas, dan pengawasan mutu ekstrak tanaman herbal",
+        "Prosedur uji stabilitas dan kalibrasi alat produksi"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pengajuan permohonan asistensi CPOBAB melalui loket BPOM di MPP Madiun",
+      "Bimbingan teknis bertahap pemenuhan fasilitas ruang produksi",
+      "Verifikasi lapangan dan penerbitan sertifikat pemenuhan aspek bertahap"
+    ],
+    "portalUrl": "https://oss.go.id",
+    "keywords": [
+      "cpobab",
+      "jamu",
+      "obat herbal",
+      "obat bahan alam",
+      "bpom"
+    ]
+  },
+  {
+    "id": 78,
+    "title": "Izin SERTIFIKASI PEMENUHAN ASPEK CARA PEMBUATAN KOSMETIK YANG BAIK (CPKB)",
+    "slug": "sertifikasi-pemenuhan-aspek-cpkb",
+    "instansi": "Loka POM / BPOM",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "4 menit",
+    "biaya": "Sesuai Ketentuan PNBP",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "NIB KBLI Industri Kosmetik (Golongan A / B)",
+        "Surat Izin Usaha Industri Kosmetik",
+        "Perjanjian kerja sama PJT Apoteker penanggung jawab teknis"
+      ],
+      "teknis": [
+        "Denah tata ruang (clean room, ruang timbang, ruang mixing, lab QC)",
+        "SOP validasi proses pembuatan dan penanganan air murni (purified water)",
+        "Program pelatihan berkala personel produksi kosmetik"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Permohonan rekomendasi CPKB diajukan di sistem e-sertifikasi BPOM",
+      "Pemeriksaan dokumen dan peninjauan fasilitas ruang bersih",
+      "Penerbitan Surat Rekomendasi / Sertifikat CPKB"
+    ],
+    "portalUrl": "https://oss.go.id",
+    "keywords": [
+      "cpkb",
+      "pabrik kosmetik",
+      "skincare",
+      "bpom madiun",
+      "standar kosmetik"
+    ]
+  },
+  {
+    "id": 77,
+    "title": "Izin SERTIFIKASI CARA DISTRIBUSI OBAT YANG BAIK (CDOB)",
+    "slug": "sertifikasi-cara-distribusi-obat-yang-baik-cdob",
+    "instansi": "Loka POM / BPOM",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "4 menit",
+    "biaya": "Sesuai PNBP BPOM",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "NIB Pedagang Besar Farmasi (PBF) atau PBF Cabang",
+        "Izin Operasional PBF aktif",
+        "Perjanjian kerja sama dengan Apoteker Penanggung Jawab (APJ)"
+      ],
+      "teknis": [
+        "Desain dan denah gudang farmasi berpendingin (Cold Chain Management)",
+        "SOP penerimaan, penyimpanan, karantina, dan distribusi obat",
+        "Data log pencatatan suhu dan kelembapan real-time (datalogger)"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pengajuan sertifikasi melalui portal resmi e-CDOB BPOM",
+      "Pemeriksaan kepatuhan rantai dingin dan dokumen penjaminan mutu",
+      "Audit komprehensif sarana distribusi",
+      "Penerbitan Sertifikat CDOB"
+    ],
+    "portalUrl": "https://oss.go.id",
+    "keywords": [
+      "cdob",
+      "distribusi obat",
+      "pbf",
+      "apotek",
+      "gudang obat",
+      "bpom"
+    ]
+  },
+  {
+    "id": 76,
+    "title": "Izin PELAPORAN SPT TAHUNAN KERTAS",
+    "slug": "pelaporan-spt-tahunan-kertas",
+    "instansi": "KPP Pratama Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Formulir SPT Tahunan 1770 / 1770S / 1770SS bermeterai",
+        "Fotokopi KTP dan NPWP Wajib Pajak",
+        "Bukti potong pajak 1721-A1 atau 1721-A2 dari bendahara pemberi kerja",
+        "Daftar rincian harta dan kewajiban per 31 Desember tahun pajak"
+      ],
+      "teknis": [
+        "Perhitungan peredaran bruto untuk WP Orang Pribadi pengusaha tertentu",
+        "Surat kuasa khusus jika dikuasakan"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Wajib pajak mengambil nomor antrean loket KPP Pratama di MPP Madiun",
+      "Petugas loket memvalidasi kelengkapan formulir dan lampiran SPT",
+      "Pencetakan Bukti Penerimaan Surat (BPS) sebagai tanda terima resmi"
+    ],
+    "portalUrl": "https://pajak.go.id",
+    "keywords": [
+      "spt tahunan",
+      "kpp pratama",
+      "pajak penghasilan",
+      "pajak madiun",
+      "form 1770"
+    ]
+  },
+  {
+    "id": 75,
+    "title": "Izin PENGAJUAN NPWPD PAJAK DAERAH LAINNYA",
+    "slug": "pengajuan-npwpd-pajak-daerah-lainnya",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Fotokopi KTP pemilik atau penanggung jawab usaha",
+        "Nomor Induk Berusaha (NIB) atau izin operasional",
+        "Surat keterangan domisili usaha dari kelurahan/desa setempat",
+        "Foto tempat usaha dan papan reklame/nama usaha"
+      ],
+      "teknis": [
+        "Formulir pendaftaran wajib pajak daerah daerah (PBJT/Reklame/Air Tanah/MBLB)"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Wajib pajak mengisi formulir registrasi NPWPD di loket Bapenda MPP",
+      "Verifikasi data dan penetapan nomor registrasi perpajakan daerah",
+      "Kartu NPWPD langsung dicetak seketika tanpa dipungut biaya"
+    ],
+    "portalUrl": "https://bapenda.madiunkab.go.id",
+    "keywords": [
+      "npwpd",
+      "pajak daerah",
+      "bapenda madiun",
+      "pajak restoran",
+      "reklame"
+    ]
+  },
+  {
+    "id": 74,
+    "title": "Izin PENGAJUAN BPHTB",
+    "slug": "pengajuan-bphtb",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 bulan",
+    "biaya": "Sesuai NJOP / Nilai Transaksi Pajak (5%)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Formulir Surat Setoran Pajak Daerah (SSPD) BPHTB",
+        "Fotokopi KTP pihak penjual dan pembeli",
+        "Fotokopi sertipikat tanah yang menjadi objek transaksi",
+        "Fotokopi SPPT PBB-P2 tahun berjalan dan bukti lunas PBB"
+      ],
+      "teknis": [
+        "Akta Jual Beli (AJB) dari PPAT atau draf perjanjian pengalihan hak",
+        "Surat pernyataan nilai transaksi bermeterai cukup"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengunggah data pada portal e-BPHTB atau menyerahkan berkas di loket Bapenda MPP",
+      "Pemeriksaan dan validasi kesesuaian nilai transaksi dengan standar NJOP",
+      "Penerbitan kode bayar BPHTB Bank Jatim",
+      "Validasi bukti pembayaran dan pengesahan SSPD BPHTB"
+    ],
+    "portalUrl": "https://bapenda.madiunkab.go.id",
+    "keywords": [
+      "bphtb",
+      "pajak tanah",
+      "bapenda",
+      "jual beli tanah",
+      "sspd bphtb"
+    ]
+  },
+  {
+    "id": 73,
+    "title": "Izin PENGAJUAN BPHTB PEMBERIAN HAK BARU ATAS TANAH SEBAGAI KELANJUTAN DARI PELEPASAN HAK",
+    "slug": "pengajuan-bphtb-pelepasan-hak",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 bulan",
+    "biaya": "Sesuai Rumus Perhitungan BPHTB 5%",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Surat keputusan pemberian hak baru dari Kantor Pertanahan (Kantah ATR/BPN)",
+        "Surat pelepasan hak dari pemegang hak sebelumnya di hadapan notaris/PPAT",
+        "Fotokopi KTP dan KK pemohon penerima hak",
+        "Bukti pelunasan PBB-P2 objek pajak 5 tahun terakhir"
+      ],
+      "teknis": [
+        "Peta bidang tanah resmi dari BPN",
+        "Hasil penilaian dan verifikasi tim lapangan Bapenda"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pengajuan berkas permohonan ke loket Bapenda di MPP Caruban",
+      "Penelitian dokumen yuridis dan pengecekan lapangan",
+      "Penetapan Nilai Perolehan Objek Pajak Tidak Kena Pajak (NPOPTKP)",
+      "Pembayaran via teller/virtual account Bank Jatim dan legalisir SSPD"
+    ],
+    "portalUrl": "https://bapenda.madiunkab.go.id",
+    "keywords": [
+      "bphtb pelepasan hak",
+      "pemberian hak baru",
+      "tanah negara",
+      "atr bpn",
+      "bapenda"
+    ]
+  },
+  {
+    "id": 72,
+    "title": "Izin PROSEDUR PELAYANAN PENGAJUAN BPHTB ATAS WARIS SECARA MANDIRI",
+    "slug": "prosedur-pelayanan-pengajuan-bphtb-atas-waris-secara-mandiri",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "7 jam",
+    "biaya": "Dikenakan NPOPTKP Khusus Waris (Rp 300 Juta)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Surat Keterangan Waris yang disahkan oleh Lurah/Kepala Desa dan Camat",
+        "Fotokopi Akta Kematian pewaris dari Disdukcapil",
+        "Fotokopi KTP dan KK seluruh ahli waris",
+        "Surat pernyataan pembagian waris bermeterai Rp 10.000",
+        "Fotokopi Sertipikat Tanah atas nama pewaris",
+        "Fotokopi SPPT dan STTS lunas PBB 5 tahun terakhir"
+      ],
+      "teknis": [
+        "Denah lokasi tanah warisan",
+        "Surat kuasa seluruh ahli waris bila dikuasakan ke salah satu anak kandung"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Ahli waris datang ke Loket Pelayanan Bapenda di MPP Madiun membawa berkas lengkap",
+      "Petugas menghitung nilai BPHTB Waris (dengan potongan NPOPTKP Waris Rp 300.000.000)",
+      "Jika nilai tanah di bawah Rp 300 juta, BPHTB adalah Rp 0 (Nihil) dan langsung divalidasi",
+      "Jika melebihi, pembayaran dilakukan di Loket Bank Jatim MPP dan disahkan seketika"
+    ],
+    "portalUrl": "https://bapenda.madiunkab.go.id",
+    "keywords": [
+      "bphtb waris",
+      "warisan",
+      "tanah waris",
+      "bapenda madiun",
+      "surat waris"
+    ]
+  },
+  {
+    "id": 71,
+    "title": "Izin PENGAJUAN KEBERATAN ATAS SPPT ATAU SKP PBB-P2",
+    "slug": "pengajuan-keberatan-atas-sppt-atau-skp-pbb-p2",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "1 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Surat permohonan pengajuan keberatan bermeterai diajukan tertulis kepada Bupati Madiun c.q. Kepala Bapenda",
+        "Asli SPPT atau SKP PBB-P2 yang diajukan keberatan",
+        "Fotokopi KTP pemohon dan fotokopi sertipikat/akta tanah",
+        "Surat kuasa khusus bermeterai apabila dikuasakan"
+      ],
+      "teknis": [
+        "Alasan dan perhitungan rinci keberatan luas bumi/bangunan yang tidak sesuai kondisi riil",
+        "Foto dokumentasi kondisi fisik objek pajak dari 4 sudut"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Wajib pajak menyerahkan berkas keberatan di loket Bapenda MPP Caruban",
+      "Petugas melakukan verifikasi administrasi dan menerbitkan tanda terima surat keberatan",
+      "Tim lapangan melakukan survei pengukuran ulang fisik bangunan/tanah",
+      "Penerbitan Surat Keputusan Keberatan PBB-P2"
+    ],
+    "portalUrl": "https://bapenda.madiunkab.go.id",
+    "keywords": [
+      "keberatan pbb",
+      "sppt pbb salah",
+      "luas tanah salah",
+      "bapenda madiun"
+    ]
+  },
+  {
+    "id": 70,
+    "title": "Izin PERMOHONAN PENGURANGAN PBB-P2",
+    "slug": "permohonan-pengurangan-pbb-p2",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 bulan",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Surat permohonan pengurangan PBB-P2",
+        "Fotokopi KTP dan Kartu Keluarga pemohon",
+        "Fotokopi SPPT PBB tahun berjalan",
+        "Surat Keterangan Tidak Mampu (SKTM) dari desa/kelurahan atau Surat Pensiunan (bagi pensiunan ASN/TNI/Polri)"
+      ],
+      "teknis": [
+        "Bukti kerusakan objek akibat bencana alam bila alasan permohonan karena musibah alam"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Permohonan disampaikan ke loket Bapenda MPP sebelum tanggal jatuh tempo pembayaran",
+      "Petugas memverifikasi kelayakan kriteria penerima pengurangan (pensiunan, veteran, tidak mampu)",
+      "Penerbitan SK Pengurangan PBB-P2 dan pembaruan tagihan pembayaran"
+    ],
+    "portalUrl": "https://bapenda.madiunkab.go.id",
+    "keywords": [
+      "pengurangan pbb",
+      "diskon pbb",
+      "pensiunan",
+      "sktm",
+      "bapenda madiun"
+    ]
+  },
+  {
+    "id": 69,
+    "title": "Izin PENGAJUAN SALINAN SPPT PBB-P2",
+    "slug": "pengajuan-salinan-sppt-pbb-p2",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "1 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Surat permohonan cetak salinan SPPT PBB-P2",
+        "Fotokopi KTP pemohon selaku pemilik objek pajak",
+        "Fotokopi bukti kepemilikan tanah (sertipikat / petok D / akta hibah)",
+        "Surat kehilangan dari kepolisian apabila SPPT asli hilang"
+      ],
+      "teknis": [
+        "Nomor Objek Pajak (NOP) 18 digit yang valid"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon datang ke loket Bapenda MPP Madiun menyebutkan NOP",
+      "Petugas mengecek data master perpajakan daerah melalui aplikasi SIM-PBB",
+      "Salinan SPPT PBB-P2 dicetak dan dibubuhi cap basah resmi seketika"
+    ],
+    "portalUrl": "https://bapenda.madiunkab.go.id",
+    "keywords": [
+      "salinan sppt",
+      "sppt hilang",
+      "nop pbb",
+      "bapenda caruban",
+      "pajak bumi"
+    ]
+  },
+  {
+    "id": 68,
+    "title": "Izin PERMOHONAN SURAT KETERANGAN NJOP",
+    "slug": "permohonan-surat-keterangan-njop",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "2 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Surat permohonan penerbitan Keterangan Nilai Jual Objek Pajak (NJOP)",
+        "Fotokopi KTP pemohon dan fotokopi sertipikat hak atas tanah",
+        "Bukti pelunasan PBB-P2 tahun berjalan",
+        "Surat pengantar bank bila untuk keperluan agunan kredit perbankan"
+      ],
+      "teknis": [
+        "Peta lokasi atau titik koordinat objek tanah"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Penyerahan berkas permohonan ke petugas loket Bapenda di MPP Madiun",
+      "Verifikasi kesesuaian zonasi nilai tanah (ZNT) dalam database geografis",
+      "Penandatanganan dan penyerahan Surat Keterangan NJOP resmi"
+    ],
+    "portalUrl": "https://bapenda.madiunkab.go.id",
+    "keywords": [
+      "surat keterangan njop",
+      "harga tanah pbb",
+      "agunan bank",
+      "bapenda madiun"
+    ]
+  },
+  {
+    "id": 67,
+    "title": "Penerbitan KTP Elektronik (KTP-el) Baru Pemula",
+    "slug": "penerbitan-ktp-elektronik-ktp-el-baru-pemula",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan KTP Elektronik (KTP-el) Baru Pemula",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "KTP-el",
+      "KTP pemula",
+      "disdukcapil",
+      "rekam e-ktp",
+      "17 tahun",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 66,
+    "title": "Penerbitan Penggantian KTP-el Rusak atau Hilang",
+    "slug": "penerbitan-penggantian-ktp-el-rusak-atau-hilang",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Penggantian KTP-el Rusak atau Hilang",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "KTP hilang",
+      "KTP rusak",
+      "cetak ulang KTP",
+      "disdukcapil",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 65,
+    "title": "Penerbitan Kartu Keluarga (KK) Baru Membentuk Keluarga Baru",
+    "slug": "penerbitan-kartu-keluarga-kk-baru-membentuk-keluarga-baru",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Kartu Keluarga (KK) Baru Membentuk Keluarga Baru",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "KK baru",
+      "kartu keluarga",
+      "buku nikah",
+      "pecah KK",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 64,
+    "title": "Izin PERUBAHAN DATA KARTU KELUARGA (PENDIDIKAN, PEKERJAAN, GOLONGAN DARAH)",
+    "slug": "perubahan-data-kartu-keluarga-pendidikan,-pekerjaan,-golongan-darah",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Perubahan Data Kartu Keluarga (Pendidikan, Pekerjaan, Golongan Darah)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "ubah KK",
+      "perubahan data KK",
+      "ijazah",
+      "disdukcapil",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 63,
+    "title": "Penerbitan Kartu Identitas Anak (KIA) Usia 0-17 Tahun Kurang 1 Hari",
+    "slug": "penerbitan-kartu-identitas-anak-kia-usia-0-17-tahun-kurang-1-hari",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Kartu Identitas Anak (KIA) Usia 0-17 Tahun Kurang 1 Hari",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "KIA",
+      "kartu identitas anak",
+      "KTP anak",
+      "disdukcapil",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 62,
+    "title": "Penerbitan Kutipan Akta Kelahiran Baru",
+    "slug": "penerbitan-kutipan-akta-kelahiran-baru",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Kutipan Akta Kelahiran Baru",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "akta kelahiran",
+      "surat lahir",
+      "akta lahir baru",
+      "disdukcapil",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 61,
+    "title": "Penerbitan Kutipan Akta Kematian",
+    "slug": "penerbitan-kutipan-akta-kematian",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Kutipan Akta Kematian",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "akta kematian",
+      "surat meninggal",
+      "lapor kematian",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 60,
+    "title": "Penerbitan Surat Keterangan Pindah Warga Negara Indonesia (SKPWNI) Keluar",
+    "slug": "penerbitan-surat-keterangan-pindah-warga-negara-indonesia-skpwni-keluar",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Surat Keterangan Pindah Warga Negara Indonesia (SKPWNI) Keluar",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "surat pindah",
+      "skpwni",
+      "pindah keluar",
+      "disdukcapil",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 59,
+    "title": "Penerbitan Surat Keterangan Pindah Datang WNI ke Kabupaten Madiun",
+    "slug": "penerbitan-surat-keterangan-pindah-datang-wni-ke-kabupaten-madiun",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Surat Keterangan Pindah Datang WNI ke Kabupaten Madiun",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "pindah datang",
+      "masuk madiun",
+      "kk baru pindah",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 58,
+    "title": "Pelayanan Aktivasi Identitas Kependudukan Digital (IKD) pada Smartphone",
+    "slug": "pelayanan-aktivasi-identitas-kependudukan-digital-ikd-pada-smartphone",
+    "instansi": "Disdukcapil",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "dukcapil",
+    "categoryName": "Administrasi Kependudukan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Aktivasi Identitas Kependudukan Digital (IKD) pada Smartphone",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "ikd",
+      "ktp digital",
+      "aktivasi ikd",
+      "aplikasi ikd",
+      "dukcapil",
+      "disdukcapil",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 57,
+    "title": "Penerbitan Surat Keterangan Catatan Kepolisian (SKCK) Baru",
+    "slug": "penerbitan-surat-keterangan-catatan-kepolisian-skck-baru",
+    "instansi": "Polres Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Rp 30.000 (PNBP Resmi)",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Surat Keterangan Catatan Kepolisian (SKCK) Baru",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "skck baru",
+      "polres madiun",
+      "sidik jari",
+      "rumus sidik jari",
+      "polres madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 56,
+    "title": "Penerbitan Perpanjangan Masa Berlaku SKCK",
+    "slug": "penerbitan-perpanjangan-masa-berlaku-skck",
+    "instansi": "Polres Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Rp 30.000 (PNBP Resmi)",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Perpanjangan Masa Berlaku SKCK",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "skck perpanjang",
+      "polres",
+      "skck lama",
+      "biaya skck",
+      "polres madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 55,
+    "title": "Pelayanan Perpanjangan Surat Izin Mengemudi (SIM A dan SIM C)",
+    "slug": "pelayanan-perpanjangan-surat-izin-mengemudi-sim-a-dan-sim-c",
+    "instansi": "Polres Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "30 menit",
+    "biaya": "SIM A: Rp80.000, SIM C: Rp75.000",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Perpanjangan Surat Izin Mengemudi (SIM A dan SIM C)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "sim a",
+      "sim c",
+      "perpanjang sim",
+      "satpas polres",
+      "polres madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 54,
+    "title": "Pelayanan Surat Keterangan Lapor Kehilangan (SKTLK) Barang / Surat Berharga",
+    "slug": "pelayanan-surat-keterangan-lapor-kehilangan-sktlk-barang---surat-berharga",
+    "instansi": "Polres Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Surat Keterangan Lapor Kehilangan (SKTLK) Barang / Surat Berharga",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "surat kehilangan",
+      "lapor polisi",
+      "sktlk",
+      "polres",
+      "polres madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 53,
+    "title": "Pelayanan Pembayaran Denda Tilang Elektronik (ETLE) & Manual",
+    "slug": "pelayanan-pembayaran-denda-tilang-elektronik-etle-&-manual",
+    "instansi": "Kejaksaan Negeri Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Sesuai Putusan Hakim",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pembayaran Denda Tilang Elektronik (ETLE) & Manual",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "tilang",
+      "denda tilang",
+      "kejaksaan",
+      "ambil sim tilang",
+      "kejaksaan negeri madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 52,
+    "title": "Pelayanan Pengambilan Barang Bukti Perkara Pidana Gratis (Layanan PERINTIS)",
+    "slug": "pelayanan-pengambilan-barang-bukti-perkara-pidana-gratis-layanan-perintis",
+    "instansi": "Kejaksaan Negeri Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pengambilan Barang Bukti Perkara Pidana Gratis (Layanan PERINTIS)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "barang bukti",
+      "perintis kejaksaan",
+      "ambil motor bukti",
+      "kejaksaan negeri madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 51,
+    "title": "Pelayanan Pos Bantuan Hukum (Posbakum) dan Konsultasi Hukum Gratis",
+    "slug": "pelayanan-pos-bantuan-hukum-posbakum-dan-konsultasi-hukum-gratis",
+    "instansi": "Kejaksaan Negeri Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "20 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pos Bantuan Hukum (Posbakum) dan Konsultasi Hukum Gratis",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "konsultasi hukum",
+      "jaksa pengacara negara",
+      "posbakum",
+      "kejaksaan negeri madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 50,
+    "title": "Pelayanan Legalisir Salinan Berkas Putusan dan Penetapan Perkara",
+    "slug": "pelayanan-legalisir-salinan-berkas-putusan-dan-penetapan-perkara",
+    "instansi": "Pengadilan Negeri Mejayan",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Rp 10.000 per lembar",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Legalisir Salinan Berkas Putusan dan Penetapan Perkara",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "legalisir putusan",
+      "pengadilan negeri",
+      "mejayan",
+      "pengadilan negeri mejayan",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 49,
+    "title": "Izin PENGAMBILAN PRODUK AKTA CERAI ASLI DAN SALINAN PUTUSAN",
+    "slug": "pengambilan-produk-akta-cerai-asli-dan-salinan-putusan",
+    "instansi": "Pengadilan Agama Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Gratis (Sesuai Panjar Perkara)",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pengambilan Produk Akta Cerai Asli dan Salinan Putusan",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "akta cerai",
+      "salinan putusan cerai",
+      "pengadilan agama",
+      "pengadilan agama kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 48,
+    "title": "Izin PENDAFTARAN PERKARA GUGATAN DAN PERMOHONAN (E-COURT MANDIRI)",
+    "slug": "pendaftaran-perkara-gugatan-dan-permohonan-e-court-mandiri",
+    "instansi": "Pengadilan Agama Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "20 menit",
+    "biaya": "Sesuai Radius Biaya Panjar",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pendaftaran Perkara Gugatan dan Permohonan (e-Court Mandiri)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "ecourt",
+      "gugat cerai",
+      "isbat nikah",
+      "dispensasi nikah",
+      "pengadilan agama kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 47,
+    "title": "Penerbitan Surat Keterangan Validasi Akta Cerai untuk KUA",
+    "slug": "penerbitan-surat-keterangan-validasi-akta-cerai-untuk-kua",
+    "instansi": "Pengadilan Agama Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Surat Keterangan Validasi Akta Cerai untuk KUA",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "validasi akta cerai",
+      "kua",
+      "surat cerai sah",
+      "pengadilan agama kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 46,
+    "title": "Izin KONSULTASI LAYANAN DISPENSASI KAWIN DAN ITSBAT NIKAH",
+    "slug": "konsultasi-layanan-dispensasi-kawin-dan-itsbat-nikah",
+    "instansi": "Pengadilan Agama Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "hukum",
+    "categoryName": "Kepolisian, Kejaksaan & Pengadilan",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Konsultasi Layanan Dispensasi Kawin dan Itsbat Nikah",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "dispensasi kawin",
+      "itsbat nikah",
+      "buku nikah",
+      "pa madiun",
+      "pengadilan agama kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 45,
+    "title": "Penerbitan NIB Usaha Mikro dan Kecil Perseorangan (KBLI Risiko Rendah)",
+    "slug": "penerbitan-nib-usaha-mikro-dan-kecil-perseorangan-kbli-risiko-rendah",
+    "instansi": "DPMPTSP Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "0 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan NIB Usaha Mikro dan Kecil Perseorangan (KBLI Risiko Rendah)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "nib umk",
+      "oss rba",
+      "izin usaha mikro",
+      "dpmptsp",
+      "dpmptsp kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 44,
+    "title": "Penerbitan Persetujuan Bangunan Gedung (PBG) Fungsi Hunian Sederhana",
+    "slug": "penerbitan-persetujuan-bangunan-gedung-pbg-fungsi-hunian-sederhana",
+    "instansi": "DPMPTSP & DPUPR",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Sesuai Rumus Retribusi Daerah",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Persetujuan Bangunan Gedung (PBG) Fungsi Hunian Sederhana",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "pbg",
+      "simbg",
+      "izin mendirikan bangunan",
+      "dpmptsp",
+      "dpmptsp & dpupr",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 43,
+    "title": "Penerbitan Sertifikat Laik Fungsi (SLF) Bangunan Gedung",
+    "slug": "penerbitan-sertifikat-laik-fungsi-slf-bangunan-gedung",
+    "instansi": "DPMPTSP & DPUPR",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Sesuai Luas dan Fungsi Gedung",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Sertifikat Laik Fungsi (SLF) Bangunan Gedung",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "slf",
+      "sertifikat laik fungsi",
+      "gedung bertingkat",
+      "dpmptsp & dpupr",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 42,
+    "title": "Penerbitan Izin Pemasangan Titik Reklame dan Media Promosi",
+    "slug": "penerbitan-izin-pemasangan-titik-reklame-dan-media-promosi",
+    "instansi": "DPMPTSP Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "2 hari",
+    "biaya": "Sesuai Zonasi & Ukuran Reklame",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Izin Pemasangan Titik Reklame dan Media Promosi",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "izin reklame",
+      "baliho",
+      "spanduk",
+      "pajak reklame",
+      "dpmptsp kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 41,
+    "title": "Penerbitan Surat Izin Praktik Dokter (SIP Dokter Umum / Spesialis)",
+    "slug": "penerbitan-surat-izin-praktik-dokter-sip-dokter-umum---spesialis",
+    "instansi": "DPMPTSP & Dinkes",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Surat Izin Praktik Dokter (SIP Dokter Umum / Spesialis)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "sip dokter",
+      "izin praktik",
+      "idi",
+      "dinas kesehatan",
+      "dpmptsp & dinkes",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 40,
+    "title": "Penerbitan Surat Izin Praktik Bidan (SIPB Mandiri / Faskes)",
+    "slug": "penerbitan-surat-izin-praktik-bidan-sipb-mandiri---faskes",
+    "instansi": "DPMPTSP & Dinkes",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Surat Izin Praktik Bidan (SIPB Mandiri / Faskes)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "sipb",
+      "bidan mandiri",
+      "izin praktik bidan",
+      "ibii",
+      "dpmptsp & dinkes",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 39,
+    "title": "Penerbitan Surat Izin Praktik Perawat (SIPP Mandiri / Faskes)",
+    "slug": "penerbitan-surat-izin-praktik-perawat-sipp-mandiri---faskes",
+    "instansi": "DPMPTSP & Dinkes",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Surat Izin Praktik Perawat (SIPP Mandiri / Faskes)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "sipp",
+      "perawat",
+      "ppni",
+      "izin perawat",
+      "dpmptsp & dinkes",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 38,
+    "title": "Penerbitan Izin Operasional Klinik Rawat Jalan Pratama",
+    "slug": "penerbitan-izin-operasional-klinik-rawat-jalan-pratama",
+    "instansi": "DPMPTSP & Dinkes",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Izin Operasional Klinik Rawat Jalan Pratama",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "izin klinik",
+      "klinik pratama",
+      "faskes",
+      "dpmptsp",
+      "dpmptsp & dinkes",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 37,
+    "title": "Penerbitan Izin Operasional Apotek dan Toko Obat",
+    "slug": "penerbitan-izin-operasional-apotek-dan-toko-obat",
+    "instansi": "DPMPTSP & Dinkes",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Izin Operasional Apotek dan Toko Obat",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "izin apotek",
+      "toko obat",
+      "sia",
+      "apoteker",
+      "dpmptsp & dinkes",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 36,
+    "title": "Penerbitan Sertifikat Pemenuhan Komitmen SPP-IRT Industri Rumah Tangga",
+    "slug": "penerbitan-sertifikat-pemenuhan-komitmen-spp-irt-industri-rumah-tangga",
+    "instansi": "DPMPTSP & Dinkes",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Sertifikat Pemenuhan Komitmen SPP-IRT Industri Rumah Tangga",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "spp-irt",
+      "pirt",
+      "izin pangan rumah tangga",
+      "dinkes",
+      "dpmptsp & dinkes",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 35,
+    "title": "Penerbitan Kesesuaian Kegiatan Pemanfaatan Ruang (KKPR) Non Berusaha",
+    "slug": "penerbitan-kesesuaian-kegiatan-pemanfaatan-ruang-kkpr-non-berusaha",
+    "instansi": "DPMPTSP & DPUPR",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Kesesuaian Kegiatan Pemanfaatan Ruang (KKPR) Non Berusaha",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "kkpr",
+      "tata ruang",
+      "izin lokasi",
+      "pupr",
+      "dpmptsp & dpupr",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 34,
+    "title": "Pelayanan Fasilitasi Bantuan Pendampingan OSS RBA bagi Pelaku Usaha Mikro",
+    "slug": "pelayanan-fasilitasi-bantuan-pendampingan-oss-rba-bagi-pelaku-usaha-mikro",
+    "instansi": "DPMPTSP Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Fasilitasi Bantuan Pendampingan OSS RBA bagi Pelaku Usaha Mikro",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "bantuan oss",
+      "pendampingan nib",
+      "mpp caruban",
+      "dpmptsp",
+      "dpmptsp kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 33,
+    "title": "Pelayanan Pengecekan Keabsahan Sertipikat Hak Atas Tanah",
+    "slug": "pelayanan-pengecekan-keabsahan-sertipikat-hak-atas-tanah",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "1 hari",
+    "biaya": "Rp 50.000 per sertipikat",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pengecekan Keabsahan Sertipikat Hak Atas Tanah",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "cek sertipikat",
+      "bpn madiun",
+      "keabsahan tanah",
+      "sertipikat online",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 32,
+    "title": "Pelayanan Pencatatan Peralihan Hak Jual Beli Tanah dan Bangunan",
+    "slug": "pelayanan-pencatatan-peralihan-hak-jual-beli-tanah-dan-bangunan",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Sesuai Nilai Tanah (1/1000 + Rp50rb)",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pencatatan Peralihan Hak Jual Beli Tanah dan Bangunan",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "balik nama tanah",
+      "jual beli sertipikat",
+      "ajb ppat",
+      "bpn",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 31,
+    "title": "Pelayanan Pencatatan Peralihan Hak Karena Pewarisan Tanah",
+    "slug": "pelayanan-pencatatan-peralihan-hak-karena-pewarisan-tanah",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Sesuai Rumus PNBP Waris",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pencatatan Peralihan Hak Karena Pewarisan Tanah",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "balik nama waris",
+      "sertipikat waris",
+      "bpn caruban",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 30,
+    "title": "Pelayanan Penghapusan Hak Tanggungan (Roya Hipotik / Kredit Bank)",
+    "slug": "pelayanan-penghapusan-hak-tanggungan-roya-hipotik---kredit-bank",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "1 hari",
+    "biaya": "Rp 50.000 per sertipikat",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Penghapusan Hak Tanggungan (Roya Hipotik / Kredit Bank)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "roya",
+      "hapus hak tanggungan",
+      "lunas kpr",
+      "bpn",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 29,
+    "title": "Pelayanan Pendaftaran Hak Tanggungan Elektronik (HT-el)",
+    "slug": "pelayanan-pendaftaran-hak-tanggungan-elektronik-ht-el",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "1 hari",
+    "biaya": "Sesuai Nilai Plafon Pinjaman",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pendaftaran Hak Tanggungan Elektronik (HT-el)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "hak tanggungan",
+      "ht el",
+      "kredit perbankan",
+      "bpn",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 28,
+    "title": "Pelayanan Pengukuran dan Pemecahan / Pemisahan Bidang Tanah",
+    "slug": "pelayanan-pengukuran-dan-pemecahan---pemisahan-bidang-tanah",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "7 hari",
+    "biaya": "Sesuai Luas & Rumus PNBP Ukur",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pengukuran dan Pemecahan / Pemisahan Bidang Tanah",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "pecah sertipikat",
+      "ukur tanah",
+      "pemecahan bidang",
+      "bpn",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 27,
+    "title": "Pelayanan Pendaftaran Surat Keputusan Pemberian Hak Milik Perorangan",
+    "slug": "pelayanan-pendaftaran-surat-keputusan-pemberian-hak-milik-perorangan",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Rp 50.000 per sertipikat",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pendaftaran Surat Keputusan Pemberian Hak Milik Perorangan",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "shm baru",
+      "hak milik",
+      "sk pemberian hak",
+      "bpn",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 26,
+    "title": "Pelayanan Surat Keterangan Pendaftaran Tanah (SKPT)",
+    "slug": "pelayanan-surat-keterangan-pendaftaran-tanah-skpt",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "2 hari",
+    "biaya": "Rp 50.000",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Surat Keterangan Pendaftaran Tanah (SKPT)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "skpt",
+      "surat pendaftaran tanah",
+      "bpn madiun",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 25,
+    "title": "Pelayanan Penggantian Sertipikat Karena Rusak / Penggantian Blanko Lama",
+    "slug": "pelayanan-penggantian-sertipikat-karena-rusak---penggantian-blanko-lama",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Rp 50.000",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Penggantian Sertipikat Karena Rusak / Penggantian Blanko Lama",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "sertipikat rusak",
+      "ganti blanko bpn",
+      "sertipikat elektronik",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 24,
+    "title": "Izin KONSULTASI PROGRAM PTSL (PENDAFTARAN TANAH SISTEMATIS LENGKAP)",
+    "slug": "konsultasi-program-ptsl-pendaftaran-tanah-sistematis-lengkap",
+    "instansi": "Kantor Pertanahan ATR/BPN",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "agraria",
+    "categoryName": "Pertanahan, ATR/BPN & Tata Ruang",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Konsultasi Program PTSL (Pendaftaran Tanah Sistematis Lengkap)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "ptsl",
+      "sertipikat massal",
+      "ptsl madiun",
+      "bpn",
+      "kantor pertanahan atr/bpn",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 23,
+    "title": "Izin PENDAFTARAN PESERTA BARU BPJS KESEHATAN SEGMEN PEKERJA MANDIRI (PBPU)",
+    "slug": "pendaftaran-peserta-baru-bpjs-kesehatan-segmen-pekerja-mandiri-pbpu",
+    "instansi": "BPJS Kesehatan Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Iuran Sesuai Kelas)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pendaftaran Peserta Baru BPJS Kesehatan Segmen Pekerja Mandiri (PBPU)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "daftar bpjs",
+      "bpjs mandiri",
+      "iuran bpjs kesehatan",
+      "bpjs kesehatan madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 22,
+    "title": "Izin PERUBAHAN DATA KEPESERTAAN & FASILITAS KESEHATAN TINGKAT PERTAMA (FKTP)",
+    "slug": "perubahan-data-kepesertaan-&-fasilitas-kesehatan-tingkat-pertama-fktp",
+    "instansi": "BPJS Kesehatan Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Perubahan Data Kepesertaan & Fasilitas Kesehatan Tingkat Pertama (FKTP)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "pindah faskes",
+      "ubah data bpjs",
+      "puskesmas",
+      "klinik bpjs",
+      "bpjs kesehatan madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 21,
+    "title": "Izin PENGAKTIFAN KEMBALI KARTU BPJS KESEHATAN DAN PENANGANAN PENONAKTIFAN",
+    "slug": "pengaktifan-kembali-kartu-bpjs-kesehatan-dan-penanganan-penonaktifan",
+    "instansi": "BPJS Kesehatan Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pengaktifan Kembali Kartu BPJS Kesehatan dan Penanganan Penonaktifan",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "bpjs nonaktif",
+      "aktifkan bpjs",
+      "cek denda layanan",
+      "bpjs kesehatan madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Izin PENDAFTARAN KEPESERTAAN BPJS KETENAGAKERJAAN SEKTOR BPU (BUKAN PENERIMA UPAH)",
+    "slug": "pendaftaran-kepesertaan-bpjs-ketenagakerjaan-sektor-bpu-bukan-penerima-upah",
+    "instansi": "BPJS Ketenagakerjaan Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Mulai Rp 16.800 per bulan",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pendaftaran Kepesertaan BPJS Ketenagakerjaan Sektor BPU (Bukan Penerima Upah)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "bpjs bpu",
+      "pekerja mandiri",
+      "jkk",
+      "jkm",
+      "bpjstk",
+      "bpjs ketenagakerjaan madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Pelayanan Klaim Jaminan Hari Tua (JHT) Saldo di Bawah 10 Juta via JMO",
+    "slug": "pelayanan-klaim-jaminan-hari-tua-jht-saldo-di-bawah-10-juta-via-jmo",
+    "instansi": "BPJS Ketenagakerjaan Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Klaim Jaminan Hari Tua (JHT) Saldo di Bawah 10 Juta via JMO",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "klaim jht",
+      "cairkan bpjs",
+      "jht ketenagakerjaan",
+      "jmo",
+      "bpjs ketenagakerjaan madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Izin KONSULTASI MANFAAT JAMINAN KECELAKAAN KERJA (JKK) DAN JAMINAN PENSIUN (JP)",
+    "slug": "konsultasi-manfaat-jaminan-kecelakaan-kerja-jkk-dan-jaminan-pensiun-jp",
+    "instansi": "BPJS Ketenagakerjaan Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Konsultasi Manfaat Jaminan Kecelakaan Kerja (JKK) dan Jaminan Pensiun (JP)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "jkk",
+      "jaminan pensiun",
+      "klaim kecelakaan kerja",
+      "bpjs ketenagakerjaan madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Penerbitan Kartu Tanda Pencari Kerja (Kartu Kuning / AK-1)",
+    "slug": "penerbitan-kartu-tanda-pencari-kerja-kartu-kuning---ak-1",
+    "instansi": "Dinas Tenaga Kerja Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Kartu Tanda Pencari Kerja (Kartu Kuning / AK-1)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "kartu kuning",
+      "ak-1",
+      "pencari kerja",
+      "disnaker madiun",
+      "dinas tenaga kerja kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Pelayanan Informasi Lowongan Kerja Resmi Dalam & Luar Negeri",
+    "slug": "pelayanan-informasi-lowongan-kerja-resmi-dalam-&-luar-negeri",
+    "instansi": "Dinas Tenaga Kerja Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "10 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Informasi Lowongan Kerja Resmi Dalam & Luar Negeri",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "lowongan kerja",
+      "loker madiun",
+      "bursa kerja",
+      "disnaker",
+      "dinas tenaga kerja kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Pelayanan Rekomendasi Penerbitan Paspor Calon Pekerja Migran Indonesia (CPMI)",
+    "slug": "pelayanan-rekomendasi-penerbitan-paspor-calon-pekerja-migran-indonesia-cpmi",
+    "instansi": "Dinas Tenaga Kerja Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "1 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Rekomendasi Penerbitan Paspor Calon Pekerja Migran Indonesia (CPMI)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "cpmi",
+      "tki madiun",
+      "paspor tki",
+      "rekomendasi paspor",
+      "dinas tenaga kerja kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Izin KONSULTASI DAN PENGADUAN PERSELISIHAN HUBUNGAN INDUSTRIAL (TRIPARTIT)",
+    "slug": "konsultasi-dan-pengaduan-perselisihan-hubungan-industrial-tripartit",
+    "instansi": "Dinas Tenaga Kerja Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "20 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "sosial",
+    "categoryName": "Ketenagakerjaan, BPJS & Sosial",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Konsultasi dan Pengaduan Perselisihan Hubungan Industrial (Tripartit)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "perselisihan kerja",
+      "pesangon phk",
+      "upah lembur",
+      "mediasi disnaker",
+      "dinas tenaga kerja kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Pelayanan Pembayaran Pajak Daerah & Retribusi (PBB, BPHTB, PBJT)",
+    "slug": "pelayanan-pembayaran-pajak-daerah-&-retribusi-pbb,-bphtb,-pbjt",
+    "instansi": "Bank Jatim Cabang MPP",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 menit",
+    "biaya": "Sesuai Tagihan Resmi",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pembayaran Pajak Daerah & Retribusi (PBB, BPHTB, PBJT)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "bayar pbb",
+      "bank jatim",
+      "teller mpp",
+      "qris bank jatim",
+      "bank jatim cabang mpp",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Izin PEMBUKAAN REKENING TABUNGAN BANK JATIM (SIKLUS / TABUNGANKU)",
+    "slug": "pembukaan-rekening-tabungan-bank-jatim-siklus---tabunganku",
+    "instansi": "Bank Jatim Cabang MPP",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "15 menit",
+    "biaya": "Setoran Awal Rp 50.000",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pembukaan Rekening Tabungan Bank Jatim (Siklus / Tabunganku)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "buka rekening",
+      "tabungan bank jatim",
+      "rekening asn",
+      "bank jatim cabang mpp",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Pelayanan Pembayaran Tagihan PDAM Tirta Dharma Purabaya",
+    "slug": "pelayanan-pembayaran-tagihan-pdam-tirta-dharma-purabaya",
+    "instansi": "Bank Jatim & PDAM MPP",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 menit",
+    "biaya": "Sesuai Meteran Air",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pembayaran Tagihan PDAM Tirta Dharma Purabaya",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "bayar pdam",
+      "tagihan air",
+      "tirta dharma madiun",
+      "bank jatim & pdam mpp",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Penerbitan Persetujuan Pernyataan Kesanggupan Pengelolaan Lingkungan (SPPL)",
+    "slug": "penerbitan-persetujuan-pernyataan-kesanggupan-pengelolaan-lingkungan-sppl",
+    "instansi": "Dinas Lingkungan Hidup Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "2 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Persetujuan Pernyataan Kesanggupan Pengelolaan Lingkungan (SPPL)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "sppl",
+      "lingkungan hidup",
+      "dlh madiun",
+      "izin lingkungan",
+      "dinas lingkungan hidup kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Penerbitan Rekomendasi Upaya Pengelolaan Lingkungan (UKL-UPL)",
+    "slug": "penerbitan-rekomendasi-upaya-pengelolaan-lingkungan-ukl-upl",
+    "instansi": "Dinas Lingkungan Hidup Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "7 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Rekomendasi Upaya Pengelolaan Lingkungan (UKL-UPL)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "ukl upl",
+      "amdalnet",
+      "rekomendasi lingkungan",
+      "dlh",
+      "dinas lingkungan hidup kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Penerbitan Izin Penyimpanan Sementara Limbah Bahan Berbahaya dan Beracun (B3)",
+    "slug": "penerbitan-izin-penyimpanan-sementara-limbah-bahan-berbahaya-dan-beracun-b3",
+    "instansi": "Dinas Lingkungan Hidup Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Penerbitan Izin Penyimpanan Sementara Limbah Bahan Berbahaya dan Beracun (B3)",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "limbah b3",
+      "tps limbah b3",
+      "dlh caruban",
+      "dinas lingkungan hidup kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Izin KONSULTASI UJI KUALITAS AIR LIMBAH USAHA DAN SERTIFIKASI BAKU MUTU",
+    "slug": "konsultasi-uji-kualitas-air-limbah-usaha-dan-sertifikasi-baku-mutu",
+    "instansi": "Dinas Lingkungan Hidup Kab. Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Sesuai Perda Tarif Lab",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Konsultasi Uji Kualitas Air Limbah Usaha dan Sertifikasi Baku Mutu",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "uji air",
+      "baku mutu",
+      "laboratorium lingkungan",
+      "dinas lingkungan hidup kab. madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Pelayanan Mutasi / Balik Nama Objek Pajak PBB-P2 Seluruhnya",
+    "slug": "pelayanan-mutasi---balik-nama-objek-pajak-pbb-p2-seluruhnya",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Mutasi / Balik Nama Objek Pajak PBB-P2 Seluruhnya",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "mutasi pbb",
+      "balik nama sppt",
+      "bapenda madiun",
+      "bapenda kabupaten madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Pelayanan Pendaftaran Objek Pajak Baru PBB-P2 Tanah Belum Bersertipikat",
+    "slug": "pelayanan-pendaftaran-objek-pajak-baru-pbb-p2-tanah-belum-bersertipikat",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pendaftaran Objek Pajak Baru PBB-P2 Tanah Belum Bersertipikat",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "daftar pbb baru",
+      "nop baru",
+      "letter c",
+      "petok d",
+      "bapenda kabupaten madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Pelayanan Pembatalan SPPT PBB-P2 Ganda / Objek Tidak Ditemukan",
+    "slug": "pelayanan-pembatalan-sppt-pbb-p2-ganda---objek-tidak-ditemukan",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "3 hari",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pembatalan SPPT PBB-P2 Ganda / Objek Tidak Ditemukan",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "pbb ganda",
+      "hapus nop ganda",
+      "bapenda caruban",
+      "bapenda kabupaten madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Pelayanan Pengesahan Legalisir Fotokopi SPPT dan STTS PBB-P2",
+    "slug": "pelayanan-pengesahan-legalisir-fotokopi-sppt-dan-stts-pbb-p2",
+    "instansi": "Bapenda Kabupaten Madiun",
+    "jenisPerizinan": "Perizinan Baru",
+    "waktuPelayanan": "5 menit",
+    "biaya": "Gratis (Rp 0)",
+    "categoryId": "pajak",
+    "categoryName": "Pajak Daerah & BPHTB (Bapenda)",
+    "persyaratan": {
+      "administratif": [
+        "Kartu Tanda Penduduk (KTP) Pemohon yang masih berlaku",
+        "Kartu Keluarga (KK) terbaru",
+        "Surat permohonan resmi bermeterai Rp 10.000",
+        "Surat Kuasa bermeterai apabila pengurusan dikuasakan kepada pihak lain"
+      ],
+      "teknis": [
+        "Dokumen teknis pendukung spesifik pelayanan Pelayanan Pengesahan Legalisir Fotokopi SPPT dan STTS PBB-P2",
+        "Formulir registrasi loket Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon mengambil tiket antrean di Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+      "Menyerahkan berkas persyaratan kepada petugas loket yang bersangkutan",
+      "Petugas memverifikasi kelengkapan administrasi dan keabsahan dokumen",
+      "Proses validasi dan penerbitan produk layanan resmi",
+      "Penyerahan dokumen hasil perizinan / layanan kepada pemohon"
+    ],
+    "portalUrl": "https://bukusakumpp.madiunkab.go.id",
+    "keywords": [
+      "legalisir sppt",
+      "legalisir pbb",
+      "stts lunas",
+      "bapenda",
+      "bapenda kabupaten madiun",
+      "mpp madiun",
+      "kabupaten madiun"
+    ]
+  }
+]

@@ -1,0 +1,313 @@
+{
+    "total_visits": 2546,
+    "total_queries": 2343,
+    "avg_latency_ms": 1840,
+    "activities": [
+        {
+            "id": "act-1794831100-188",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794831100,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794831100-837",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794831100,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830713-378",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830713,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830713-855",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830713,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830713-134",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830713,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830694-511",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830694,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830693-387",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830693,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830693-380",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830693,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830682-705",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830682,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830681-562",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830681,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830681-664",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830681,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830368-807",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "tanya_ai",
+            "title": "Warga bertanya: \"Halo Buku Saku, sebutkan identitas Anda dan layana...\"",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830368,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830243-625",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830243,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794830243-966",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794830243,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829835-756",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829835,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829835-260",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829835,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829785-984",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829785,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829784-146",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829784,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829784-931",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829784,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829453-751",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "tanya_ai",
+            "title": "Warga bertanya: \"Halo Buku Saku, sebutkan identitas Anda dan layana...\"",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829453,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829368-903",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829368,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829368-120",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829368,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829111-257",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829111,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829110-700",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829110,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829110-994",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829110,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829100-145",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829100,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829100-233",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829100,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1794829099-896",
+            "ip": "127.0.0.1 (WiFi MPP Madiun)",
+            "type": "visit",
+            "title": "Warga membuka portal Buku Saku MPP",
+            "device": "Windows / Desktop",
+            "timestamp": 1794829099,
+            "time_ago": "Baru saja"
+        },
+        {
+            "id": "act-1",
+            "ip": "192.168.1.45 (WiFi MPP)",
+            "type": "tanya_ai",
+            "title": "Warga menanyakan: \"syarat izin warung kopi (KBLI 56303)\"",
+            "device": "Android / Chrome",
+            "timestamp": 1794828863,
+            "time_ago": "2 menit yang lalu"
+        },
+        {
+            "id": "act-2",
+            "ip": "114.124.201.88 (Telkomsel Madiun)",
+            "type": "cek_izin",
+            "title": "Warga mengecek SOP: \"Izin CPPOB Pangan Olahan\"",
+            "device": "Windows / Edge",
+            "timestamp": 1794827903,
+            "time_ago": "18 menit yang lalu"
+        },
+        {
+            "id": "act-3",
+            "ip": "180.252.170.12 (Indihome Caruban)",
+            "type": "tanya_ai",
+            "title": "Warga konsultasi: \"persyaratan SKCK baru & rumus sidik jari\"",
+            "device": "iPhone / Safari",
+            "timestamp": 1794826283,
+            "time_ago": "45 menit yang lalu"
+        },
+        {
+            "id": "act-4",
+            "ip": "10.15.2.14 (LAN DPMPTSP)",
+            "type": "perizinan_update",
+            "title": "Admin memperbarui berkas teknis perizinan",
+            "device": "PC / Chrome",
+            "timestamp": 1794825383,
+            "time_ago": "1 jam yang lalu"
+        },
+        {
+            "id": "act-5",
+            "ip": "36.85.92.104 (Indosat Ooredoo)",
+            "type": "tanya_ai",
+            "title": "Warga menanyakan: \"prosedur BPHTB waris mandiri tanpa calo\"",
+            "device": "Android / Chrome",
+            "timestamp": 1794821783,
+            "time_ago": "2 jam yang lalu"
+        }
+    ],
+    "daily_history": {
+        "Sen": 640,
+        "Sel": 780,
+        "Rab": 920,
+        "Kam": 840,
+        "Jum": 1100,
+        "Sab": 1250,
+        "Min": 1252
+    }
+}

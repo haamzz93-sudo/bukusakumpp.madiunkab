@@ -1,0 +1,62 @@
+{
+    "geminiApiKey": "",
+    "geminiModel": "gemini-3.5-flash-lite",
+    "temperature": 0.2,
+    "guardrailEnabled": true,
+    "systemPrompt": "Anda adalah BUKU SAKU, asisten digital resmi Mal Pelayanan Publik (MPP) Pemerintah Kabupaten Madiun.\nTugas Anda adalah memberikan panduan pelayanan perizinan, administrasi kependudukan, perpajakan daerah, dan layanan hukum di Kabupaten Madiun secara akurat berdasarkan standar pelayanan resmi.\nAturan Penting:\n1. JANGAN PERNAH menyebut Anda dibuat oleh OpenAI/Google/Claude atau menyebut nama model AI. Jika ditanya identitas, tegaskan Anda adalah BUKU SAKU AI Resmi Mal Pelayanan Publik Kabupaten Madiun.\n2. Gunakan bahasa Indonesia yang ramah, sopan, birokratis namun mudah dipahami masyarakat.\n3. Sebutkan persyaratan berkas, lama waktu layanan, biaya (jika gratis sebutkan Rp0), alur prosedur, dan tautan resmi OSS/Bapenda jika relevan.",
+    "logoOriginalUrl": "/images/logo_buku_saku_original.png",
+    "logoWhiteUrl": "/images/logo_buku_saku_white_gold.png",
+    "logoMppUrl": "/images/logo_mpp_madiun_hd.png",
+    "bgMode": "auto",
+    "bgAutoIntervalSeconds": 8,
+    "selectedFixedBg": "/images/backgrounds/bg_liquid_glass.jpg",
+    "heroBadge": "Layanan Resmi Mal Pelayanan Publik (MPP) Kabupaten Madiun",
+    "heroTitle": "Halo, saya Buku Saku.",
+    "heroSubtitle": "Mau tanya apa soal perizinan di Kabupaten Madiun?",
+    "heroDesc": "Panduan digital resmi MPP Kab. Madiun. Tanyakan seputar izin warung kopi, PB UMKU, NIB OSS, BPHTB, SKCK, Paspor, hingga KTP-el — saya jawab langsung dari dokumen standar pelayanan.",
+    "trustBadge": "Jawaban disusun langsung dari Standar Pelayanan Resmi MPP & DPMPTSP Kabupaten Madiun",
+    "quickChips": [
+        "izin buka warung kopi",
+        "syarat SKCK baru",
+        "pengajuan BPHTB waris mandiri",
+        "izin edar pangan CPPOB",
+        "pendaftaran NPWP Coretax",
+        "aktivasi IKD di HP"
+    ],
+    "stat1Value": "80+",
+    "stat1Label": "Jenis perizinan resmi",
+    "stat2Value": "100% Gratis",
+    "stat2Label": "Informasi resmi tanpa calo",
+    "stat3Value": "24 Jam",
+    "stat3Label": "Dapat diakses kapan saja",
+    "stat4Value": "2,4 dtk",
+    "stat4Label": "Rata-rata waktu respon",
+    "whatsappNumber": "0851-1740-5460",
+    "phone": "(0351) 383015",
+    "email": "dpmptsp@madiunkab.go.id",
+    "address": "Gedung MPP Caruban: Jl. Alun-Alun Timur No.3, Caruban, Kabupaten Madiun",
+    "workingHours": "Senin – Jumat, 08.00 – 15.00 WIB",
+    "footerAbout": "Panduan digital perizinan resmi dari Mal Pelayanan Publik (MPP) Kabupaten Madiun. Hadir untuk mempermudah masyarakat dan pelaku usaha memperoleh informasi syarat, alur, dan ketentuan perizinan secara cepat, transparan, dan bebas pungutan liar.",
+    "footerLinks": [
+        {
+            "title": "Buku Saku MPP Madiun",
+            "url": "https://bukusakumpp.madiunkab.go.id/"
+        },
+        {
+            "title": "DPMPTSP Kabupaten Madiun",
+            "url": "https://dpmptsp.id/"
+        },
+        {
+            "title": "Portal OSS-RBA (BKPM RI)",
+            "url": "https://oss.go.id/"
+        },
+        {
+            "title": "Pemerintah Kab. Madiun",
+            "url": "https://madiunkab.go.id/"
+        },
+        {
+            "title": "Coretax DJP Pajak",
+            "url": "https://coretaxdjp.pajak.go.id/"
+        }
+    ]
+}
