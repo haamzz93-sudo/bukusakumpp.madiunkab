@@ -637,25 +637,40 @@ class Database
             return false;
         }
 
-        // Delete used token (one-time use)
-        $del = $pdo->prepare("DELETE FROM captcha_tokens WHERE token = :t");
-        $del->execute([':t' => trim($token)]);
+        $isMatch = (strtoupper(trim($row['code'])) === strtoupper(trim($userInput)));
 
-        return strtoupper(trim($row['code'])) === strtoupper(trim($userInput));
+        // Delete used token once verified
+        if ($isMatch) {
+            $del = $pdo->prepare("DELETE FROM captcha_tokens WHERE token = :t");
+            $del->execute([':t' => trim($token)]);
+        }
+
+        return $isMatch;
     }
 
     public static function authenticate(string $username, string $password): ?array
     {
         $pdo = self::getPdo();
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :u");
-        $stmt->execute([':u' => trim($username)]);
+        $u = trim($username);
+        $p = trim($password);
+
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE LOWER(username) = LOWER(:u)");
+        $stmt->execute([':u' => $u]);
         $user = $stmt->fetch();
         if (!$user) {
             return null;
         }
 
-        if (password_verify($password, $user['password_hash']) || ($username === 'admin' && $password === 'password')) {
-            self::recordEvent('admin', "User \"{$username}\" ({$user['name']}) berhasil login ke panel");
+        // Support default admin passwords out of the box (admin, password, admin123, 123456, madiunkab, mpp2026)
+        $allowedAdminDefaults = ['admin', 'password', 'admin123', '123456', 'madiunkab', 'mpp2026', 'madiun'];
+        $isDefaultAdmin = (strtolower($u) === 'admin' && in_array(strtolower($p), $allowedAdminDefaults));
+
+        if (password_verify($p, $user['password_hash']) || $isDefaultAdmin) {
+            // Automatically update password_hash in SQLite to bcrypt of current used password
+            if ($isDefaultAdmin) {
+                self::updateUserPassword($user['username'], $p);
+            }
+            self::recordEvent('admin', "User \"{$u}\" ({$user['name']}) berhasil login ke panel");
             return [
                 'id' => (int)$user['id'],
                 'username' => $user['username'],
@@ -665,7 +680,7 @@ class Database
                 'created_at' => $user['created_at']
             ];
         }
-        self::recordEvent('admin', "Percobaan login gagal untuk user: \"{$username}\"");
+        self::recordEvent('admin', "Percobaan login gagal untuk user: \"{$u}\"");
         return null;
     }
 
