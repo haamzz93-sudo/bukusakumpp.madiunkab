@@ -121,7 +121,7 @@ export const App: React.FC = () => {
     });
   };
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = async (query: string, isFollowup = false) => {
     if (!query.trim()) return;
 
     trackVisitorEvent('tanya_ai', `Warga menanyakan: "${query.substring(0, 40)}${query.length > 40 ? '...' : ''}"`);
@@ -136,11 +136,17 @@ export const App: React.FC = () => {
       timestamp: Date.now()
     };
 
-    setMessages(prev => [...prev, userMsg]);
+    if (isFollowup) {
+      setMessages(prev => [...prev, userMsg]);
+    } else {
+      // Pertanyaan baru: reset tampilan agar langsung fokus ke pertanyaan baru yang diklik
+      setMessages([userMsg]);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
-      const result = await askHybridAi(query, [...messages, userMsg]);
+      const historyToSend = isFollowup ? [...messages, userMsg] : [];
+      const result = await askHybridAi(query, historyToSend);
 
       const botMsg: ChatMessage = {
         id: `bot-${Date.now()}`,
@@ -154,7 +160,11 @@ export const App: React.FC = () => {
         needsHuman: result.needs_human
       };
 
-      setMessages(prev => [...prev, botMsg]);
+      if (isFollowup) {
+        setMessages(prev => [...prev, botMsg]);
+      } else {
+        setMessages([userMsg, botMsg]);
+      }
     } catch (err) {
       const fallbackMsg: ChatMessage = {
         id: `bot-err-${Date.now()}`,
@@ -163,7 +173,11 @@ export const App: React.FC = () => {
         timestamp: Date.now(),
         needsHuman: true
       };
-      setMessages(prev => [...prev, fallbackMsg]);
+      if (isFollowup) {
+        setMessages(prev => [...prev, fallbackMsg]);
+      } else {
+        setMessages([userMsg, fallbackMsg]);
+      }
     } finally {
       setIsLoading(false);
     }

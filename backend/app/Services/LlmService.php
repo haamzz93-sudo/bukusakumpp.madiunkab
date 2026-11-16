@@ -14,7 +14,7 @@ class LlmService
     {
         $this->apiKey = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? '');
         $this->model = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.5-flash-lite');
-        $this->fallbackModel = getenv('GEMINI_FALLBACK_MODEL') ?: ($_ENV['GEMINI_FALLBACK_MODEL'] ?? 'gemini-3.5-flash');
+        $this->fallbackModel = getenv('GEMINI_FALLBACK_MODEL') ?: ($_ENV['GEMINI_FALLBACK_MODEL'] ?? 'gemini-3.1-flash-lite');
 
         $settingsFile = __DIR__ . '/../../storage/settings.json';
         if (file_exists($settingsFile)) {
@@ -97,6 +97,10 @@ class LlmService
             $response = $this->callGeminiApi($this->fallbackModel, $systemInstruction, $prompt);
         }
 
+        if (!$response) {
+            $response = $this->callGeminiApi('gemini-flash-lite-latest', $systemInstruction, $prompt);
+        }
+
         return $response;
     }
 
@@ -133,8 +137,8 @@ class LlmService
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json'
             ],
-            CURLOPT_TIMEOUT => 35,
-            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT => 20,
+            CURLOPT_CONNECTTIMEOUT => 8,
             CURLOPT_SSL_VERIFYPEER => false
         ]);
 

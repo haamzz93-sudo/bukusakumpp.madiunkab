@@ -27,7 +27,7 @@ interface ChatThreadProps {
   messages: ChatMessage[];
   currentQuery: string;
   isLoading: boolean;
-  onSendFollowup: (query: string) => void;
+  onSendFollowup: (query: string, isFollowup?: boolean) => void;
   onBackToHome: () => void;
 }
 
@@ -190,7 +190,8 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   onBackToHome
 }) => {
   const [useTimesNewRoman, setUseTimesNewRoman] = useState(true);
-  const [followupText, setFollowupText] = useState('');
+  const [headerSearchText, setHeaderSearchText] = useState('');
+  const [bottomFollowupText, setBottomFollowupText] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [openSources, setOpenSources] = useState<{ [key: string]: boolean }>({});
   const [votes, setVotes] = useState<{ [key: string]: 'up' | 'down' }>({});
@@ -209,11 +210,19 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
     setVotes(prev => ({ ...prev, [msgId]: type }));
   };
 
-  const handleFollowupSubmit = (e: React.FormEvent) => {
+  const handleHeaderSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (followupText.trim() && !isLoading) {
-      onSendFollowup(followupText.trim());
-      setFollowupText('');
+    if (headerSearchText.trim() && !isLoading) {
+      onSendFollowup(headerSearchText.trim(), false);
+      setHeaderSearchText('');
+    }
+  };
+
+  const handleBottomSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (bottomFollowupText.trim() && !isLoading) {
+      onSendFollowup(bottomFollowupText.trim(), false);
+      setBottomFollowupText('');
     }
   };
 
@@ -227,7 +236,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
           <button
             onClick={onBackToHome}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-sm shadow-sm transition-all self-start"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-sm shadow-sm transition-all self-start cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>Kembali ke Beranda</span>
@@ -235,19 +244,19 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
 
           {/* Active Query Banner */}
           <div className="flex-1 max-w-xl sm:mx-4">
-            <form onSubmit={handleFollowupSubmit} className="relative flex items-center">
+            <form onSubmit={handleHeaderSearchSubmit} className="relative flex items-center">
               <input
                 type="text"
-                value={followupText}
-                onChange={(e) => setFollowupText(e.target.value)}
+                value={headerSearchText}
+                onChange={(e) => setHeaderSearchText(e.target.value)}
                 placeholder="Tanyakan hal lain seputar perizinan..."
                 className="w-full py-2 pl-9 pr-24 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:border-madiun-forest dark:focus:border-emerald-400 shadow-sm"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3" />
               <button
                 type="submit"
-                disabled={!followupText.trim() || isLoading}
-                className="absolute right-1.5 px-3 py-1 bg-mpp-bright hover:bg-mpp-yellow text-slate-950 font-bold text-xs rounded-lg shadow-sm transition-transform active:scale-95 disabled:opacity-50"
+                disabled={!headerSearchText.trim() || isLoading}
+                className="absolute right-1.5 px-3 py-1 bg-mpp-bright hover:bg-mpp-yellow text-slate-950 font-bold text-xs rounded-lg shadow-sm transition-transform active:scale-95 disabled:opacity-50 cursor-pointer"
               >
                 Tanya
               </button>
@@ -440,8 +449,8 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                   {latestAssistantMessage.relatedQuestions.map((q, idx) => (
                     <button
                       key={idx}
-                      onClick={() => onSendFollowup(q)}
-                      className="text-left text-xs px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 shadow-sm transition-all"
+                      onClick={() => onSendFollowup(q, false)}
+                      className="text-left text-xs px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 shadow-sm transition-all cursor-pointer"
                     >
                       {q}
                     </button>
@@ -451,20 +460,20 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
             )}
 
             {/* Follow-up input form */}
-            <form onSubmit={handleFollowupSubmit} className="pt-4">
+            <form onSubmit={handleBottomSubmit} className="pt-4">
               <div className="flex items-center gap-2">
                 <input
                   type="text"
-                  value={followupText}
-                  onChange={(e) => setFollowupText(e.target.value)}
+                  value={bottomFollowupText}
+                  onChange={(e) => setBottomFollowupText(e.target.value)}
                   placeholder="Ketik pertanyaan lanjutan Anda di sini..."
                   className="flex-1 py-3 px-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-emerald-600 shadow-sm"
                   disabled={isLoading}
                 />
                 <button
                   type="submit"
-                  disabled={isLoading || !followupText.trim()}
-                  className="px-5 py-3 rounded-xl bg-madiun-forest hover:bg-emerald-800 text-white font-semibold text-sm shadow-md transition-all disabled:opacity-50 flex items-center gap-1.5"
+                  disabled={isLoading || !bottomFollowupText.trim()}
+                  className="px-5 py-3 rounded-xl bg-madiun-forest hover:bg-emerald-800 text-white font-semibold text-sm shadow-md transition-all disabled:opacity-50 flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>Kirim</span>
                   <Send className="w-4 h-4" />

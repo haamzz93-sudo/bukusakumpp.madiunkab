@@ -15,7 +15,7 @@ export async function askHybridAi(
   for (const endpoint of endpoints) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout for live LLM inference
+      const timeoutId = setTimeout(() => controller.abort(), 35000); // 35s timeout for live LLM inference
 
       const apiRes = await fetch(endpoint, {
         method: 'POST',
