@@ -18,8 +18,8 @@ class RagSearchService
         $cleanQ = mb_strtolower(trim($query));
         $tokens = array_filter(explode(' ', preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $cleanQ)));
         
-        // Exclude common stop words
-        $stopWords = ['apa', 'saja', 'syarat', 'cara', 'bagaimana', 'alur', 'izin', 'perizinan', 'di', 'ke', 'dari', 'dan', 'yang', 'untuk', 'madiun', 'kabupaten', 'buku', 'saku', 'mpp'];
+        // Exclude common stop words (including general verbs like 'buka')
+        $stopWords = ['apa', 'saja', 'syarat', 'cara', 'bagaimana', 'alur', 'izin', 'perizinan', 'di', 'ke', 'dari', 'dan', 'yang', 'untuk', 'madiun', 'kabupaten', 'buku', 'saku', 'mpp', 'buka', 'mau', 'bisa', 'tolong', 'tanya'];
         $meaningfulTokens = array_values(array_filter($tokens, fn($t) => !in_array($t, $stopWords) && mb_strlen($t) > 2));
 
         if (empty($meaningfulTokens)) {
@@ -36,42 +36,83 @@ class RagSearchService
 
             // Exact phrase match bonus
             if (str_contains($contentLower, $cleanQ)) {
-                $score += 25;
+                $score += 35;
             }
 
             foreach ($meaningfulTokens as $token) {
                 if (str_contains($titleLower, $token)) {
-                    $score += 15;
+                    $score += 20;
                 }
                 if (str_contains($agencyLower, $token)) {
-                    $score += 8;
+                    $score += 10;
                 }
                 if (str_contains($contentLower, $token)) {
-                    $score += 3;
+                    $score += 4;
                 }
             }
 
-            // Specific high-frequency service boosters
-            if ((str_contains($cleanQ, 'warung kopi') || str_contains($cleanQ, 'kedai')) && str_contains($contentLower, '56303')) {
-                $score += 30;
+            // High-precision Domain Intent Boosters & Collision Guards
+            
+            // 1. Usaha Warung Kopi / Usaha Kuliner / Cafe / Makanan & Minuman
+            if (preg_match('/warung|kopi|warkop|kedai|kafe|cafe|kuliner|restoran|rumah makan|minuman|56303/u', $cleanQ)) {
+                if (str_contains($titleLower, 'warung kopi') || str_contains($titleLower, '56303') || str_contains($contentLower, '56303')) {
+                    $score += 180;
+                } elseif (str_contains($agencyLower, 'dpmptsp') || str_contains($titleLower, 'oss') || str_contains($titleLower, 'berusaha') || ($page['page'] ?? 0) == 6 || ($page['page'] ?? 0) == 10) {
+                    $score += 90;
+                }
+                // Penalty: jangan mencocokkan rekening/deposito perbankan saat bertanya kuliner/warung
+                if (str_contains($titleLower, 'deposito') || str_contains($titleLower, 'tabungan') || str_contains($titleLower, 'bank daerah')) {
+                    $score -= 150;
+                }
             }
-            if (str_contains($cleanQ, 'skck') && (str_contains($contentLower, 'skck') || str_contains($agencyLower, 'polres'))) {
-                $score += 30;
+
+            // 2. Perbankan / Deposito / Simpanan
+            if (preg_match('/deposito|tabungan|bpr|bank daerah|rekening|kredit/u', $cleanQ)) {
+                if (str_contains($titleLower, 'deposito') || str_contains($titleLower, 'tabungan') || str_contains($agencyLower, 'bank')) {
+                    $score += 120;
+                }
             }
-            if (str_contains($cleanQ, 'bphtb') && (str_contains($contentLower, 'bphtb') || str_contains($agencyLower, 'bapenda'))) {
-                $score += 30;
+
+            // 3. SKCK & Kepolisian
+            if (preg_match('/skck|catatan kepolisian|sidik jari/u', $cleanQ)) {
+                if (str_contains($titleLower, 'skck') || str_contains($agencyLower, 'polres')) {
+                    $score += 120;
+                }
             }
-            if (str_contains($cleanQ, 'pbb') && (str_contains($contentLower, 'pbb') || str_contains($agencyLower, 'bapenda'))) {
-                $score += 30;
+
+            // 4. BPHTB & Waris
+            if (preg_match('/bphtb|waris mandiri|pajak waris/u', $cleanQ)) {
+                if (str_contains($titleLower, 'bphtb') || (str_contains($agencyLower, 'bapenda') && str_contains($titleLower, 'waris'))) {
+                    $score += 120;
+                }
             }
-            if (str_contains($cleanQ, 'paspor') && str_contains($contentLower, 'paspor')) {
-                $score += 30;
+
+            // 5. PBB-P2 & Balik Nama Pajak
+            if (preg_match('/pbb|sppt|stts|balik nama pbb|mutasi pbb|njop/u', $cleanQ)) {
+                if (str_contains($titleLower, 'pbb') || str_contains($titleLower, 'sppt')) {
+                    $score += 120;
+                }
             }
-            if ((str_contains($cleanQ, 'ktp') || str_contains($cleanQ, 'kk') || str_contains($cleanQ, 'ikd')) && str_contains($agencyLower, 'kependudukan')) {
-                $score += 30;
+
+            // 6. CPPOB / BPOM / PIRT / Pangan Olahan
+            if (preg_match('/cppob|bpom|pangan|pirt|obat|kosmetik/u', $cleanQ)) {
+                if (str_contains($titleLower, 'cppob') || str_contains($agencyLower, 'pom') || str_contains($titleLower, 'kosmetik')) {
+                    $score += 120;
+                }
             }
-            if (str_contains($cleanQ, 'kosmetik') && str_contains($contentLower, 'kosmetik')) {
-                $score += 30;
+
+            // 7. Administrasi Kependudukan (KTP, KK, IKD, Akta)
+            if (preg_match('/ktp|kartu keluarga|kia|ikd|akta/u', $cleanQ)) {
+                if (str_contains($agencyLower, 'kependudukan') || str_contains($agencyLower, 'dukcapil') || str_contains($titleLower, 'ktp') || str_contains($titleLower, 'akta')) {
+                    $score += 120;
+                }
+            }
+
+            // 8. Paspor & Keimigrasian
+            if (preg_match('/paspor|imigrasi|visa/u', $cleanQ)) {
+                if (str_contains($agencyLower, 'imigrasi') || str_contains($titleLower, 'paspor')) {
+                    $score += 120;
+                }
             }
 
             if ($score > 0) {
@@ -179,7 +220,7 @@ class RagSearchService
         $related = [];
         $agency = $chunks[0]['agency'] ?? 'MPP Kabupaten Madiun';
         
-        $related[] = "Berapa jam operasional loket {$agency} di MPP Caruban?";
+        $related[] = "Berapa jam operasional loket {$agency} di Gedung MPP Kabupaten Madiun?";
         $related[] = "Apakah pengurusan layanan ini dapat diwakilkan dengan surat kuasa?";
         $related[] = "Dokumen asli apa saja yang wajib dibawa saat verifikasi di loket?";
 
@@ -200,7 +241,45 @@ class RagSearchService
                 $data = json_decode($raw, true);
                 if (!empty($data['pages'])) {
                     $this->pages = $data['pages'];
-                    return;
+                    break;
+                }
+            }
+        }
+
+        // Merge official perizinan catalog services into knowledge base
+        $catalogPaths = [
+            __DIR__ . '/../../storage/allPerizinan80.json',
+            __DIR__ . '/../storage/allPerizinan80.json',
+            'D:/Landing Page/Buku Saku/backend/storage/allPerizinan80.json'
+        ];
+
+        foreach ($catalogPaths as $cPath) {
+            if (file_exists($cPath)) {
+                $rawCatalog = file_get_contents($cPath);
+                $items = json_decode($rawCatalog, true);
+                if (is_array($items)) {
+                    foreach ($items as $item) {
+                        $adm = is_array($item['persyaratan']['administratif'] ?? null) ? implode("\n", $item['persyaratan']['administratif']) : '';
+                        $tek = is_array($item['persyaratan']['teknis'] ?? null) ? implode("\n", $item['persyaratan']['teknis']) : '';
+                        $mek = is_array($item['mekanismeProsedur'] ?? null) ? implode("\n", $item['mekanismeProsedur']) : '';
+                        $keywords = is_array($item['keywords'] ?? null) ? implode(', ', $item['keywords']) : '';
+
+                        $content = "Standar Pelayanan: {$item['title']}\n"
+                            . "Instansi Pelaksana: {$item['instansi']}\n"
+                            . "Jenis Layanan: {$item['jenisPerizinan']} | Waktu: {$item['waktuPelayanan']} | Biaya: {$item['biaya']}\n"
+                            . "Persyaratan Administratif:\n{$adm}\n"
+                            . "Persyaratan Teknis:\n{$tek}\n"
+                            . "Alur Prosedur & Mekanisme:\n{$mek}\n"
+                            . "Kata Kunci Pencarian: {$keywords}";
+
+                        $this->pages[] = [
+                            'page' => $item['id'] == 101 ? 5 : ($item['id'] ?? 1),
+                            'agency' => $item['instansi'],
+                            'title' => $item['title'],
+                            'content' => $content
+                        ];
+                    }
+                    break;
                 }
             }
         }

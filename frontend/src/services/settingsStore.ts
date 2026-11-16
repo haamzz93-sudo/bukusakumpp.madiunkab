@@ -48,7 +48,7 @@ export interface AppSettings {
 
 export const DEFAULT_SETTINGS: AppSettings = {
   geminiApiKey: import.meta.env.VITE_GEMINI_API_KEY || '',
-  geminiModel: 'gemini-3.5-flash-lite',
+  geminiModel: 'gemini-3.1-flash-lite',
   temperature: 0.2,
   guardrailEnabled: true,
   systemPrompt: `Anda adalah BUKU SAKU, asisten digital resmi Mal Pelayanan Publik (MPP) Pemerintah Kabupaten Madiun.

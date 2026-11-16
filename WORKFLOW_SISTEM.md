@@ -71,7 +71,7 @@ Sistem dirancang mengadopsi mekanisme ketat seperti AIDA UNS, di mana permintaan
 ### Layer 3: AI General & Eskalasi Helpdesk Otomatis
 * Digunakan jika pertanyaan membutuhkan sintesis multi-izin atau panduan langkah demi langkah.
 * Jika pertanyaan membutuhkan verifikasi data pribadi (misal: *"kenapa NIB saya belum terbit?"*, *"apakah berkas saya sudah diverifikasi dinas?"*), sistem menandai `needs_human: true`.
-* Frontend otomatis menampilkan tombol hijau WhatsApp Helpdesk MPP Kabupaten Madiun (`0851-1740-5460` / `(0351) 383015`) dengan pesan yang telah terisi otomatis (*pre-filled*).
+* Frontend otomatis menampilkan tombol hijau WhatsApp Helpdesk MPP Kabupaten Madiun (`0811-3778-776` / `(0351) 497206`) dengan pesan yang telah terisi otomatis (*pre-filled*).
 
 ---
 

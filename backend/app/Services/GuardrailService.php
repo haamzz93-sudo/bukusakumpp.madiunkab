@@ -22,7 +22,7 @@ class GuardrailService
                 'related' => [
                     'Apa saja jenis perizinan usaha yang dilayani di MPP Madiun?',
                     'Bagaimana syarat membuat NIB OSS untuk warung kopi?',
-                    'Berapa jam operasional loket di MPP Caruban?'
+                    'Berapa jam operasional loket di Gedung MPP Kabupaten Madiun?'
                 ],
                 'needs_human' => false
             ];

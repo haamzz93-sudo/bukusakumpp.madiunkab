@@ -1,5 +1,52 @@
 [
   {
+    "id": 101,
+    "title": "Perizinan Berusaha Warung Kopi, Kedai Minuman & Restoran Skala Mikro Kecil (KBLI 56303)",
+    "slug": "izin-buka-warung-kopi-kbli-56303",
+    "instansi": "DPMPTSP Kabupaten Madiun / Lembaga OSS BKPM RI",
+    "jenisPerizinan": "Perizinan Berusaha Baru (Tingkat Risiko Rendah)",
+    "waktuPelayanan": "Langsung Terbit (0 menit via OSS RBA)",
+    "biaya": "Gratis (Rp0) — Tanpa Dipungut Biaya Retribusi",
+    "categoryId": "usaha",
+    "categoryName": "Perizinan Usaha, OSS & BPOM",
+    "persyaratan": {
+      "administratif": [
+        "KTP Pemilik Usaha / Penanggung Jawab",
+        "Nomor Pokok Wajib Pajak (NPWP) Pemilik Usaha",
+        "Nomor Telepon Aktif & Email untuk aktivasi akun OSS-RBA",
+        "Nomor Induk Berusaha (NIB) dengan KBLI 56303 (Penyediaan Minuman / Warung Kopi / Kedai Kopi)",
+        "Titik koordinat dan alamat lengkap tempat usaha di wilayah Kabupaten Madiun"
+      ],
+      "teknis": [
+        "Surat Pernyataan Kesanggupan Pengelolaan dan Pemantauan Lingkungan Hidup (SPPL) otomatis terintegrasi di OSS",
+        "Pernyataan kesanggupan menjaga kebersihan dan sanitasi tempat usaha",
+        "Jika memproduksi kopi bubuk/biji kemasan sendiri dengan merek dagang, mengurus Sertifikat Pemenuhan Komitmen SPP-IRT ke Dinas Kesehatan Kab. Madiun"
+      ]
+    },
+    "mekanismeProsedur": [
+      "Pemohon membuat akun di sistem Online Single Submission (OSS RBA) melalui laman oss.go.id atau dibantu langsung oleh petugas loket DPMPTSP di Gedung Mal Pelayanan Publik (MPP) Kabupaten Madiun.",
+      "Memilih menu Permohonan Baru, mengisi identitas usaha, luas tempat usaha warung kopi, dan modal usaha.",
+      "Memilih KBLI 56303 (Restoran/Warung Kopi/Rumah Minum). Karena berstatus Risiko Rendah, izin yang dibutuhkan adalah NIB yang sekaligus berlaku sebagai izin operasional dan legalitas usaha.",
+      "Menyetujui surat pernyataan mandiri terkait K3, tata ruang, dan lingkungan secara elektronik.",
+      "NIB terbit seketika dalam format PDF bertanda tangan elektronik (BSrE), dapat dicetak mandiri atau dicetak di loket MPP Kabupaten Madiun.",
+      "Warung kopi resmi legal dan siap beroperasi tanpa perlu izin tambahan lainnya."
+    ],
+    "portalUrl": "https://oss.go.id",
+    "keywords": [
+      "warung kopi",
+      "warkop",
+      "kedai kopi",
+      "kafe",
+      "usaha kopi",
+      "izin usaha mikro",
+      "kbli 56303",
+      "nib warung",
+      "mpp madiun",
+      "dpmptsp",
+      "izin buka warung kopi"
+    ]
+  },
+  {
     "id": 82,
     "title": "Izin PERMOHONAN REKOMENDASI SEBAGAI PEMOHON NOTIFIKASI KOSMETIKA",
     "slug": "permohonan-rekomendasi-sebagai-pemohon-notifikasi-kosmetika",

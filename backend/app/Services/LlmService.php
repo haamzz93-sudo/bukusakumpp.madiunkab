@@ -13,8 +13,8 @@ class LlmService
     public function __construct()
     {
         $this->apiKey = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? '');
-        $this->model = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.5-flash-lite');
-        $this->fallbackModel = getenv('GEMINI_FALLBACK_MODEL') ?: ($_ENV['GEMINI_FALLBACK_MODEL'] ?? 'gemini-3.1-flash-lite');
+        $this->model = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.1-flash-lite');
+        $this->fallbackModel = getenv('GEMINI_FALLBACK_MODEL') ?: ($_ENV['GEMINI_FALLBACK_MODEL'] ?? 'gemini-flash-lite-latest');
 
         $settingsFile = __DIR__ . '/../../storage/settings.json';
         if (file_exists($settingsFile)) {
@@ -40,12 +40,13 @@ class LlmService
             return null;
         }
 
-        // Build context block from retrieved pages
+        // Build context block from top 2 retrieved pages (optimized for fast LLM inference)
         $contextText = "";
-        foreach ($contextChunks as $idx => $chunk) {
+        $topChunks = array_slice($contextChunks, 0, 2);
+        foreach ($topChunks as $idx => $chunk) {
             $contextText .= "--- DOKUMEN RUJUKAN RESMI " . ($idx + 1) . " (Buku Saku MPP 2026 - Halaman {$chunk['page']} | Instansi: {$chunk['agency']}) ---\n";
             $contextText .= "Judul/Layanan: {$chunk['title']}\n";
-            $contextText .= "Isi Standar Pelayanan:\n" . substr($chunk['content'], 0, 1500) . "\n\n";
+            $contextText .= "Isi Standar Pelayanan:\n" . substr($chunk['content'], 0, 800) . "\n\n";
         }
 
         $basePrompt = !empty($this->customSystemPrompt) 
@@ -98,7 +99,7 @@ class LlmService
         }
 
         if (!$response) {
-            $response = $this->callGeminiApi('gemini-flash-lite-latest', $systemInstruction, $prompt);
+            $response = $this->callGeminiApi('gemini-3.5-flash-lite', $systemInstruction, $prompt);
         }
 
         return $response;
@@ -124,7 +125,7 @@ class LlmService
             ],
             'generationConfig' => [
                 'temperature' => $this->temperature,
-                'maxOutputTokens' => 3000,
+                'maxOutputTokens' => 1800,
                 'topP' => 0.85
             ]
         ];
@@ -137,8 +138,9 @@ class LlmService
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json'
             ],
-            CURLOPT_TIMEOUT => 20,
-            CURLOPT_CONNECTTIMEOUT => 8,
+            CURLOPT_TIMEOUT => 12,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
             CURLOPT_SSL_VERIFYPEER => false
         ]);
 

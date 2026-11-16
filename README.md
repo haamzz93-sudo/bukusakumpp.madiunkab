@@ -53,7 +53,7 @@ D:\Landing Page\Buku Saku\
 │   │   │   ├── ChatThread.tsx          # Thread percakapan & bubble AIDA
 │   │   │   ├── TelusuriSection.tsx     # Katalog eksplorasi kategori perizinan
 │   │   │   ├── PopulerSection.tsx      # Topik perizinan paling sering ditanya
-│   │   │   ├── ContactFooter.tsx       # Kontak resmi MPP Caruban & Jam Kerja
+│   │   │   ├── ContactFooter.tsx       # Kontak resmi MPP Kab. Madiun & Jam Kerja
 │   │   │   └── AdminLoginModal.tsx     # Modal login admin MPP
 │   │   ├── data/
 │   │   │   └── perizinanMadiunData.ts  # Master data 82 perizinan resmi MPP Madiun
