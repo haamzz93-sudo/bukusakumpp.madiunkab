@@ -94,14 +94,32 @@ class RagSearchService
             $topChunks = array_slice($this->pages, 3, 3);
         }
 
-        // Construct source items citing actual PDF pages
+        // Construct source items citing actual PDF pages with authentic portal URLs
         $sourceItems = [];
         foreach ($topChunks as $chunk) {
+            $portal = 'https://bukusakumpp.madiunkab.go.id';
+            $agencyLower = mb_strtolower($chunk['agency'] ?? '');
+            if (str_contains($agencyLower, 'pertanahan') || str_contains($agencyLower, 'bpn')) {
+                $portal = 'https://atrbpn.go.id';
+            } elseif (str_contains($agencyLower, 'bapenda') || str_contains($agencyLower, 'pajak')) {
+                $portal = 'https://bapenda.madiunkab.go.id';
+            } elseif (str_contains($agencyLower, 'dpmptsp') || str_contains($agencyLower, 'usaha')) {
+                $portal = 'https://oss.go.id';
+            } elseif (str_contains($agencyLower, 'polres') || str_contains($agencyLower, 'skck')) {
+                $portal = 'https://skck.polri.go.id';
+            } elseif (str_contains($agencyLower, 'kependudukan') || str_contains($agencyLower, 'disdukcapil')) {
+                $portal = 'https://dukcapil.madiunkab.go.id';
+            } elseif (str_contains($agencyLower, 'imigrasi') || str_contains($agencyLower, 'paspor')) {
+                $portal = 'https://mpaspor.imigrasi.go.id';
+            } elseif (str_contains($agencyLower, 'bpom') || str_contains($agencyLower, 'obat')) {
+                $portal = 'https://e-sertifikasi.pom.go.id';
+            }
+
             $sourceItems[] = [
                 'name' => "Standar Pelayanan: {$chunk['title']}",
                 'instansi' => $chunk['agency'],
                 'waktu' => "Halaman {$chunk['page']} (Buku Saku MPP 2026)",
-                'portal' => 'Mal Pelayanan Publik Caruban'
+                'portal' => $portal
             ];
         }
 

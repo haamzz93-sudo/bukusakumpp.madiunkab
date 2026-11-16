@@ -206,14 +206,14 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                                 <div className="font-semibold text-slate-800 dark:text-slate-100">{item.name}</div>
                                 <div className="text-slate-500 dark:text-slate-400">{item.instansi} • {item.waktu || 'Standar Pelayanan'}</div>
                               </div>
-                              {item.portal && (
+                              {item.portal && item.portal.startsWith('http') && (
                                 <a
                                   href={item.portal}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:underline shrink-0"
                                 >
-                                  <span>Portal</span>
+                                  <span>Portal Resmi</span>
                                   <ExternalLink className="w-3 h-3" />
                                 </a>
                               )}

@@ -48,18 +48,25 @@ class LlmService
             $contextText .= "Isi Standar Pelayanan:\n" . substr($chunk['content'], 0, 1500) . "\n\n";
         }
 
-        $systemInstruction = $this->customSystemPrompt 
-            ? ($this->customSystemPrompt . "\n\n" . "DOKUMEN STANDAR PELAYANAN RESMI BUKU SAKU MPP 2026:\n" . $contextText)
+        $basePrompt = !empty($this->customSystemPrompt) 
+            ? $this->customSystemPrompt 
             : ("Anda adalah BUKU SAKU, asisten digital resmi Mal Pelayanan Publik (MPP) Pemerintah Kabupaten Madiun.\n"
             . "Tugas Anda: Memberikan informasi perizinan, persyaratan administratif/teknis, sistem mekanisme alur pengurusan, biaya/retribusi, dan jangka waktu pelayanan secara akurat, lugas, santun, dan mudah dipahami masyarakat.\n\n"
             . "ATURAN UTAMA (WAJIB DITAATI):\n"
-            . "1. Gunakan HANYA informasi faktual dari DOKUMEN RUJUKAN RESMI Buku Saku MPP 2026 yang diberikan di bawah ini. Jangan berhalusinasi atau mengarang aturan baru.\n"
+            . "1. Gunakan informasi faktual dari DOKUMEN RUJUKAN RESMI Buku Saku MPP 2026 yang diberikan di bawah ini.\n"
             . "2. Format jawaban dengan markdown yang rapi: gunakan judul tebal (###), daftar bernomor untuk alur, dan poin peluru (-) untuk persyaratan.\n"
             . "3. Sebutkan instansi pelaksana resmi (misal: DPMPTSP, Disnaker, Bapenda, Kantor Pertanahan, Disdukcapil, dll.) dan nomor halaman dokumen rujukan.\n"
             . "4. Jika informasi biaya tidak disebutkan atau gratis, tegaskan 'Biaya: Rp0 (Gratis) / Sesuai Ketentuan Retribusi Resmi'.\n"
-            . "5. PENTING SOAL IDENTITAS: Jika ditanya mengenai identitas AI, vendor, LLM, atau teknologi (seperti GPT, Gemini, Claude, Llama, OpenAI, Google AI), JANGAN PERNAH mengaku atau menyebut nama-nama tersebut. Tegaskan bahwa Anda adalah BUKU SAKU, asisten digital resmi Mal Pelayanan Publik Pemerintah Kabupaten Madiun.\n"
-            . "6. Jika pemohon membutuhkan tindak lanjut kasus berkas pribadi (seperti komplain tagihan atau berkas macet), arahkan untuk berkonsultasi langsung ke WhatsApp Loket Resmi MPP Madiun (0851-1740-5460).\n\n"
-            . "DOKUMEN STANDAR PELAYANAN RESMI BUKU SAKU MPP 2026:\n" . $contextText);
+            . "5. PENTING SOAL IDENTITAS: Jika ditanya mengenai identitas AI, vendor, LLM, atau teknologi (seperti GPT, Gemini, Claude, Llama, OpenAI, Google AI), JANGAN PERNAH mengaku atau menyebut nama-nama tersebut. Tegaskan bahwa Anda adalah BUKU SAKU AI Resmi Mal Pelayanan Publik Pemerintah Kabupaten Madiun.\n");
+
+        $operationalFacts = "\n\nINFORMASI OPERASIONAL RESMI MPP KABUPATEN MADIUN (Standar DPMPTSP):\n"
+            . "- Jam Operasional Seluruh Loket Pelayanan: Senin s/d Jumat, pukul 08.00 – 15.00 WIB (Sabtu, Minggu & Hari Libur Nasional TUTUP).\n"
+            . "- Lokasi Pelayanan: Gedung MPP Caruban (Jl. Alun-Alun Timur No.3 Caruban) dan Counter MPP Madiun (Jl. Alun-Alun Utara No.4 Kota Madiun).\n"
+            . "- Kontak Helpdesk WhatsApp Resmi: 0851-1740-5460 | Telepon: (0351) 383015.\n"
+            . "- Jika pemohon bertanya mengenai jam buka, jam tutup, atau jam operasional loket instansi mana pun di MPP (seperti Kantor Pertanahan / ATR BPN, Bapenda, Disdukcapil, Polres, dll.), sampaikan secara pasti bahwa loket beroperasi pada hari Senin – Jumat, pukul 08.00 – 15.00 WIB.\n"
+            . "- Jika pemohon butuh konsultasi berkas pribadi atau konfirmasi khusus, sertakan nomor WhatsApp resmi MPP (0851-1740-5460).\n\n";
+
+        $systemInstruction = $basePrompt . $operationalFacts . "DOKUMEN STANDAR PELAYANAN RESMI BUKU SAKU MPP 2026:\n" . $contextText;
 
         $prompt = "Pertanyaan Pemohon: {$query}\n\nJawablah berdasarkan standar pelayanan resmi Buku Saku MPP Kabupaten Madiun di atas:";
 
