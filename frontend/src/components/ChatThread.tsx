@@ -16,7 +16,8 @@ import {
   MapPin,
   ShieldCheck,
   AlertCircle,
-  Cpu
+  Cpu,
+  Type
 } from 'lucide-react';
 import { ChatMessage } from '../types/perizinan';
 import { WA_NUM_MPP, TELP_MPP } from '../services/hybridAiService';
@@ -29,6 +30,157 @@ interface ChatThreadProps {
   onBackToHome: () => void;
 }
 
+const renderInlineMarkdown = (str: string): React.ReactNode => {
+  if (!str) return null;
+  const clean = str.replace(/\\\*/g, '*');
+
+  const parts: React.ReactNode[] = [];
+  const regex = /(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(clean)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(clean.substring(lastIndex, match.index));
+    }
+    const token = match[0];
+    if (token.startsWith('**') && token.endsWith('**')) {
+      parts.push(
+        <strong key={match.index} className="font-bold text-slate-950 dark:text-white">
+          {token.slice(2, -2)}
+        </strong>
+      );
+    } else if (token.startsWith('*') && token.endsWith('*')) {
+      parts.push(
+        <em key={match.index} className="italic text-slate-800 dark:text-slate-200">
+          {token.slice(1, -1)}
+        </em>
+      );
+    } else if (token.startsWith('[')) {
+      const linkMatch = token.match(/\[([^\]]+)\]\(([^)]+)\)/);
+      if (linkMatch) {
+        parts.push(
+          <a
+            key={match.index}
+            href={linkMatch[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-700 dark:text-emerald-400 font-semibold underline underline-offset-2 hover:text-emerald-600"
+          >
+            {linkMatch[1]}
+          </a>
+        );
+      } else {
+        parts.push(token);
+      }
+    }
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < clean.length) {
+    parts.push(clean.substring(lastIndex));
+  }
+
+  return parts;
+};
+
+const FormattedMessageContent: React.FC<{ text: string; isSerif: boolean }> = ({ text, isSerif }) => {
+  // Normalize run-together lists: "Title 1. Step A 2. Step B" or "* Item A * Item B"
+  const normalized = text
+    .replace(/(\s+)(\d+\.\s+)/g, '\n$2')
+    .replace(/(\s+)([\*\-•]\s+)/g, '\n$2')
+    .replace(/\s*---\s*/g, '\n---\n');
+
+  const rawLines = normalized.split('\n');
+
+  return (
+    <div className={`space-y-2.5 ${isSerif ? "font-['Times_New_Roman',Times,Georgia,serif] text-[15.5px] sm:text-[16.5px] leading-[1.8] text-slate-900 dark:text-slate-100" : "font-sans text-sm sm:text-[15px] leading-relaxed text-slate-800 dark:text-slate-200"}`}>
+      {rawLines.map((rawLine, idx) => {
+        const line = rawLine.trim();
+        if (!line) return null;
+
+        // Horizontal divider
+        if (line === '---' || line === '***' || line === '___') {
+          return <hr key={idx} className="my-3.5 border-slate-200 dark:border-slate-800" />;
+        }
+
+        // Section Headers: ### Header, ## Header, or # Header
+        if (line.startsWith('### ') || line.startsWith('## ') || line.startsWith('# ')) {
+          const cleanHead = line.replace(/^#+\s*/, '');
+          return (
+            <div key={idx} className="pt-2.5 pb-1">
+              <h4 className="text-base sm:text-lg font-bold text-slate-950 dark:text-white border-l-4 border-emerald-600 dark:border-emerald-400 pl-3 py-0.5">
+                {renderInlineMarkdown(cleanHead)}
+              </h4>
+            </div>
+          );
+        }
+
+        // Section header like **A. Judul** or **1. Layanan...** on a single line
+        const sectionMatch = line.match(/^\*\*([A-Z0-9\.\s\-–\(\)]{2,80})\*\*:?$/i);
+        if (sectionMatch && !line.toLowerCase().includes('catatan')) {
+          const titleText = sectionMatch[1];
+          return (
+            <div key={idx} className="pt-3 pb-1 border-b border-emerald-600/20 dark:border-emerald-500/20 mb-1">
+              <h4 className="text-base sm:text-[17px] font-bold text-emerald-900 dark:text-emerald-300">
+                {renderInlineMarkdown(titleText)}
+              </h4>
+            </div>
+          );
+        }
+
+        // Numbered list item: 1. Item
+        const numMatch = line.match(/^(\d+)\.\s+(.*)/);
+        if (numMatch) {
+          const num = numMatch[1];
+          const content = numMatch[2];
+          return (
+            <div key={idx} className="flex items-start gap-2.5 pl-1 my-1">
+              <span className="font-bold text-emerald-800 dark:text-emerald-400 font-mono text-sm shrink-0 min-w-[20px] text-right mt-0.5">
+                {num}.
+              </span>
+              <div className="flex-1">
+                {renderInlineMarkdown(content)}
+              </div>
+            </div>
+          );
+        }
+
+        // Bullet point: * Item, - Item, • Item
+        const bulletMatch = line.match(/^[\*\-•]\s+(.*)/);
+        if (bulletMatch) {
+          const content = bulletMatch[1];
+          return (
+            <div key={idx} className="flex items-start gap-2.5 pl-3 my-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400 shrink-0 mt-2.5" />
+              <div className="flex-1">
+                {renderInlineMarkdown(content)}
+              </div>
+            </div>
+          );
+        }
+
+        // Note or Important highlight box (e.g. *(Catatan: ...)* or (Catatan: ...))
+        if (line.toLowerCase().includes('catatan:') || line.startsWith('>') || line.toLowerCase().includes('penting:')) {
+          const cleanNote = line.replace(/^[\*\(\>]\s*|\s*[\*\)]$/g, '');
+          return (
+            <div key={idx} className="p-3 my-2 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 text-amber-950 dark:text-amber-200 text-xs sm:text-sm">
+              {renderInlineMarkdown(cleanNote)}
+            </div>
+          );
+        }
+
+        // Regular paragraph text
+        return (
+          <p key={idx} className="my-1.5">
+            {renderInlineMarkdown(line)}
+          </p>
+        );
+      })}
+    </div>
+  );
+};
+
 export const ChatThread: React.FC<ChatThreadProps> = ({
   messages,
   currentQuery,
@@ -36,6 +188,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   onSendFollowup,
   onBackToHome
 }) => {
+  const [useTimesNewRoman, setUseTimesNewRoman] = useState(true);
   const [followupText, setFollowupText] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [openSources, setOpenSources] = useState<{ [key: string]: boolean }>({});
@@ -129,62 +282,55 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
               return (
                 <div key={msg.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm p-6 space-y-4">
                   
-                  {/* Assistant Identity Tag */}
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                  {/* Assistant Identity Tag & Typography Controls */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                       <span className="text-xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-400 font-display">
                         Buku Saku · Panduan Resmi MPP
                       </span>
                     </div>
-                    {msg.via && (
-                      <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 ${
-                        msg.via === 'gemini-llm-rag'
-                          ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
-                      }`}>
-                        <Cpu className="w-3 h-3 text-emerald-500" />
-                        <span>
-                          {msg.via === 'gemini-llm-rag' 
-                            ? 'Gemini LLM · RAG Dokumen Resmi' 
-                            : msg.via === 'docrag' || msg.via === 'pdf-rag-offline'
-                            ? 'RAG Dokumen Pelayanan MPP'
-                            : msg.via === 'faq'
-                            ? 'SOP Katalog Resmi'
-                            : 'Asistensi Umum'}
+
+                    <div className="flex items-center gap-2">
+                      {/* Font Switcher Button */}
+                      <button
+                        type="button"
+                        onClick={() => setUseTimesNewRoman(!useTimesNewRoman)}
+                        className={`text-[11px] font-medium px-2.5 py-0.5 rounded-lg border transition-all cursor-pointer flex items-center gap-1.5 ${
+                          useTimesNewRoman
+                            ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border-amber-200 dark:border-amber-800/60 shadow-xs'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
+                        }`}
+                        title="Klik untuk beralih antara font Times New Roman (Resmi) dan Modern Sans"
+                      >
+                        <Type className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                        <span>Font: {useTimesNewRoman ? 'Times New Roman' : 'Modern Sans'}</span>
+                      </button>
+
+                      {msg.via && (
+                        <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 ${
+                          msg.via === 'gemini-llm-rag'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                        }`}>
+                          <Cpu className="w-3 h-3 text-emerald-500" />
+                          <span>
+                            {msg.via === 'gemini-llm-rag' 
+                              ? 'Gemini LLM · RAG Dokumen Resmi' 
+                              : msg.via === 'docrag' || msg.via === 'pdf-rag-offline'
+                              ? 'RAG Dokumen Pelayanan MPP'
+                              : msg.via === 'faq'
+                              ? 'SOP Katalog Resmi'
+                              : 'Asistensi Umum'}
+                          </span>
                         </span>
-                      </span>
-                    )}
+                      )}
+                    </div>
                   </div>
 
-                  {/* Message Content */}
-                  <div className="text-slate-800 dark:text-slate-200 text-sm leading-relaxed space-y-3 prose dark:prose-invert max-w-none">
-                    {msg.text.split('\n\n').map((paragraph, pIdx) => {
-                      if (paragraph.startsWith('### ')) {
-                        return <h3 key={pIdx} className="text-base font-bold text-slate-900 dark:text-white mt-4 mb-2">{paragraph.replace('### ', '')}</h3>;
-                      }
-                      if (paragraph.startsWith('* ') || paragraph.startsWith('- ')) {
-                        const lines = paragraph.split('\n');
-                        return (
-                          <ul key={pIdx} className="list-disc pl-5 space-y-1 my-2">
-                            {lines.map((l, lIdx) => (
-                              <li key={lIdx}>{l.replace(/^[\*\-]\s+/, '')}</li>
-                            ))}
-                          </ul>
-                        );
-                      }
-                      if (paragraph.match(/^\d+\.\s+/)) {
-                        const lines = paragraph.split('\n');
-                        return (
-                          <ol key={pIdx} className="list-decimal pl-5 space-y-1 my-2">
-                            {lines.map((l, lIdx) => (
-                              <li key={lIdx}>{l.replace(/^\d+\.\s+/, '')}</li>
-                            ))}
-                          </ol>
-                        );
-                      }
-                      return <p key={pIdx}>{paragraph}</p>;
-                    })}
+                  {/* Clean Formatted Message Content (Zero Raw Asterisks, Times New Roman Typo) */}
+                  <div className="pt-1">
+                    <FormattedMessageContent text={msg.text} isSerif={useTimesNewRoman} />
                   </div>
 
                   {/* Accordion: Source Documents Cited */}
