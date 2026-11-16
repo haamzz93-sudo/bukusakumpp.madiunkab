@@ -40,7 +40,7 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   text: string;
   timestamp: number;
-  via?: 'faq' | 'docrag' | 'ai';
+  via?: 'faq' | 'docrag' | 'ai' | 'gemini-llm-rag' | 'pdf-rag-offline' | string;
   layer?: string;
   sourceItems?: SourceItem[];
   relatedQuestions?: string[];
@@ -55,8 +55,8 @@ export interface RAGResponse {
   message_id?: string | number;
   answer: string;
   rawHtml?: string;
-  layer: 'guardrail' | 'faq' | 'docrag' | 'ai';
-  via: 'faq' | 'docrag' | 'ai';
+  layer: 'guardrail' | 'faq' | 'docrag' | 'ai' | string;
+  via: 'faq' | 'docrag' | 'ai' | 'gemini-llm-rag' | 'pdf-rag-offline' | string;
   source_items: SourceItem[];
   related: string[];
   needs_human: boolean;

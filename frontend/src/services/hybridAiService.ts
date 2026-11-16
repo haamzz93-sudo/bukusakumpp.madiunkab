@@ -10,34 +10,37 @@ export async function askHybridAi(
 ): Promise<RAGResponse> {
   const cleanQ = query.trim().toLowerCase();
 
-  // 1. Coba hubungi Backend Laravel API terlebih dahulu jika online
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
+  // 1. Coba hubungi Backend PHP API terlebih dahulu (LLM Gemini + RAG 254 Hlm)
+  const endpoints = ['http://127.0.0.1:8002/api/chat', '/api/chat'];
+  for (const endpoint of endpoints) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout for live LLM inference
 
-    const apiRes = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        q: query,
-        history: conversationHistory.slice(-4).map(m => ({ role: m.role, text: m.text }))
-      }),
-      signal: controller.signal
-    });
+      const apiRes = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          q: query,
+          history: conversationHistory.slice(-4).map(m => ({ role: m.role, text: m.text }))
+        }),
+        signal: controller.signal
+      });
 
-    clearTimeout(timeoutId);
+      clearTimeout(timeoutId);
 
-    if (apiRes.ok) {
-      const data = await apiRes.json();
-      if (data && data.ok) {
-        return data as RAGResponse;
+      if (apiRes.ok) {
+        const data = await apiRes.json();
+        if (data && data.ok) {
+          return data as RAGResponse;
+        }
       }
+    } catch (e) {
+      // Endpoint network issue, continue to next endpoint or local fallback
     }
-  } catch (e) {
-    // Backend offline / mode preview client-side, lanjut ke engine simulasi RAG lokal
   }
 
   // ==========================================
