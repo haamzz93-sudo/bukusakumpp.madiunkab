@@ -236,7 +236,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
           <button
             onClick={onBackToHome}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-sm shadow-sm transition-all self-start cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl liquid-glass-sidebar text-slate-700 dark:text-slate-200 font-semibold text-sm shadow-sm transition-all self-start cursor-pointer hover:scale-[1.02] active:scale-95"
           >
             <ArrowLeft className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>Kembali ke Beranda</span>
@@ -250,7 +250,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                 value={headerSearchText}
                 onChange={(e) => setHeaderSearchText(e.target.value)}
                 placeholder="Tanyakan hal lain seputar perizinan..."
-                className="w-full py-2 pl-9 pr-24 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:border-madiun-forest dark:focus:border-emerald-400 shadow-sm"
+                className="w-full py-2 pl-9 pr-24 rounded-xl liquid-glass-sidebar text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40 shadow-sm"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3" />
               <button
@@ -290,7 +290,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
               }
 
               return (
-                <div key={msg.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm p-6 space-y-4">
+                <div key={msg.id} className="liquid-glass-sidebar rounded-2xl p-6 space-y-4">
                   
                   {/* Assistant Identity Tag & Typography Controls */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">

@@ -45,6 +45,44 @@
   position: relative;
 }
 
+/* Adaptive Liquid Glass Navbar (White Crystal in Light Mode, Emerald in Dark) */
+.liquid-glass-navbar {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(240, 253, 244, 0.78) 50%,
+    rgba(255, 255, 255, 0.92) 100%
+  );
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 16px 36px -4px rgba(6, 78, 59, 0.08),
+    0 4px 12px -2px rgba(6, 78, 59, 0.04),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+.dark .liquid-glass-navbar {
+  background: linear-gradient(
+    135deg, 
+    rgba(6, 78, 59, 0.88) 0%, 
+    rgba(4, 47, 46, 0.94) 100%
+  );
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 
+    0 16px 40px -10px rgba(2, 44, 34, 0.6),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.25);
+}
+
+.liquid-glass-navbar:hover .liquid-sheen-beam {
+  left: 220%;
+}
+
 /* Strictly Contained Sheen Layer (Prevents Glow Bleeding Past Rounded Borders) */
 .liquid-sheen-clipper {
   position: absolute;

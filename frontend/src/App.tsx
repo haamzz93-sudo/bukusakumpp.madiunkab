@@ -381,7 +381,14 @@ export const App: React.FC = () => {
     : cleanWaNumber;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-darkbg-base transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-darkbg-base transition-colors duration-200 relative overflow-x-hidden">
+      
+      {/* Ambient Organic Liquid Glass Glow Orbs (Refracts through white & dark liquid glass) */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute -top-32 left-1/4 w-[500px] h-[500px] rounded-full bg-emerald-400/15 dark:bg-emerald-800/15 blur-[120px]" />
+        <div className="absolute top-1/3 -right-32 w-[600px] h-[600px] rounded-full bg-amber-300/15 dark:bg-emerald-950/25 blur-[140px]" />
+        <div className="absolute top-2/3 -left-32 w-[550px] h-[550px] rounded-full bg-teal-300/15 dark:bg-teal-900/15 blur-[130px]" />
+      </div>
       
       {/* If viewMode === 'admin', render the full Admin Dashboard Panel */}
       {viewMode === 'admin' ? (
