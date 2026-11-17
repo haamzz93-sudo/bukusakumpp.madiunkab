@@ -1,21 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSearch } from './components/HeroSearch';
-import { ChatThread } from './components/ChatThread';
-import { TelusuriSection } from './components/TelusuriSection';
 import { KatalogPerizinanSection } from './components/KatalogPerizinanSection';
-import { PerizinanDetailModal } from './components/PerizinanDetailModal';
+import { TelusuriSection } from './components/TelusuriSection';
 import { ContactFooter } from './components/ContactFooter';
-import { AdminLoginModal } from './components/AdminLoginModal';
+import { ChatThread } from './components/ChatThread';
 import { AdminDashboard } from './components/AdminDashboard';
+import { AdminLoginModal } from './components/AdminLoginModal';
+import { PerizinanDetailModal } from './components/PerizinanDetailModal';
 import { CloudflareMadiunVerification } from './components/CloudflareMadiunVerification';
-import { ChatMessage, KategoriPerizinan, Perizinan } from './types/perizinan';
+import { WhatsAppIcon } from './components/WhatsAppIcon';
+import { ChatMessage, Perizinan, KategoriPerizinan } from './types/perizinan';
 import { askHybridAi } from './services/hybridAiService';
-import { getStoredSettings, subscribeSettings, syncSettingsFromBackend } from './services/settingsStore';
-import { syncPerizinanFromDatabase } from './services/perizinanStore';
+import { getStoredSettings, syncSettingsFromBackend, subscribeSettings } from './services/settingsStore';
+import { getStoredPerizinan, syncPerizinanFromDatabase } from './services/perizinanStore';
 import { syncKlasterFromDatabase } from './services/klasterStore';
 import { trackVisitorEvent } from './services/realStatsService';
-import { WhatsAppIcon } from './components/WhatsAppIcon';
+import { 
+  AppRoute, 
+  AdminTab, 
+  parseCurrentRoute, 
+  navigateTo, 
+  subscribeRoute 
+} from './services/appRouter';
 
 export const App: React.FC = () => {
   const [viewMode, setViewMode] = useState<'home' | 'chat' | 'telusuri' | 'admin'>('home');
@@ -25,8 +32,9 @@ export const App: React.FC = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [selectedCategoryKey, setSelectedCategoryKey] = useState<string | undefined>();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [adminTab, setAdminTab] = useState<AdminTab>('dashboard');
   
-  // Admin & Cloudflare Security States
+  // Admin & Security States
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
     return localStorage.getItem('bukusaku_admin_logged') === 'true';
   });
@@ -40,7 +48,157 @@ export const App: React.FC = () => {
   const [selectedPerizinan, setSelectedPerizinan] = useState<Perizinan | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
-  // Initialize theme and hash navigation
+  // Ref to prevent duplicate queries on direct URL mount
+  const executedQueryRef = useRef<string>('');
+
+  // Core Search Execution Engine
+  const executeQuery = useCallback(async (query: string, isFollowup: boolean = false) => {
+    if (!query.trim()) return;
+
+    executedQueryRef.current = query;
+    trackVisitorEvent('tanya_ai', `Warga menanyakan: "${query.substring(0, 40)}${query.length > 40 ? '...' : ''}"`);
+    setCurrentQuery(query);
+    setViewMode('chat');
+    setIsLoading(true);
+
+    const userMsg: ChatMessage = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      text: query,
+      timestamp: Date.now()
+    };
+
+    if (isFollowup) {
+      setMessages(prev => [...prev, userMsg]);
+    } else {
+      setMessages([userMsg]);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+      const historyToSend = isFollowup ? [...messages, userMsg] : [];
+      const result = await askHybridAi(query, historyToSend);
+
+      const botMsg: ChatMessage = {
+        id: `bot-${Date.now()}`,
+        role: 'assistant',
+        text: result.answer,
+        timestamp: Date.now(),
+        via: result.via,
+        layer: result.layer,
+        sourceItems: result.source_items,
+        relatedQuestions: result.related,
+        needsHuman: result.needs_human
+      };
+
+      if (isFollowup) {
+        setMessages(prev => [...prev, botMsg]);
+      } else {
+        setMessages([userMsg, botMsg]);
+      }
+    } catch (err) {
+      const fallbackMsg: ChatMessage = {
+        id: `bot-err-${Date.now()}`,
+        role: 'assistant',
+        text: `Mohon maaf, sistem sedang dalam antrean tinggi. Silakan ulangi pertanyaan Anda atau hubungi langsung WhatsApp Loket Mal Pelayanan Publik Kabupaten Madiun di ${appSettings.whatsappNumber}.`,
+        timestamp: Date.now(),
+        needsHuman: true
+      };
+      if (isFollowup) {
+        setMessages(prev => [...prev, fallbackMsg]);
+      } else {
+        setMessages([userMsg, fallbackMsg]);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [messages, appSettings.whatsappNumber]);
+
+  // Route Dispatcher: updates UI state according to clean SaaS URL
+  const handleRouteUpdate = useCallback((route: AppRoute) => {
+    switch (route.name) {
+      case 'home':
+        setViewMode('home');
+        setIsDetailModalOpen(false);
+        setIsLoginOpen(false);
+        break;
+
+      case 'perizinan':
+        setViewMode('home');
+        setIsLoginOpen(false);
+        if (route.slug) {
+          const items = getStoredPerizinan();
+          const targetSlug = route.slug.toLowerCase();
+          const found = items.find(p => 
+            p.slug?.toLowerCase() === targetSlug || 
+            String(p.id) === targetSlug
+          );
+          if (found) {
+            setSelectedPerizinan(found);
+            setIsDetailModalOpen(true);
+          } else {
+            setIsDetailModalOpen(false);
+          }
+        } else {
+          setIsDetailModalOpen(false);
+        }
+        break;
+
+      case 'telusuri':
+        setViewMode('telusuri');
+        setIsDetailModalOpen(false);
+        setIsLoginOpen(false);
+        if (route.klasterKey) {
+          setSelectedCategoryKey(route.klasterKey);
+        }
+        break;
+
+      case 'tanya':
+        setIsDetailModalOpen(false);
+        setIsLoginOpen(false);
+        if (route.query) {
+          if (route.query !== executedQueryRef.current) {
+            executeQuery(route.query, false);
+          } else {
+            setViewMode('chat');
+          }
+        } else if (messages.length > 0) {
+          setViewMode('chat');
+        } else {
+          setViewMode('home');
+        }
+        break;
+
+      case 'kontak':
+        setViewMode('home');
+        setIsDetailModalOpen(false);
+        setIsLoginOpen(false);
+        break;
+
+      case 'login':
+        if (isAdminLoggedIn) {
+          setViewMode('admin');
+          setAdminTab('dashboard');
+          navigateTo({ name: 'admin', tab: 'dashboard' }, { replace: true });
+        } else {
+          setIsLoginOpen(true);
+        }
+        break;
+
+      case 'admin':
+        if (isAdminLoggedIn) {
+          setViewMode('admin');
+          setAdminTab(route.tab || 'dashboard');
+          setIsLoginOpen(false);
+          setIsDetailModalOpen(false);
+        } else {
+          setIsLoginOpen(true);
+        }
+        break;
+    }
+  }, [isAdminLoggedIn, messages.length, executeQuery]);
+
+  // Initialize theme, sync stores, and subscribe to HTML5 History Routing
   useEffect(() => {
     const savedTheme = localStorage.getItem('bukusaku-theme');
     if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -51,29 +209,37 @@ export const App: React.FC = () => {
       document.documentElement.classList.remove('dark');
     }
 
-    if (window.location.hash === '#admin' && isAdminLoggedIn) {
-      setViewMode('admin');
-    } else if (window.location.hash === '#telusuri') {
-      setViewMode('telusuri');
-    } else if (window.location.hash === '#perizinan') {
-      setTimeout(() => {
-        const el = document.getElementById('katalog-perizinan');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-
     // Sync settings, perizinan, and klaster from SQLite database
     syncSettingsFromBackend().then((serverSettings) => {
       if (serverSettings) setAppSettings(serverSettings);
     });
-    syncPerizinanFromDatabase();
+    syncPerizinanFromDatabase().then(() => {
+      // Re-check if current route was an SOP slug and load it
+      const current = parseCurrentRoute();
+      if (current.name === 'perizinan' && current.slug) {
+        handleRouteUpdate(current);
+      }
+    });
     syncKlasterFromDatabase();
 
     const unsubSettings = subscribeSettings((updated) => {
       setAppSettings(updated);
     });
-    return unsubSettings;
-  }, [isAdminLoggedIn]);
+
+    // Subscribe to clean HTML5 URL routing (pops, clean url replaces, pushState)
+    const unsubRoute = subscribeRoute((route) => {
+      handleRouteUpdate(route);
+    });
+
+    // Initial route handling on page mount
+    const initialRoute = parseCurrentRoute();
+    handleRouteUpdate(initialRoute);
+
+    return () => {
+      unsubSettings();
+      unsubRoute();
+    };
+  }, [handleRouteUpdate]);
 
   // Initial visit Cloudflare Verification Splash & Telemetry
   useEffect(() => {
@@ -121,102 +287,49 @@ export const App: React.FC = () => {
     });
   };
 
-  const handleSearch = async (query: string, isFollowup = false) => {
-    if (!query.trim()) return;
-
-    trackVisitorEvent('tanya_ai', `Warga menanyakan: "${query.substring(0, 40)}${query.length > 40 ? '...' : ''}"`);
-    setCurrentQuery(query);
-    setViewMode('chat');
-    setIsLoading(true);
-
-    const userMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      text: query,
-      timestamp: Date.now()
-    };
-
+  // User Actions mapped to clean SaaS URLs
+  const handleSearch = (query: string, isFollowup: boolean = false) => {
     if (isFollowup) {
-      setMessages(prev => [...prev, userMsg]);
+      navigateTo({ name: 'tanya', query }, { replace: true, scroll: false });
+      executeQuery(query, true);
     } else {
-      // Pertanyaan baru: reset tampilan agar langsung fokus ke pertanyaan baru yang diklik
-      setMessages([userMsg]);
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    try {
-      const historyToSend = isFollowup ? [...messages, userMsg] : [];
-      const result = await askHybridAi(query, historyToSend);
-
-      const botMsg: ChatMessage = {
-        id: `bot-${Date.now()}`,
-        role: 'assistant',
-        text: result.answer,
-        timestamp: Date.now(),
-        via: result.via,
-        layer: result.layer,
-        sourceItems: result.source_items,
-        relatedQuestions: result.related,
-        needsHuman: result.needs_human
-      };
-
-      if (isFollowup) {
-        setMessages(prev => [...prev, botMsg]);
-      } else {
-        setMessages([userMsg, botMsg]);
-      }
-    } catch (err) {
-      const fallbackMsg: ChatMessage = {
-        id: `bot-err-${Date.now()}`,
-        role: 'assistant',
-        text: `Mohon maaf, sistem sedang dalam antrean tinggi. Silakan ulangi pertanyaan Anda atau hubungi langsung WhatsApp Loket Mal Pelayanan Publik Kabupaten Madiun di ${appSettings.whatsappNumber}.`,
-        timestamp: Date.now(),
-        needsHuman: true
-      };
-      if (isFollowup) {
-        setMessages(prev => [...prev, fallbackMsg]);
-      } else {
-        setMessages([userMsg, fallbackMsg]);
-      }
-    } finally {
-      setIsLoading(false);
+      navigateTo({ name: 'tanya', query });
+      executeQuery(query, false);
     }
   };
 
   const handleSelectPerizinan = (item: Perizinan) => {
     setSelectedPerizinan(item);
     setIsDetailModalOpen(true);
+    navigateTo({ name: 'perizinan', slug: item.slug || String(item.id) }, { scroll: false });
     trackVisitorEvent('cek_izin', `Warga melihat SOP: "${item.title}"`);
+  };
+
+  const handleCloseDetailModal = () => {
+    setIsDetailModalOpen(false);
+    // Return clean URL to /perizinan or previous route
+    const current = parseCurrentRoute();
+    if (current.name === 'perizinan') {
+      navigateTo({ name: 'perizinan' }, { scroll: false });
+    }
   };
 
   const handleSelectCategory = (cat: KategoriPerizinan) => {
     setSelectedCategoryKey(cat.key);
-    setViewMode('telusuri');
+    navigateTo({ name: 'telusuri', klasterKey: cat.key });
     trackVisitorEvent('klaster', `Warga menjelajahi klaster: "${cat.name}"`);
-    const el = document.getElementById('telusuri');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleBackToHome = () => {
-    setViewMode('home');
-    window.location.hash = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigateTo({ name: 'home' });
   };
 
   const scrollToPerizinan = () => {
-    if (viewMode !== 'home') {
-      setViewMode('home');
-    }
-    setTimeout(() => {
-      const el = document.getElementById('katalog-perizinan');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }, 80);
+    navigateTo({ name: 'perizinan' });
   };
 
   const scrollToPopuler = () => {
-    if (viewMode !== 'home') {
-      setViewMode('home');
-    }
+    navigateTo({ name: 'home' });
     setTimeout(() => {
       const el = document.getElementById('populer');
       if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -224,12 +337,11 @@ export const App: React.FC = () => {
   };
 
   const scrollToKontak = () => {
-    const el = document.getElementById('kontak');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    navigateTo({ name: 'kontak' });
   };
 
   // Login handler with Cloudflare Verification Splash
-  const handleLoginSuccess = (username: string) => {
+  const handleLoginSuccess = (_username: string) => {
     setIsAdminLoggedIn(true);
     localStorage.setItem('bukusaku_admin_logged', 'true');
     setPendingAdminRedirect(true);
@@ -242,8 +354,8 @@ export const App: React.FC = () => {
     if (pendingAdminRedirect) {
       setPendingAdminRedirect(false);
       setViewMode('admin');
-      window.location.hash = '#admin';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setAdminTab('dashboard');
+      navigateTo({ name: 'admin', tab: 'dashboard' });
     }
   };
 
@@ -251,7 +363,15 @@ export const App: React.FC = () => {
     setIsAdminLoggedIn(false);
     localStorage.removeItem('bukusaku_admin_logged');
     setViewMode('home');
-    window.location.hash = '';
+    navigateTo({ name: 'home' });
+  };
+
+  const handleCloseLoginModal = () => {
+    setIsLoginOpen(false);
+    const current = parseCurrentRoute();
+    if (current.name === 'login') {
+      navigateTo({ name: 'home' }, { scroll: false });
+    }
   };
 
   // Clean WhatsApp phone number for link
@@ -266,6 +386,11 @@ export const App: React.FC = () => {
       {/* If viewMode === 'admin', render the full Admin Dashboard Panel */}
       {viewMode === 'admin' ? (
         <AdminDashboard
+          initialTab={adminTab}
+          onTabChange={(tab) => {
+            setAdminTab(tab);
+            navigateTo({ name: 'admin', tab }, { scroll: false });
+          }}
           onLogout={handleLogout}
           onViewLandingPage={handleBackToHome}
           onTriggerCloudflare={() => setIsCloudflareOpen(true)}
@@ -276,19 +401,13 @@ export const App: React.FC = () => {
           <Navbar
             onHomeClick={handleBackToHome}
             onPerizinanClick={scrollToPerizinan}
-            onTelusuriClick={() => {
-              setViewMode('telusuri');
-              window.location.hash = '#telusuri';
-            }}
+            onTelusuriClick={() => navigateTo({ name: 'telusuri' })}
             onSelectCategory={handleSelectCategory}
             onPopulerClick={scrollToPopuler}
             onKontakClick={scrollToKontak}
-            onLoginClick={() => setIsLoginOpen(true)}
+            onLoginClick={() => navigateTo({ name: 'login' }, { scroll: false })}
             isAdminLoggedIn={isAdminLoggedIn}
-            onAdminPanelClick={() => {
-              setViewMode('admin');
-              window.location.hash = '#admin';
-            }}
+            onAdminPanelClick={() => navigateTo({ name: 'admin', tab: 'dashboard' })}
             isDarkMode={isDarkMode}
             toggleDarkMode={toggleDarkMode}
           />
@@ -300,28 +419,28 @@ export const App: React.FC = () => {
                 messages={messages}
                 currentQuery={currentQuery}
                 isLoading={isLoading}
-                onSendFollowup={handleSearch}
+                onSendFollowup={(q) => handleSearch(q, true)}
                 onBackToHome={handleBackToHome}
               />
             ) : (
               <>
                 {/* Hero Search Section (Home) */}
                 <div className="reveal-on-scroll">
-                  <HeroSearch onSearch={handleSearch} isLoading={isLoading} />
+                  <HeroSearch onSearch={(q) => handleSearch(q, false)} isLoading={isLoading} />
                 </div>
 
                 {/* Full 80+ Perizinan Catalog (Matching official website) */}
                 <div className="reveal-on-scroll reveal-delay-100">
                   <KatalogPerizinanSection 
                     onSelectPerizinan={handleSelectPerizinan}
-                    onAskChat={handleSearch}
+                    onAskChat={(q) => handleSearch(q, false)}
                   />
                 </div>
 
                 {/* Telusuri / Category Exploration Section */}
                 <div className="reveal-on-scroll reveal-delay-200">
                   <TelusuriSection 
-                    onSelectQuestion={handleSearch}
+                    onSelectQuestion={(q) => handleSearch(q, false)}
                     selectedCategoryKey={selectedCategoryKey}
                   />
                 </div>
@@ -346,18 +465,18 @@ export const App: React.FC = () => {
         </>
       )}
 
-      {/* Detail Modal for Perizinan */}
+      {/* Detail Modal for Perizinan with clean URL sync */}
       <PerizinanDetailModal
         perizinan={selectedPerizinan}
         isOpen={isDetailModalOpen}
-        onClose={() => setIsDetailModalOpen(false)}
-        onAskChat={handleSearch}
+        onClose={handleCloseDetailModal}
+        onAskChat={(q) => handleSearch(q, false)}
       />
 
-      {/* Admin Login Modal */}
+      {/* Admin Login Modal with clean URL sync */}
       <AdminLoginModal
         isOpen={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
+        onClose={handleCloseLoginModal}
         onLoginSuccess={handleLoginSuccess}
       />
 

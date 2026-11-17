@@ -96,18 +96,33 @@ import { CustomDropdown, DropdownOption } from './CustomDropdown';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface AdminDashboardProps {
+  initialTab?: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster';
+  onTabChange?: (tab: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster') => void;
   onLogout: () => void;
   onViewLandingPage: () => void;
   onTriggerCloudflare: () => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
+  initialTab = 'dashboard',
+  onTabChange,
   onLogout,
   onViewLandingPage,
   onTriggerCloudflare
 }) => {
   // Navigation & Layout State
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster'>('dashboard');
+  const [activeTab, setActiveTabState] = useState<'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster'>(initialTab);
+
+  useEffect(() => {
+    if (initialTab && initialTab !== activeTab) {
+      setActiveTabState(initialTab);
+    }
+  }, [initialTab]);
+
+  const setActiveTab = (tab: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster') => {
+    setActiveTabState(tab);
+    onTabChange?.(tab);
+  };
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [dashboardSubView, setDashboardSubView] = useState<'operations' | 'analytics'>('operations');

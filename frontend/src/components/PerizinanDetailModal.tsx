@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Clock, Building2, CheckCircle2, MessageSquare, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Clock, Building2, CheckCircle2, MessageSquare, ExternalLink, Share2, Check } from 'lucide-react';
 import { Perizinan } from '../types/perizinan';
 import { WA_NUM_MPP } from '../services/hybridAiService';
 import { WhatsAppIcon } from './WhatsAppIcon';
@@ -17,11 +17,22 @@ export const PerizinanDetailModal: React.FC<PerizinanDetailModalProps> = ({
   onClose,
   onAskChat
 }) => {
+  const [copiedLink, setCopiedLink] = useState(false);
+
   if (!isOpen || !perizinan) return null;
 
   const handleAskInChat = () => {
     onClose();
     onAskChat(`Bagaimana syarat dan alur lengkap ${perizinan.title}?`);
+  };
+
+  const handleCopyLink = () => {
+    const slug = perizinan.slug || String(perizinan.id);
+    const fullUrl = `${window.location.origin}/perizinan/${encodeURIComponent(slug)}`;
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    });
   };
 
   const pers = perizinan.persyaratan;
@@ -35,7 +46,7 @@ export const PerizinanDetailModal: React.FC<PerizinanDetailModalProps> = ({
       {/* Modal Dialog Card (Matching Screenshot 2) */}
       <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col z-10 animate-in zoom-in-95 duration-200 overflow-hidden">
         
-        {/* Sticky Header with Close Button */}
+        {/* Sticky Header with Close Button & Share SOP */}
         <div className="sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between z-20">
           <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
             <span>Beranda</span>
@@ -45,13 +56,29 @@ export const PerizinanDetailModal: React.FC<PerizinanDetailModalProps> = ({
             <span className="text-slate-400">Detail Layanan</span>
           </div>
           
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            aria-label="Tutup Detail"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={handleCopyLink}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                copiedLink 
+                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300' 
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+              title="Salin tautan permanen SOP perizinan ini"
+              aria-label="Salin Tautan"
+            >
+              {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
+              <span>{copiedLink ? 'Tautan Tersalin' : 'Bagikan SOP'}</span>
+            </button>
+
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Tutup Detail"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Scrollable Content Body (Exactly like official website) */}
