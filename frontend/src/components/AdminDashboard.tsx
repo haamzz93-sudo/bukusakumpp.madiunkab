@@ -513,6 +513,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         biaya: formBiaya.trim(),
         categoryId: formCategory,
         persyaratan: {
+          ...(editingItem.persyaratan || {}),
           administratif: adminLines,
           teknis: teknisLines
         },
