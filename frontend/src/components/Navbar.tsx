@@ -99,34 +99,19 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-50 px-2.5 sm:px-6 pt-2.5 sm:pt-3 pb-2 transition-all duration-500 pointer-events-none -mb-20">
       
-      {/* Dynamic Island Header Outer Container with Continuous Running Warm-White Border Beam */}
+      {/* Clean Dynamic Island Header (Zero Harsh White Lines, Pure Sleek Emerald Glass) */}
       <div 
-        className={`pointer-events-auto relative mx-auto p-[1.5px] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`pointer-events-auto relative mx-auto text-white flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] liquid-glass-dark ${
           isScrolled 
-            ? 'max-w-4xl rounded-full shadow-2xl shadow-emerald-950/40 scale-[0.98]'
-            : 'max-w-7xl rounded-2xl shadow-xl shadow-emerald-950/20 scale-100'
+            ? 'max-w-4xl rounded-full px-4 sm:px-5 py-2 shadow-2xl shadow-emerald-950/60 scale-[0.98] border border-emerald-500/20'
+            : 'max-w-7xl rounded-2xl px-4 sm:px-6 py-2.5 sm:py-3.5 shadow-xl shadow-emerald-950/30 scale-100 border border-emerald-500/15'
         }`}
       >
-        {/* Continuous Running Border Beam in Warm White */}
-        <div className="absolute -inset-[250%] pointer-events-none animate-border-beam-spin">
-          <div className="w-full h-full bg-conic-warm-white filter drop-shadow-[0_0_8px_rgba(255,248,230,0.85)]" />
+        
+        {/* Strictly Clipped Internal Sheen Layer */}
+        <div className="liquid-sheen-clipper">
+          <div className="liquid-sheen-beam" />
         </div>
-
-        {/* Base Static Border for Always-Crisp Definition */}
-        <div className="absolute inset-0 rounded-[inherit] border border-white/25 pointer-events-none z-[1]" />
-
-        {/* Inner Liquid Glass Container - Deep Emerald Liquid Glass with Crisp White Elements */}
-        <div 
-          className={`relative z-10 w-full rounded-[inherit] flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] liquid-glass-dark text-white ${
-            isScrolled 
-              ? 'px-4 sm:px-5 py-2' 
-              : 'px-4 sm:px-6 py-2.5 sm:py-3.5'
-          }`}
-        >
-          {/* Strictly Clipped Internal Sheen Layer (Prevents Glow From Bleeding Past Capsule Borders) */}
-          <div className="liquid-sheen-clipper">
-            <div className="liquid-sheen-beam" />
-          </div>
         
         {/* Dual Brand: Official MPP Madiun & Buku Saku */}
         <button 
@@ -290,19 +275,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       </div>
 
-      </div>
-
       {/* Mobile Drawer Dropdown Menu for < lg */}
       {mobileMenuOpen && (
-        <div className="pointer-events-auto lg:hidden max-w-4xl mx-auto mt-2 p-3 rounded-2xl liquid-glass-navbar border border-white/40 dark:border-white/20 shadow-2xl text-slate-800 dark:text-white space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="pointer-events-auto lg:hidden max-w-4xl mx-auto mt-2 p-3 rounded-2xl liquid-glass-dark border border-white/25 shadow-2xl text-white space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
           <button
             onClick={() => {
               onHomeClick();
               setMobileMenuOpen(false);
             }}
-            className="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-emerald-100 hover:text-emerald-950 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 flex items-center gap-2.5 text-sm font-medium"
+            className="w-full text-left px-3 py-2 rounded-xl text-emerald-100 hover:text-white hover:bg-white/10 flex items-center gap-2.5 text-sm font-medium"
           >
-            <Home className="w-4 h-4 text-emerald-600 dark:text-mpp-bright shrink-0" />
+            <Home className="w-4 h-4 text-mpp-bright shrink-0" />
             <span>Beranda</span>
           </button>
 
@@ -311,9 +294,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               onPerizinanClick();
               setMobileMenuOpen(false);
             }}
-            className="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-emerald-100 hover:text-emerald-950 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 flex items-center gap-2.5 text-sm font-medium"
+            className="w-full text-left px-3 py-2 rounded-xl text-emerald-100 hover:text-white hover:bg-white/10 flex items-center gap-2.5 text-sm font-medium"
           >
-            <FileCheck className="w-4 h-4 text-emerald-600 dark:text-mpp-bright shrink-0" />
+            <FileCheck className="w-4 h-4 text-mpp-bright shrink-0" />
             <span>Perizinan (Katalog 82+)</span>
           </button>
 
@@ -322,9 +305,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               onTelusuriClick();
               setMobileMenuOpen(false);
             }}
-            className="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-emerald-100 hover:text-emerald-950 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 flex items-center gap-2.5 text-sm font-medium"
+            className="w-full text-left px-3 py-2 rounded-xl text-emerald-100 hover:text-white hover:bg-white/10 flex items-center gap-2.5 text-sm font-medium"
           >
-            <Grid className="w-4 h-4 text-emerald-600 dark:text-mpp-bright shrink-0" />
+            <Grid className="w-4 h-4 text-mpp-bright shrink-0" />
             <span>Telusuri Klaster Layanan</span>
           </button>
 
@@ -333,9 +316,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               onKontakClick();
               setMobileMenuOpen(false);
             }}
-            className="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-emerald-100 hover:text-emerald-950 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 flex items-center gap-2.5 text-sm font-medium"
+            className="w-full text-left px-3 py-2 rounded-xl text-emerald-100 hover:text-white hover:bg-white/10 flex items-center gap-2.5 text-sm font-medium"
           >
-            <PhoneCall className="w-4 h-4 text-emerald-600 dark:text-mpp-bright shrink-0" />
+            <PhoneCall className="w-4 h-4 text-mpp-bright shrink-0" />
             <span>Kontak & Lokasi MPP</span>
           </button>
 
