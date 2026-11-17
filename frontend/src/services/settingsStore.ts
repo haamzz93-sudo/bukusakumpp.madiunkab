@@ -64,7 +64,7 @@ Aturan Penting:
 
   bgMode: 'auto',
   bgAutoIntervalSeconds: 8,
-  selectedFixedBg: '/images/backgrounds/bg_liquid_glass.jpg',
+  selectedFixedBg: '/images/backgrounds/bg_mpp_building_2d.jpg',
 
   heroBadge: 'Layanan Resmi Mal Pelayanan Publik (MPP) Kabupaten Madiun',
   heroTitle: 'Halo, saya Buku Saku.',

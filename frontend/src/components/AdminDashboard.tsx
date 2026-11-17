@@ -2117,10 +2117,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                     <div className="w-full h-16 rounded-lg overflow-hidden bg-slate-200 mb-2 border border-slate-300 dark:border-slate-600">
-                      <img src="/images/backgrounds/bg_mpp_civic.jpg" alt="Gedung MPP Modern" className="w-full h-full object-cover" />
+                      <img src="/images/backgrounds/bg_mpp_building_2d.jpg" alt="Gedung MPP 2D" className="w-full h-full object-cover" />
                     </div>
-                    <div className="text-xs font-bold text-slate-900 dark:text-white">Gedung MPP Modern</div>
-                    <div className="text-[10px] text-slate-400">Gedung MPP Kabupaten Madiun</div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white">Gedung MPP 2D</div>
+                    <div className="text-[10px] text-slate-400">Ilustrasi 2D Gedung MPP Madiun</div>
                   </div>
                 </div>
               </div>
