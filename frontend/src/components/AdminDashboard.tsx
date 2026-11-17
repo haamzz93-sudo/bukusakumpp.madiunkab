@@ -64,6 +64,7 @@ import {
   Monitor
 } from 'lucide-react';
 import { Perizinan, KategoriPerizinan } from '../types/perizinan';
+import { getApiBaseUrl } from '../services/apiConfig';
 import { 
   getStoredPerizinan, 
   addPerizinanItem, 
@@ -534,7 +535,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const start = performance.now();
 
     try {
-      const resp = await fetch('http://127.0.0.1:8002/api/chat', {
+      const resp = await fetch(`${getApiBaseUrl()}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

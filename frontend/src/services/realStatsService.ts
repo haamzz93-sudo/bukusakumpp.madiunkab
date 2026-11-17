@@ -1,3 +1,5 @@
+import { getApiBaseUrl } from './apiConfig';
+
 export interface ActivityLogItem {
   id: string;
   ip: string;
@@ -23,7 +25,7 @@ const LOCAL_ACTIVITY_KEY = 'bukusaku_real_activities';
 
 export const trackVisitorEvent = async (type: string, desc: string): Promise<void> => {
   try {
-    await fetch('http://127.0.0.1:8002/api/track', {
+    await fetch(`${getApiBaseUrl()}/api/track`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type, desc })
@@ -61,7 +63,7 @@ export const fetchVisitorLogs = async (limit: number = 100, type?: string): Prom
     if (type && type !== 'semua') {
       query.set('type', type);
     }
-    const res = await fetch(`http://127.0.0.1:8002/api/logs?${query.toString()}`);
+    const res = await fetch(`${getApiBaseUrl()}/api/logs?${query.toString()}`);
     if (res.ok) {
       const data = await res.json();
       if (data.ok && Array.isArray(data.logs)) {
@@ -89,7 +91,7 @@ export const fetchVisitorLogs = async (limit: number = 100, type?: string): Prom
 
 export const fetchRealStats = async (): Promise<RealStats> => {
   try {
-    const res = await fetch('http://127.0.0.1:8002/api/stats');
+    const res = await fetch(`${getApiBaseUrl()}/api/stats`);
     if (res.ok) {
       const data = await res.json();
       return data;

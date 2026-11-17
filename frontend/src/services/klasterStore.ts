@@ -1,8 +1,9 @@
 import { KategoriPerizinan } from '../types/perizinan';
 import { KATEGORI_PERIZINAN } from '../data/perizinanMadiunData';
+import { getApiBaseUrl } from './apiConfig';
 
 const KLASTER_STORAGE_KEY = 'bukusaku_klaster_data';
-const BACKEND_URL = 'http://127.0.0.1:8002';
+const BACKEND_URL = getApiBaseUrl();
 
 // Get all clusters from localStorage or default data
 export const getStoredKlaster = (): KategoriPerizinan[] => {

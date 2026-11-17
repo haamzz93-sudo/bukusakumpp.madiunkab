@@ -1,3 +1,5 @@
+import { getApiBaseUrl } from './apiConfig';
+
 export interface AppSettings {
   // AI & Env Settings
   geminiApiKey: string;
@@ -107,7 +109,7 @@ Aturan Penting:
 
 const SETTINGS_KEY = 'bukusaku_app_settings_v2';
 const SETTINGS_EVENT = 'bukusaku_settings_updated';
-const BACKEND_URL = 'http://127.0.0.1:8002';
+const BACKEND_URL = getApiBaseUrl();
 
 export const getStoredSettings = (): AppSettings => {
   try {

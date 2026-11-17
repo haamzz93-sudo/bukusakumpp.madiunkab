@@ -1,9 +1,10 @@
 import { Perizinan } from '../types/perizinan';
 import default80Items from '../data/allPerizinan80.json';
+import { getApiBaseUrl } from './apiConfig';
 
 const STORAGE_KEY = 'bukusaku_perizinan_master_v1';
 const LISTEN_EVENT = 'bukusaku_perizinan_updated';
-const BACKEND_URL = 'http://127.0.0.1:8002';
+const BACKEND_URL = getApiBaseUrl();
 
 // Helper to load perizinan items
 export const getStoredPerizinan = (): Perizinan[] => {

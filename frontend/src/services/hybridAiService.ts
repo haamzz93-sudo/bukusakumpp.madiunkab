@@ -1,5 +1,6 @@
 import { ChatMessage, RAGResponse, SourceItem } from '../types/perizinan';
 import { PERIZINAN_MADIUN_ITEMS } from '../data/perizinanMadiunData';
+import { getApiBaseUrl } from './apiConfig';
 
 export const WA_NUM_MPP = '628113778776'; // WhatsApp Resmi Layanan Perizinan MPP Kabupaten Madiun (Buku Saku Hal. 254)
 export const TELP_MPP = '(0351) 497206';
@@ -11,7 +12,8 @@ export async function askHybridAi(
   const cleanQ = query.trim().toLowerCase();
 
   // 1. Coba hubungi Backend PHP API terlebih dahulu (LLM Gemini + RAG 254 Hlm)
-  const endpoints = ['http://127.0.0.1:8002/api/chat', '/api/chat'];
+  const baseUrl = getApiBaseUrl();
+  const endpoints = baseUrl ? [`${baseUrl}/api/chat`, '/api/chat'] : ['/api/chat'];
   for (const endpoint of endpoints) {
     try {
       const controller = new AbortController();

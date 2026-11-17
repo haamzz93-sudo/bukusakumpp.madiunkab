@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Lock, User, RefreshCw, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
+import { getApiBaseUrl } from '../services/apiConfig';
 
 interface AdminLoginModalProps {
   isOpen: boolean;
@@ -7,7 +8,7 @@ interface AdminLoginModalProps {
   onLoginSuccess: (username: string) => void;
 }
 
-const BACKEND_URL = 'http://127.0.0.1:8002';
+const BACKEND_URL = getApiBaseUrl();
 
 export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ 
   isOpen, 
