@@ -97,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 px-2.5 sm:px-6 pt-2.5 sm:pt-3 pb-2 transition-all duration-500 pointer-events-none">
+    <header className="fixed top-0 inset-x-0 z-50 px-2.5 sm:px-6 pt-2 sm:pt-3 pb-2 transition-all duration-500 pointer-events-none">
       
       {/* Dynamic Island Header Outer Container with Continuous Running Warm-White Border Beam */}
       <div 

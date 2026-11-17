@@ -56,22 +56,22 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
   };
 
   return (
-    <section className="relative overflow-hidden text-white pt-28 sm:pt-32 pb-20 px-4 transition-all duration-700 bg-slate-950 -mt-[72px] sm:-mt-[76px]">
+    <section className="relative overflow-hidden text-white pt-24 sm:pt-28 pb-16 sm:pb-24 px-4 min-h-[580px] sm:min-h-[640px] lg:min-h-[700px] flex flex-col justify-center transition-all duration-700 bg-slate-950">
       
-      {/* Background Slideshow Layer with Smooth Crossfade */}
+      {/* Background Slideshow Layer with Smooth Crossfade - 16:9 Full Bleed */}
       {BG_IMAGES.map((img, i) => (
         <div
           key={img}
-          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out scale-105 pointer-events-none ${
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out pointer-events-none ${
             i === bgIndex ? 'opacity-100 z-0' : 'opacity-0 z-0'
           }`}
           style={{ backgroundImage: `url("${img}")` }}
         />
       ))}
 
-      {/* High-Grade Liquid Glass Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-emerald-950/85 to-slate-950/95 backdrop-blur-[2px] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-emerald-600/20 via-transparent to-transparent pointer-events-none" />
+      {/* High-Grade Liquid Glass Overlay: Crystal Clear to showcase 16:9 2D building illustration */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-emerald-950/25 to-slate-950/75 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(2,6,23,0.45)_100%)] pointer-events-none" />
 
       {/* Radial Glass Glow Orbs */}
       <div className="absolute -left-20 -top-20 w-96 h-96 rounded-full bg-emerald-400/15 blur-3xl pointer-events-none" />
