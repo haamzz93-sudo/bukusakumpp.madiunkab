@@ -143,7 +143,7 @@ class Database
             return;
         }
 
-        $pdo = self::$pdo;
+        $pdo = self::getPdo();
         $pdo->beginTransaction();
         try {
             $stmt = $pdo->prepare("
@@ -236,7 +236,7 @@ class Database
             ]
         ];
 
-        $pdo = self::$pdo;
+        $pdo = self::getPdo();
         $pdo->beginTransaction();
         try {
             $stmt = $pdo->prepare("INSERT INTO klaster_questions (klaster_key, question) VALUES (:key, :q)");
