@@ -229,8 +229,10 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   const latestAssistantMessage = [...messages].reverse().find(m => m.role === 'assistant');
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-darkbg-base transition-colors duration-200 py-6 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-slate-50 dark:bg-darkbg-base transition-colors duration-200 pt-24 sm:pt-28 pb-12 px-4 relative">
+      {/* Seamless Top Liquid Glass Backdrop for Navbar */}
+      <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-emerald-950 via-slate-950/90 to-transparent pointer-events-none z-0" />
+      <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Subheader Toolbar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
