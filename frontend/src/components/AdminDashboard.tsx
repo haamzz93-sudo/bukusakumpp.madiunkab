@@ -726,10 +726,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   ];
 
   const modelOptions: DropdownOption[] = [
-    { value: 'gemini-3.5-flash-lite', label: 'Gemini 3.5 Flash Lite (Direkomendasikan - Paling Cepat)', badge: 'Recommended' },
+    { value: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash Lite (Rekomendasi Resmi - AI Studio)', badge: 'Recommended' },
+    { value: 'gemini-flash-lite-latest', label: 'Gemini Flash Lite Latest (Model Cadangan)' },
     { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash (Standar)' },
     { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro (Akurasi Tinggi)' },
-    { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
+    { value: 'gemini-3.5-flash-lite', label: 'Gemini 3.5 Flash Lite (Experimental)' },
   ];
 
   const categoryOptions: DropdownOption[] = [
@@ -1188,7 +1189,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </header>
 
         {/* Page Content Body */}
-        <main className="pt-20 p-4 sm:p-6 lg:p-8 space-y-6 flex-1 min-w-0 max-w-7xl w-full mx-auto">
+        <main className="pt-24 px-4 pb-12 sm:px-6 lg:px-8 space-y-6 flex-1 min-w-0 max-w-7xl w-full mx-auto">
 
           {/* ========================================================
               TAB 1: GENTELELLA V4 DASHBOARD OVERVIEW (REAL TELEMETRY)

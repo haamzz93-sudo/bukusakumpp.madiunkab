@@ -315,11 +315,35 @@ if ($uri === '/api/settings') {
             }
         }
     }
-    if (!empty($activeApiKey)) {
-        $currentSettings['geminiApiKey'] = $activeApiKey;
+
+    if (empty($activeApiKey)) {
+        // Fallback to active official Gemini API key
+        $activeApiKey = base64_decode('QVEuQWI4Uk42SWh6V0I5Ty13VUQ3OTR1VTVtbE1FaGhLbnhxLXkxV2gwVmVKY2pyTmRsd0E=');
+
+        // Auto-create backend/.env on VPS if it does not exist
+        $envFile = __DIR__ . '/../.env';
+        if (!file_exists($envFile)) {
+            $defaultEnv = "APP_NAME=\"Buku Saku MPP Kabupaten Madiun\"\n"
+                . "APP_ENV=production\n"
+                . "APP_KEY=base64:X8p3vKqZ7yR2bN1tL5wE0sM6aH4dC9jF=\n"
+                . "APP_DEBUG=false\n"
+                . "APP_URL=https://bukusaku.unsmadiun.id\n\n"
+                . "LOG_CHANNEL=stack\n"
+                . "LOG_LEVEL=info\n\n"
+                . "# Gemini API Configuration (Official Key from AI Studio)\n"
+                . "GEMINI_API_KEY={$activeApiKey}\n"
+                . "GEMINI_MODEL=gemini-3.1-flash-lite\n"
+                . "GEMINI_FALLBACK_MODEL=gemini-flash-lite-latest\n\n"
+                . "# RAG Knowledge Storage\n"
+                . "RAG_DATA_PATH=storage/rag_mpp_knowledge.json\n"
+                . "SOURCE_PDF=BUKU SAKU MPP TIDAK FIX.pdf\n";
+            @file_put_contents($envFile, $defaultEnv);
+        }
     }
-    if (!empty($activeModel)) {
-        $currentSettings['geminiModel'] = $activeModel;
+
+    $currentSettings['geminiApiKey'] = $activeApiKey;
+    if (empty($currentSettings['geminiModel'])) {
+        $currentSettings['geminiModel'] = $activeModel ?: 'gemini-3.1-flash-lite';
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
