@@ -115,43 +115,65 @@ export const PerizinanDetailModal: React.FC<PerizinanDetailModalProps> = ({
               PERSYARATAN:
             </h3>
 
-            {pers.administratif && pers.administratif.length > 0 && (
-              <div className="space-y-2">
-                <h4 className="font-bold text-slate-900 dark:text-white text-sm">
-                  A. Dokumen Administratif
-                </h4>
-                <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
-                  {pers.administratif.map((req, idx) => (
-                    <li key={idx} className="leading-relaxed whitespace-pre-line">{req}</li>
-                  ))}
-                </ul>
+            {pers.sections && pers.sections.length > 0 ? (
+              <div className="space-y-4">
+                {pers.sections.map((sec, sIdx) => (
+                  <div key={sIdx} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                    <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      <span>{sec.title}</span>
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
+                      {sec.items.map((req, idx) => (
+                        <li key={idx} className="leading-relaxed whitespace-pre-line text-xs sm:text-sm">
+                          {req}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
-            )}
+            ) : (
+              <>
+                {pers.administratif && pers.administratif.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                      A. Dokumen Administratif
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
+                      {pers.administratif.map((req, idx) => (
+                        <li key={idx} className="leading-relaxed whitespace-pre-line text-xs sm:text-sm">{req}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-            {pers.teknis && pers.teknis.length > 0 && (
-              <div className="space-y-2 pt-2">
-                <h4 className="font-bold text-slate-900 dark:text-white text-sm">
-                  B. Dokumen Teknis & Operasional
-                </h4>
-                <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
-                  {pers.teknis.map((req, idx) => (
-                    <li key={idx} className="leading-relaxed whitespace-pre-line">{req}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+                {pers.teknis && pers.teknis.length > 0 && (
+                  <div className="space-y-2 pt-2">
+                    <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                      B. Dokumen Teknis & Operasional
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
+                      {pers.teknis.map((req, idx) => (
+                        <li key={idx} className="leading-relaxed whitespace-pre-line text-xs sm:text-sm">{req}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-            {pers.umum && pers.umum.length > 0 && (
-              <div className="space-y-2 pt-2">
-                <h4 className="font-bold text-slate-900 dark:text-white text-sm">
-                  Persyaratan Umum
-                </h4>
-                <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
-                  {pers.umum.map((req, idx) => (
-                    <li key={idx} className="leading-relaxed whitespace-pre-line">{req}</li>
-                  ))}
-                </ul>
-              </div>
+                {pers.umum && pers.umum.length > 0 && (
+                  <div className="space-y-2 pt-2">
+                    <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                      Persyaratan Umum
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
+                      {pers.umum.map((req, idx) => (
+                        <li key={idx} className="leading-relaxed whitespace-pre-line text-xs sm:text-sm">{req}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
@@ -161,9 +183,11 @@ export const PerizinanDetailModal: React.FC<PerizinanDetailModalProps> = ({
               SISTEM, MEKANISME & PROSEDUR:
             </h3>
 
-            <ol className="list-decimal pl-5 space-y-2 text-slate-700 dark:text-slate-300">
+            <ol className="list-decimal pl-5 space-y-2.5 text-slate-700 dark:text-slate-300">
               {perizinan.mekanismeProsedur.map((step, idx) => (
-                <li key={idx} className="leading-relaxed pl-1">{step}</li>
+                <li key={idx} className="leading-relaxed pl-1 whitespace-pre-line text-xs sm:text-sm">
+                  {step.replace(/^\d+[\.\)]\s*/, '')}
+                </li>
               ))}
             </ol>
 

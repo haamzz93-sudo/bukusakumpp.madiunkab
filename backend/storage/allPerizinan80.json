@@ -207,34 +207,78 @@
     "slug": "sertifikasi-pemenuhan-aspek-cpkb",
     "instansi": "Loka POM / BPOM",
     "jenisPerizinan": "Perizinan Baru",
-    "waktuPelayanan": "4 menit",
+    "waktuPelayanan": "4 Menit Pelayanan",
     "biaya": "Sesuai Ketentuan PNBP",
     "categoryId": "usaha",
     "categoryName": "Perizinan Usaha, OSS & BPOM",
     "persyaratan": {
+      "sections": [
+        {
+          "title": "A. Sertifikat Pemenuhan Aspek Cara Pembuatan Kosmetik yang Baik (CPKB) Baru",
+          "items": [
+            "Surat permohonan.",
+            "Persetujuan Denah Bangunan Industri Kosmetika.",
+            "Dokumen penerapan sistem mutu CPKB meliputi aspek sistem manajemen mutu, personalia, bangunan dan fasilitas, peralatan, sanitasi dan higiene, produksi, pengawasan mutu, dokumentasi, penyimpanan, penanganan keluhan dan penarikan produk sesuai dengan Peraturan Badan Pengawas Obat dan Makanan yang mengatur mengenai CPKB.",
+            "Surat persetujuan penggunaan fasilitas bersama yang masih berlaku dengan bentuk sediaan sesuai dengan permohonan untuk sarana produksi yang menggunakan fasilitas bersama Kosmetika dengan komoditi obat atau obat Bahan Alam.",
+            "Memiliki penanggung jawab teknis sesuai dengan ketentuan peraturan perundang-undangan."
+          ]
+        },
+        {
+          "title": "B. Sertifikat Pemenuhan Aspek Cara Pembuatan Kosmetik yang Baik (CPKB) Pembaharuan",
+          "items": [
+            "Surat permohonan.",
+            "Persetujuan Denah Bangunan Industri Kosmetika.",
+            "Dokumen penerapan sistem mutu CPKB meliputi aspek sistem manajemen mutu, personalia, bangunan dan fasilitas, peralatan, sanitasi dan higiene, produksi, pengawasan mutu, dokumentasi, penyimpanan, penanganan keluhan dan penarikan produk sesuai dengan Peraturan Badan Pengawas Obat dan Makanan yang mengatur mengenai CPKB.",
+            "Surat persetujuan penggunaan fasilitas bersama yang masih berlaku dengan bentuk sediaan sesuai dengan permohonan untuk sarana produksi yang menggunakan fasilitas bersama Kosmetika dengan komoditi obat atau obat Bahan Alam.",
+            "Memiliki penanggung jawab teknis sesuai dengan ketentuan peraturan perundang-undangan.",
+            "Ketentuan Pemeriksaan Sarana Pembaharuan:\n• Pembaharuan Sertifikat Pemenuhan Aspek CPKB TIDAK dilakukan pemeriksaan sarana apabila:\n  - Tidak ada perubahan kapasitas produksi, fungsi ruangan atau gudang; dan/atau\n  - Penambahan kapasitas produksi dengan perubahan fungsi ruangan tanpa perubahan tingkat kebersihan dan/atau dengan perubahan peralatan.\n• Pembaharuan Sertifikat Pemenuhan Aspek CPKB DILAKUKAN pemeriksaan sarana apabila:\n  - Penambahan ruangan terkait perubahan kapasitas produksi dengan perubahan terhadap tingkat kebersihan;\n  - Penambahan gudang di luar alamat yang tercantum pada izin sarana; dan/atau\n  - Penambahan gudang di satu lokasi sarana.\n• Permohonan pembaharuan Sertifikat Pemenuhan Aspek CPKB dilakukan evaluasi dengan mempertimbangkan penerapan sistem mutu aspek CPKB berdasarkan:\n  - Hasil pemeriksaan rutin; dan/atau\n  - Riwayat Kosmetika yang diedarkan."
+          ]
+        },
+        {
+          "title": "C. Sertifikat Pemenuhan Aspek CPKB Perubahan Teknis",
+          "items": [
+            "Perubahan teknis Sertifikat Pemenuhan Aspek CPKB terdiri dari:\n1. Penambahan kapasitas produksi dengan perubahan fungsi ruangan tanpa perubahan tingkat kebersihan dan/atau dengan perubahan peralatan;\n2. Penambahan ruangan terkait perubahan kapasitas produksi dengan perubahan terhadap tingkat kebersihan;\n3. Penambahan gudang di luar alamat yang tercantum pada izin sarana; dan/atau\n4. Penambahan gudang di satu lokasi sarana.",
+            "Persyaratan teknis meliputi:\n1. Persetujuan denah bangunan industri kosmetika;\n2. Dokumen penerapan sistem mutu disesuaikan dengan perubahan teknis yang diajukan; dan\n3. Surat persetujuan penggunaan fasilitas bersama yang masih berlaku dengan bentuk sediaan sesuai dengan permohonan untuk sarana produksi yang menggunakan fasilitas bersama dengan obat atau obat Bahan Alam.",
+            "Ketentuan Pemeriksaan Sarana Perubahan Teknis:\n• Dalam hal terjadi perubahan teknis Sertifikat Pemenuhan Aspek CPKB karena penambahan kapasitas produksi dengan perubahan fungsi ruangan tanpa perubahan tingkat kebersihan dan/atau dengan perubahan peralatan, TIDAK dilakukan pemeriksaan sarana. Namun dilakukan evaluasi dengan mempertimbangkan penerapan sistem mutu aspek CPKB berdasarkan hasil pemeriksaan rutin dan/atau riwayat Kosmetika yang diedarkan.\n• Dalam hal terjadi perubahan teknis karena penambahan ruangan terkait perubahan kapasitas produksi dengan perubahan terhadap tingkat kebersihan, penambahan gudang di luar alamat pada izin, dan/atau penambahan gudang di satu lokasi sarana, DILAKUKAN pemeriksaan sarana."
+          ]
+        }
+      ],
       "administratif": [
-        "NIB KBLI Industri Kosmetik (Golongan A / B)",
-        "Surat Izin Usaha Industri Kosmetik",
-        "Perjanjian kerja sama PJT Apoteker penanggung jawab teknis"
+        "Surat permohonan Sertifikat Pemenuhan Aspek CPKB (Baru / Pembaharuan / Perubahan Teknis)",
+        "Persetujuan Denah Bangunan Industri Kosmetika dari Badan POM",
+        "Surat persetujuan penggunaan fasilitas bersama yang masih berlaku dengan bentuk sediaan sesuai permohonan (jika menggunakan fasilitas bersama komoditi obat/bahan alam)",
+        "Memiliki penanggung jawab teknis (Apoteker/Tenaga Teknis Kefarmasian) sesuai ketentuan peraturan perundang-undangan"
       ],
       "teknis": [
-        "Denah tata ruang (clean room, ruang timbang, ruang mixing, lab QC)",
-        "SOP validasi proses pembuatan dan penanganan air murni (purified water)",
-        "Program pelatihan berkala personel produksi kosmetik"
+        "Dokumen penerapan sistem mutu CPKB lengkap: aspek sistem manajemen mutu, personalia, bangunan dan fasilitas, peralatan, sanitasi dan higiene, produksi, pengawasan mutu, dokumentasi, penyimpanan, penanganan keluhan dan penarikan produk sesuai Peraturan BPOM",
+        "Dokumen penerapan sistem mutu disesuaikan dengan perubahan teknis yang diajukan (untuk permohonan perubahan teknis)",
+        "Kepatuhan tindak lanjut CAPA terhadap hasil pemeriksaan rutin sarana dan riwayat kepatuhan produk kosmetika yang diedarkan"
+      ],
+      "umum": [
+        "Pendaftaran akun hak akses PB UMKU pelaku usaha pada sistem OSS RBA (https://oss.go.id)",
+        "KBLI Industri Kosmetika yang terverifikasi aktif pada Nomor Induk Berusaha (NIB)"
       ]
     },
     "mekanismeProsedur": [
-      "Permohonan rekomendasi CPKB diajukan di sistem e-sertifikasi BPOM",
-      "Pemeriksaan dokumen dan peninjauan fasilitas ruang bersih",
-      "Penerbitan Surat Rekomendasi / Sertifikat CPKB"
+      "Pemohon mengajukan Perizinan Berusaha untuk Menunjang Kegiatan Usaha (PB UMKU) Sertifikat Pemenuhan Aspek CPKB dan mengunggah dokumen pendukung secara daring (online) melalui laman https://oss.go.id",
+      "Petugas melakukan evaluasi terhadap kelengkapan dokumen permohonan yang diunggah. Bila dokumen tidak lengkap maka permohonan dikembalikan",
+      "Apabila dokumen lengkap, pemohon akan dihubungi oleh petugas untuk memastikan kesiapan dan penjadwalan audit sarana",
+      "Saat audit sarana, pemohon mendapatkan salinan Berita Acara Pemeriksaan. Pemohon akan mendapatkan surat hasil pemeriksaan sarana setelah audit sarana dilaksanakan",
+      "Pemohon menyampaikan tambahan data dan/atau tindakan perbaikan dan pencegahan terhadap temuan audit sarana paling banyak 3 (tiga) kali dengan batas waktu masing-masing paling lambat 20 (dua puluh) hari kerja setelah surat hasil pemeriksaan sarana dan/atau hasil evaluasi terhadap tambahan data dan/atau tindakan perbaikan dan pencegahan diterima oleh pemohon",
+      "Rekomendasi penerbitan Sertifikat Pemenuhan Aspek CPKB berupa Analisis Hasil Pemeriksaan diterbitkan setelah pemohon melengkapi tambahan data dan/atau tindakan perbaikan dan pencegahan sehingga seluruh tambahan data dan/atau tindakan perbaikan dan pencegahan terhadap temuan audit sarana dinyatakan selesai"
     ],
     "portalUrl": "https://oss.go.id",
     "keywords": [
       "cpkb",
+      "cara pembuatan kosmetik yang baik",
+      "industri kosmetik",
       "pabrik kosmetik",
       "skincare",
-      "bpom madiun",
-      "standar kosmetik"
+      "loka pom",
+      "bpom",
+      "pemenuhan aspek cpkb",
+      "audit sarana cpkb",
+      "denah industri kosmetik"
     ]
   },
   {

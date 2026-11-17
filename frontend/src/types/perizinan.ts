@@ -12,6 +12,10 @@ export interface Perizinan {
     administratif?: string[];
     teknis?: string[];
     umum?: string[];
+    sections?: {
+      title: string;
+      items: string[];
+    }[];
   };
   mekanismeProsedur: string[];
   portalUrl?: string;

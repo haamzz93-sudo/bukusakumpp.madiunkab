@@ -101,7 +101,7 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
       {/* Popover Menu with Liquid Glass styling */}
       {isOpen && (
         <div 
-          className="absolute left-0 mt-1.5 w-full min-w-[200px] z-30 rounded-2xl bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-slate-950/20 py-1.5 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          className="absolute left-0 mt-1.5 w-full min-w-[200px] z-50 rounded-2xl bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-slate-950/20 py-1.5 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
           role="listbox"
         >
           <div className="max-h-60 overflow-y-auto px-1 space-y-0.5 custom-scrollbar">

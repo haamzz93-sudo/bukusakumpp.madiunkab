@@ -1201,8 +1201,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
         </header>
 
-        {/* Page Content Body */}
-        <main className="pt-24 px-4 pb-12 sm:px-6 lg:px-8 space-y-6 flex-1 min-w-0 max-w-7xl w-full mx-auto">
+        {/* Page Content Body - Generous top padding so header never clips content */}
+        <main className="pt-24 sm:pt-28 px-4 pb-16 sm:px-6 lg:px-8 space-y-6 flex-1 min-w-0 max-w-7xl w-full mx-auto">
 
           {/* ========================================================
               TAB 1: GENTELELLA V4 DASHBOARD OVERVIEW (REAL TELEMETRY)
