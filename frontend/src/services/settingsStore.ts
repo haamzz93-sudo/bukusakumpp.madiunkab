@@ -62,7 +62,7 @@ Aturan Penting:
   logoWhiteUrl: '/images/logo_buku_saku_white_gold.png',
   logoMppUrl: '/images/logo_mpp_madiun_hd.png',
 
-  bgMode: 'auto',
+  bgMode: 'fixed',
   bgAutoIntervalSeconds: 8,
   selectedFixedBg: '/images/backgrounds/bg_mpp_building_2d.jpg',
 

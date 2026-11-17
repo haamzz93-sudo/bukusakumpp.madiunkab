@@ -180,6 +180,18 @@
   }
 }
 
+@keyframes border-beam-slide {
+  0% {
+    transform: translateX(-120%);
+  }
+  50% {
+    transform: translateX(120%);
+  }
+  100% {
+    transform: translateX(360%);
+  }
+}
+
 .animate-border-beam-spin {
   animation: border-beam-spin 8s linear infinite;
   will-change: transform;
@@ -187,6 +199,11 @@
 
 .animate-border-beam-fast {
   animation: border-beam-spin 5.5s linear infinite;
+  will-change: transform;
+}
+
+.animate-border-beam-slide {
+  animation: border-beam-slide 5s ease-in-out infinite;
   will-change: transform;
 }
 
