@@ -743,6 +743,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     { value: 'infrastruktur', label: 'Infrastruktur, Perbankan & Umum' },
   ];
 
+  const userRoleOptions: DropdownOption[] = [
+    { value: 'Administrator Utama', label: 'Administrator Utama', badge: 'Full Access' },
+    { value: 'Administrator', label: 'Administrator' },
+    { value: 'Petugas Loket MPP', label: 'Petugas Loket MPP' },
+    { value: 'Operator RAG & AI', label: 'Operator RAG & AI' },
+  ];
+
   const getKlasterIcon = (key: string) => {
     switch (key) {
       case 'usaha': return <Store className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />;
@@ -2951,16 +2958,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Role / Jabatan
                   </label>
-                  <select
+                  <CustomDropdown
+                    options={userRoleOptions}
                     value={formUserRole}
-                    onChange={(e) => setFormUserRole(e.target.value)}
-                    className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
-                  >
-                    <option value="Administrator Utama">Administrator Utama</option>
-                    <option value="Administrator">Administrator</option>
-                    <option value="Petugas Loket MPP">Petugas Loket MPP</option>
-                    <option value="Operator RAG & AI">Operator RAG & AI</option>
-                  </select>
+                    onChange={(val) => setFormUserRole(val)}
+                    size="sm"
+                  />
                 </div>
               </div>
 
