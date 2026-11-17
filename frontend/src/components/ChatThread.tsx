@@ -17,7 +17,8 @@ import {
   ShieldCheck,
   AlertCircle,
   Cpu,
-  Type
+  Type,
+  CheckCircle2
 } from 'lucide-react';
 import { ChatMessage } from '../types/perizinan';
 import { WA_NUM_MPP, TELP_MPP } from '../services/hybridAiService';
@@ -306,39 +307,10 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2">
-                      {/* Font Switcher Button */}
-                      <button
-                        type="button"
-                        onClick={() => setUseTimesNewRoman(!useTimesNewRoman)}
-                        className={`text-[11px] font-medium px-2.5 py-0.5 rounded-lg border transition-all cursor-pointer flex items-center gap-1.5 ${
-                          useTimesNewRoman
-                            ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border-amber-200 dark:border-amber-800/60 shadow-xs'
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
-                        }`}
-                        title="Klik untuk beralih antara font Times New Roman (Resmi) dan Modern Sans"
-                      >
-                        <Type className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                        <span>Font: {useTimesNewRoman ? 'Times New Roman' : 'Modern Sans'}</span>
-                      </button>
-
-                      {msg.via && (
-                        <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 ${
-                          msg.via === 'gemini-llm-rag'
-                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
-                        }`}>
-                          <Cpu className="w-3 h-3 text-emerald-500" />
-                          <span>
-                            {msg.via === 'gemini-llm-rag' 
-                              ? 'Gemini LLM · RAG Dokumen Resmi' 
-                              : msg.via === 'docrag' || msg.via === 'pdf-rag-offline'
-                              ? 'RAG Dokumen Pelayanan MPP'
-                              : msg.via === 'faq'
-                              ? 'SOP Katalog Resmi'
-                              : 'Asistensi Umum'}
-                          </span>
-                        </span>
-                      )}
+                      <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                        <span>Dokumen Standar Pelayanan Resmi</span>
+                      </span>
                     </div>
                   </div>
 

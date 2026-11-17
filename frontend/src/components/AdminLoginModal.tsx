@@ -289,9 +289,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
               />
               <span>Ingat username saya</span>
             </label>
-            <span className="text-[11px] text-slate-400">
-              Database: <span className="font-semibold text-emerald-600 dark:text-emerald-400">SQLite Active</span>
-            </span>
           </div>
 
           {/* Submit Button */}

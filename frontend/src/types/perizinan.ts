@@ -8,6 +8,7 @@ export interface Perizinan {
   waktuPelayanan: string;
   biaya: string;
   jenisPerizinan: string;
+  whatsappNumber?: string;
   persyaratan: {
     administratif?: string[];
     teknis?: string[];

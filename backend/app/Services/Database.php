@@ -61,6 +61,7 @@ class Database
                 biaya TEXT,
                 category_id TEXT,
                 category_name TEXT,
+                whatsapp_number TEXT,
                 persyaratan TEXT,
                 mekanisme TEXT,
                 portal_url TEXT,
@@ -69,6 +70,12 @@ class Database
             );
             CREATE INDEX IF NOT EXISTS idx_perizinan_cat ON perizinan(category_id);
         ");
+
+        try {
+            $pdo->exec("ALTER TABLE perizinan ADD COLUMN whatsapp_number TEXT;");
+        } catch (\Throwable $e) {
+            // Column already exists
+        }
 
         // Table 3: Klaster Questions
         $pdo->exec("
@@ -148,8 +155,8 @@ class Database
         try {
             $stmt = $pdo->prepare("
                 INSERT OR REPLACE INTO perizinan 
-                (id, title, slug, instansi, jenis_pelayanan, lama_pelayanan, biaya, category_id, category_name, persyaratan, mekanisme, portal_url, updated_at)
-                VALUES (:id, :title, :slug, :instansi, :jenis, :lama, :biaya, :cat_id, :cat_name, :syarat, :mekanisme, :portal, datetime('now'))
+                (id, title, slug, instansi, jenis_pelayanan, lama_pelayanan, biaya, category_id, category_name, whatsapp_number, persyaratan, mekanisme, portal_url, updated_at)
+                VALUES (:id, :title, :slug, :instansi, :jenis, :lama, :biaya, :cat_id, :cat_name, :wa, :syarat, :mekanisme, :portal, datetime('now'))
             ");
 
             foreach ($items as $item) {
@@ -163,6 +170,7 @@ class Database
                     ':biaya' => $item['biaya'] ?? 'Gratis (Rp 0)',
                     ':cat_id' => $item['categoryId'] ?? 'usaha',
                     ':cat_name' => $item['categoryName'] ?? 'Perizinan Usaha',
+                    ':wa' => $item['whatsappNumber'] ?? null,
                     ':syarat' => json_encode($item['persyaratan'] ?? [], JSON_UNESCAPED_UNICODE),
                     ':mekanisme' => json_encode($item['mekanismeProsedur'] ?? [], JSON_UNESCAPED_UNICODE),
                     ':portal' => $item['portalUrl'] ?? 'https://oss.go.id'
@@ -339,6 +347,7 @@ class Database
                 'biaya' => $r['biaya'],
                 'categoryId' => $r['category_id'],
                 'categoryName' => $r['category_name'],
+                'whatsappNumber' => !empty($r['whatsapp_number']) ? $r['whatsapp_number'] : null,
                 'persyaratan' => json_decode($r['persyaratan'] ?? '[]', true) ?: [],
                 'mekanismeProsedur' => json_decode($r['mekanisme'] ?? '[]', true) ?: [],
                 'portalUrl' => $r['portal_url'],
@@ -363,8 +372,8 @@ class Database
 
         $stmt = $pdo->prepare("
             INSERT OR REPLACE INTO perizinan 
-            (id, title, slug, instansi, jenis_pelayanan, lama_pelayanan, biaya, category_id, category_name, persyaratan, mekanisme, portal_url, updated_at)
-            VALUES (:id, :title, :slug, :instansi, :jenis, :lama, :biaya, :cat_id, :cat_name, :syarat, :mekanisme, :portal, datetime('now'))
+            (id, title, slug, instansi, jenis_pelayanan, lama_pelayanan, biaya, category_id, category_name, whatsapp_number, persyaratan, mekanisme, portal_url, updated_at)
+            VALUES (:id, :title, :slug, :instansi, :jenis, :lama, :biaya, :cat_id, :cat_name, :wa, :syarat, :mekanisme, :portal, datetime('now'))
         ");
 
         $stmt->execute([
@@ -377,6 +386,7 @@ class Database
             ':biaya' => $data['biaya'] ?? 'Gratis (Rp 0)',
             ':cat_id' => $data['categoryId'] ?? 'usaha',
             ':cat_name' => $data['categoryName'] ?? 'Perizinan Usaha',
+            ':wa' => !empty($data['whatsappNumber']) ? trim($data['whatsappNumber']) : null,
             ':syarat' => is_array($data['persyaratan']) ? json_encode($data['persyaratan'], JSON_UNESCAPED_UNICODE) : (string)($data['persyaratan'] ?? '[]'),
             ':mekanisme' => is_array($data['mekanismeProsedur']) ? json_encode($data['mekanismeProsedur'], JSON_UNESCAPED_UNICODE) : (string)($data['mekanismeProsedur'] ?? '[]'),
             ':portal' => $data['portalUrl'] ?? 'https://oss.go.id'
@@ -394,6 +404,7 @@ class Database
             'biaya' => $data['biaya'] ?? 'Gratis (Rp 0)',
             'categoryId' => $data['categoryId'] ?? 'usaha',
             'categoryName' => $data['categoryName'] ?? 'Perizinan Usaha',
+            'whatsappNumber' => !empty($data['whatsappNumber']) ? trim($data['whatsappNumber']) : null,
             'persyaratan' => is_array($data['persyaratan']) ? $data['persyaratan'] : json_decode($data['persyaratan'] ?? '[]', true),
             'mekanismeProsedur' => is_array($data['mekanismeProsedur']) ? $data['mekanismeProsedur'] : json_decode($data['mekanismeProsedur'] ?? '[]', true),
             'portalUrl' => $data['portalUrl'] ?? 'https://oss.go.id'

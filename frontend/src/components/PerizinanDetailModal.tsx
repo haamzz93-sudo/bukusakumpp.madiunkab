@@ -101,6 +101,12 @@ export const PerizinanDetailModal: React.FC<PerizinanDetailModalProps> = ({
               <span className="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-500/30 text-amber-800 dark:text-amber-300 font-bold text-xs">
                 Biaya: {perizinan.biaya || 'Gratis'}
               </span>
+              {perizinan.whatsappNumber && (
+                <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300 font-bold text-xs flex items-center gap-1.5">
+                  <WhatsAppIcon size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>WA Loket: {perizinan.whatsappNumber}</span>
+                </span>
+              )}
             </div>
 
             <p className="text-xs text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5 pt-1">
@@ -220,16 +226,44 @@ export const PerizinanDetailModal: React.FC<PerizinanDetailModalProps> = ({
             <span>Tanya Buku Saku tentang Izin Ini</span>
           </button>
 
-          {/* WhatsApp Direct Chat Button (Like screenshot 2 'Mulai Chat') */}
-          <a
-            href={`https://wa.me/${WA_NUM_MPP}?text=${encodeURIComponent(`Halo Mal Pelayanan Publik Kabupaten Madiun, saya ingin bertanya mengenai perizinan: ${perizinan.title}`)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 active:scale-95"
-          >
-            <span>Mulai Chat</span>
-            <WhatsAppIcon size={20} className="text-white shrink-0" />
-          </a>
+          {/* WhatsApp Direct Chat Actions (SOP-Specific & Universal MPP) */}
+          <div className="w-full sm:w-auto flex flex-wrap items-center gap-2.5">
+            {perizinan.whatsappNumber ? (
+              <>
+                <a
+                  href={`https://wa.me/${perizinan.whatsappNumber.replace(/[^0-9]/g, '').replace(/^0/, '62')}?text=${encodeURIComponent(`Halo Loket ${perizinan.instansi}, saya ingin konsultasi mengenai perizinan: ${perizinan.title}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 active:scale-95"
+                  title={`Hubungi WhatsApp Khusus SOP ${perizinan.instansi}`}
+                >
+                  <WhatsAppIcon size={18} className="text-white shrink-0" />
+                  <span>WA Loket SOP ({perizinan.whatsappNumber})</span>
+                </a>
+
+                <a
+                  href={`https://wa.me/${WA_NUM_MPP}?text=${encodeURIComponent(`Halo Mal Pelayanan Publik Kabupaten Madiun, saya ingin bertanya mengenai perizinan: ${perizinan.title}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium text-xs transition-all flex items-center justify-center gap-1.5 border border-slate-300 dark:border-slate-700"
+                  title="Hubungi Helpdesk Layanan Terpadu Mal Pelayanan Publik (MPP) Kabupaten Madiun"
+                >
+                  <WhatsAppIcon size={15} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>WA Helpdesk MPP</span>
+                </a>
+              </>
+            ) : (
+              <a
+                href={`https://wa.me/${WA_NUM_MPP}?text=${encodeURIComponent(`Halo Mal Pelayanan Publik Kabupaten Madiun, saya ingin bertanya mengenai perizinan: ${perizinan.title}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 active:scale-95"
+              >
+                <span>WhatsApp Loket MPP (0811-3778-776)</span>
+                <WhatsAppIcon size={18} className="text-white shrink-0" />
+              </a>
+            )}
+          </div>
 
         </div>
 

@@ -118,7 +118,7 @@ class LlmService
 
         $systemInstruction = $basePrompt . $operationalFacts . "DOKUMEN STANDAR PELAYANAN RESMI BUKU SAKU MPP 2026:\n" . $contextText;
 
-        $prompt = "Pertanyaan Pemohon: {$query}\n\nJawablah secara LENGKAP, JELAS, TUNTAS (jangan terpotong), dan rapi berdasarkan standar pelayanan resmi Buku Saku MPP Kabupaten Madiun di atas:";
+        $prompt = "Pertanyaan Pemohon: {$query}\n\nJawablah secara LENGKAP, JELAS, TUNTAS (jangan pernah terpotong), dan rapi berdasarkan standar pelayanan resmi Buku Saku MPP Kabupaten Madiun di atas:";
 
         $response = $this->callGeminiApi($this->model, $systemInstruction, $prompt);
 
@@ -127,7 +127,29 @@ class LlmService
         }
 
         if (!$response) {
-            $response = $this->callGeminiApi('gemini-3.5-flash-lite', $systemInstruction, $prompt);
+            $response = $this->callGeminiApi('gemini-1.5-flash', $systemInstruction, $prompt);
+        }
+
+        // Integrity Verification: Pastikan jawaban 100% utuh dan tidak terpotong di tengah kalimat
+        if (!empty($response)) {
+            $trimmed = trim($response);
+            $incompleteEndings = ['mengenai', 'adalah', 'dan', 'atau', 'pada', 'dengan', 'yaitu', 'seperti', 'berikut:', 'berikut', '---'];
+            $isCutOff = false;
+            foreach ($incompleteEndings as $ending) {
+                if (str_ends_with(strtolower($trimmed), $ending) || str_ends_with(strtolower($trimmed), $ending . '..') || str_ends_with(strtolower($trimmed), $ending . '...')) {
+                    $isCutOff = true;
+                    break;
+                }
+            }
+
+            if ($isCutOff || (strlen($trimmed) < 250 && !str_ends_with($trimmed, '.') && !str_ends_with($trimmed, '!') && !str_ends_with($trimmed, '?') && !str_ends_with($trimmed, '"') && !str_ends_with($trimmed, '`'))) {
+                // Jawaban terpotong! Lakukan panggilan lanjutan untuk melengkapi hingga 100% tuntas
+                $continuePrompt = "Jawaban sebelumnya terpotong pada kalimat: \"" . substr($trimmed, -100) . "\".\nSilakan tuliskan jawaban secara LENGKAP dan TUNTAS 100% dari awal sampai akhir mengenai: {$query}";
+                $retryRes = $this->callGeminiApi($this->model, $systemInstruction, $continuePrompt);
+                if (!empty($retryRes) && strlen(trim($retryRes)) > strlen($trimmed)) {
+                    $response = $retryRes;
+                }
+            }
         }
 
         return $response;
@@ -153,7 +175,7 @@ class LlmService
             ],
             'generationConfig' => [
                 'temperature' => $this->temperature,
-                'maxOutputTokens' => 1800,
+                'maxOutputTokens' => 4096,
                 'topP' => 0.85
             ]
         ];
@@ -166,7 +188,7 @@ class LlmService
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json'
             ],
-            CURLOPT_TIMEOUT => 25,
+            CURLOPT_TIMEOUT => 35,
             CURLOPT_CONNECTTIMEOUT => 8,
             CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
             CURLOPT_SSL_VERIFYPEER => false

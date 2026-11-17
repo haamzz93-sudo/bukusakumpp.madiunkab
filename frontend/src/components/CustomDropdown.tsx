@@ -78,15 +78,15 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        <span className="flex items-center gap-2 truncate">
+        <span className="flex items-center gap-2 text-left leading-snug min-w-0">
           {selectedOption?.icon && (
             <span className="shrink-0 text-slate-500 dark:text-slate-400">{selectedOption.icon}</span>
           )}
-          <span className={`truncate ${!selectedOption && placeholder ? 'text-slate-400 dark:text-slate-500' : ''}`}>
+          <span className={`line-clamp-1 sm:line-clamp-2 ${!selectedOption && placeholder ? 'text-slate-400 dark:text-slate-500' : ''}`} title={selectedOption ? selectedOption.label : placeholder}>
             {selectedOption ? selectedOption.label : placeholder}
           </span>
           {selectedOption?.badge && (
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
               {selectedOption.badge}
             </span>
           )}
@@ -98,13 +98,13 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
         />
       </button>
 
-      {/* Popover Menu with Liquid Glass styling */}
+      {/* Popover Menu with Liquid Glass styling - Full Width & No Truncation */}
       {isOpen && (
         <div 
-          className="absolute left-0 mt-1.5 w-full min-w-[200px] z-50 rounded-2xl bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-slate-950/20 py-1.5 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          className="absolute left-0 mt-1.5 w-max min-w-full max-w-[360px] sm:max-w-md z-50 rounded-2xl bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-slate-950/20 py-1.5 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
           role="listbox"
         >
-          <div className="max-h-60 overflow-y-auto px-1 space-y-0.5 custom-scrollbar">
+          <div className="max-h-64 overflow-y-auto px-1 space-y-0.5 custom-scrollbar">
             {options.map((option) => {
               const isSelected = String(option.value) === String(value);
               return (
@@ -115,7 +115,7 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
                     onChange(option.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs sm:text-sm transition-all duration-150 ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-xs sm:text-sm transition-all duration-150 ${
                     isSelected
                       ? 'bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-semibold border border-emerald-500/25'
                       : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 border border-transparent'
@@ -123,15 +123,15 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
                   role="option"
                   aria-selected={isSelected}
                 >
-                  <span className="flex items-center gap-2 truncate">
+                  <span className="flex items-center gap-2 text-left whitespace-normal break-words leading-snug flex-1">
                     {option.icon && (
                       <span className={`shrink-0 ${isSelected ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
                         {option.icon}
                       </span>
                     )}
-                    <span className="truncate">{option.label}</span>
+                    <span className="break-words">{option.label}</span>
                     {option.badge && (
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                      <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                         {option.badge}
                       </span>
                     )}

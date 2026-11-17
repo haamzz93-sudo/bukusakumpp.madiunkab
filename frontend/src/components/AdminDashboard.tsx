@@ -180,6 +180,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [formWaktu, setFormWaktu] = useState('0 menit');
   const [formBiaya, setFormBiaya] = useState('Gratis (Rp 0)');
   const [formCategory, setFormCategory] = useState('usaha');
+  const [formWhatsapp, setFormWhatsapp] = useState('');
   const [formAdminReq, setFormAdminReq] = useState('');
   const [formTeknisReq, setFormTeknisReq] = useState('');
   const [formProsedur, setFormProsedur] = useState('');
@@ -466,6 +467,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setFormWaktu('0 menit');
     setFormBiaya('Gratis (Rp 0)');
     setFormCategory('usaha');
+    setFormWhatsapp('');
     setFormAdminReq('KTP Pemohon\nKartu Keluarga\nNomor Induk Berusaha (NIB)');
     setFormTeknisReq('Dokumen pendukung teknis standar pelayanan');
     setFormProsedur('Pemohon mengajukan permohonan di loket Gedung MPP Kabupaten Madiun\nPetugas melakukan verifikasi berkas\nPenerbitan izin resmi');
@@ -483,6 +485,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setFormWaktu(item.waktuPelayanan);
     setFormBiaya(item.biaya);
     setFormCategory(item.categoryId);
+    setFormWhatsapp(item.whatsappNumber || '');
     setFormAdminReq(item.persyaratan?.administratif?.join('\n') || '');
     setFormTeknisReq(item.persyaratan?.teknis?.join('\n') || '');
     setFormProsedur(item.mekanismeProsedur?.join('\n') || '');
@@ -512,6 +515,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         waktuPelayanan: formWaktu.trim(),
         biaya: formBiaya.trim(),
         categoryId: formCategory,
+        whatsappNumber: formWhatsapp.trim() || undefined,
         persyaratan: {
           ...(editingItem.persyaratan || {}),
           administratif: adminLines,
@@ -533,6 +537,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         waktuPelayanan: formWaktu.trim(),
         biaya: formBiaya.trim(),
         categoryId: formCategory,
+        whatsappNumber: formWhatsapp.trim() || undefined,
         categoryName: formCategory === 'usaha' ? 'Perizinan Usaha, OSS & BPOM' : 
                       formCategory === 'pajak' ? 'Pajak Daerah & BPHTB (Bapenda)' :
                       formCategory === 'dukcapil' ? 'Administrasi Kependudukan' :
@@ -1223,7 +1228,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </h1>
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Database: SQLite Terhubung
+                      Sistem Aktif Terverifikasi
                     </span>
                   </div>
                 </div>
@@ -2740,7 +2745,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 uppercase tracking-wider">
                       Autentikasi & Hak Akses
                     </span>
-                    <span className="text-xs text-slate-400">Database: SQLite Terhubung</span>
+                    <span className="text-xs text-slate-400">Panel Resmi Administrator</span>
                   </div>
                   <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                     Manajemen Pengguna & Akun Administrator
@@ -3136,6 +3141,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Klaster Kategori
+                  </label>
+                  <CustomDropdown
+                    options={categoryOptions}
+                    value={formCategory}
+                    onChange={(val) => setFormCategory(val)}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Jenis Pelayanan
                   </label>
                   <CustomDropdown
@@ -3144,9 +3162,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     onChange={(val) => setFormJenis(val)}
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Lama Pelayanan
@@ -3170,17 +3186,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     onChange={(e) => setFormBiaya(e.target.value)}
                     placeholder="Gratis (Rp 0)"
                     className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Klaster Kategori
-                  </label>
-                  <CustomDropdown
-                    options={categoryOptions}
-                    value={formCategory}
-                    onChange={(val) => setFormCategory(val)}
                   />
                 </div>
               </div>
@@ -3227,6 +3232,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Nomor WhatsApp Loket SOP (Opsional)
+                  </label>
+                  <input
+                    type="text"
+                    value={formWhatsapp}
+                    onChange={(e) => setFormWhatsapp(e.target.value)}
+                    placeholder="Contoh: 0811-1068-0000"
+                    className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Link Portal Resmi (Opsional)
                   </label>
                   <input
@@ -3237,19 +3255,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Kata Kunci Pencarian (Pisahkan koma)
-                  </label>
-                  <input
-                    type="text"
-                    value={formKeywords}
-                    onChange={(e) => setFormKeywords(e.target.value)}
-                    placeholder="warung kopi, kafe, oss, kbli 56303"
-                    className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Kata Kunci Pencarian (Pisahkan koma)
+                </label>
+                <input
+                  type="text"
+                  value={formKeywords}
+                  onChange={(e) => setFormKeywords(e.target.value)}
+                  placeholder="warung kopi, kafe, oss, kbli 56303"
+                  className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
+                />
               </div>
 
               <div className="pt-3 flex justify-end gap-2.5 border-t border-slate-100 dark:border-slate-800">
@@ -3426,7 +3444,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       Log Audit & Telemetri Pengunjung Real-Time
                     </h3>
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                      SQLite Active
+                      Sistem Terverifikasi
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 mt-0.5">
