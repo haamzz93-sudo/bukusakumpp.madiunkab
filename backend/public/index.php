@@ -294,10 +294,22 @@ if ($uri === '/api/settings') {
         $currentSettings = json_decode(file_get_contents($settingsFile), true) ?? [];
     }
 
-    // Always ensure active API Key & Model from .env are served to Admin Panel
+    // Always ensure active API Key & Model from .env or config are served to Admin Panel
     $activeApiKey = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? '');
-    $activeModel = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.5-flash-lite');
+    $activeModel = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.1-flash-lite');
 
+    if (empty($activeApiKey)) {
+        $envFile = __DIR__ . '/../.env';
+        if (file_exists($envFile)) {
+            $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($lines as $line) {
+                if (str_starts_with(trim($line), 'GEMINI_API_KEY=')) {
+                    $activeApiKey = trim(explode('=', $line, 2)[1] ?? '');
+                    break;
+                }
+            }
+        }
+    }
     if (!empty($activeApiKey)) {
         $currentSettings['geminiApiKey'] = $activeApiKey;
     }
@@ -358,7 +370,148 @@ if ($uri === '/api/settings') {
     }
 }
 
-// 8. HEALTH CHECK
+// 8. USER MANAGEMENT CRUD API (Backed by SQLite database)
+if ($uri === '/api/users' || str_starts_with($uri, '/api/users/')) {
+    header('Content-Type: application/json');
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    // GET: List all admin users
+    if ($method === 'GET') {
+        $users = Database::getUsers();
+        echo json_encode(['ok' => true, 'users' => $users]);
+        exit();
+    }
+
+    // POST: Create or Update / Delete based on payload or sub-route
+    if ($method === 'POST') {
+        $raw = file_get_contents('php://input');
+        $data = json_decode($raw, true) ?? [];
+
+        // Check if create
+        if ($uri === '/api/users/create' || ($uri === '/api/users' && empty($data['id']) && empty($data['action']))) {
+            $username = trim($data['username'] ?? '');
+            $password = trim($data['password'] ?? '');
+            $name = trim($data['name'] ?? '');
+            $email = trim($data['email'] ?? '');
+            $role = trim($data['role'] ?? 'Administrator');
+
+            if (empty($username) || empty($password) || empty($name)) {
+                http_response_code(422);
+                echo json_encode(['ok' => false, 'error' => 'Username, Password, dan Nama Lengkap wajib diisi.']);
+                exit();
+            }
+
+            try {
+                $user = Database::createUser($username, $password, $name, $email, $role);
+                echo json_encode(['ok' => true, 'message' => 'Pengguna berhasil dibuat!', 'user' => $user]);
+                exit();
+            } catch (\Exception $e) {
+                http_response_code(400);
+                echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+                exit();
+            }
+        }
+
+        // Check if update
+        if ($uri === '/api/users/update' || ($uri === '/api/users' && !empty($data['id']) && ($data['action'] ?? '') !== 'delete')) {
+            $id = (int)($data['id'] ?? 0);
+            $username = trim($data['username'] ?? '');
+            $name = trim($data['name'] ?? '');
+            $email = trim($data['email'] ?? '');
+            $role = trim($data['role'] ?? 'Administrator');
+            $password = !empty($data['password']) ? trim($data['password']) : null;
+
+            if ($id <= 0 || empty($username) || empty($name)) {
+                http_response_code(422);
+                echo json_encode(['ok' => false, 'error' => 'ID, Username, dan Nama Lengkap wajib diisi.']);
+                exit();
+            }
+
+            try {
+                Database::updateUser($id, $username, $name, $email, $role, $password);
+                echo json_encode(['ok' => true, 'message' => 'Profil pengguna berhasil diperbarui!']);
+                exit();
+            } catch (\Exception $e) {
+                http_response_code(400);
+                echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+                exit();
+            }
+        }
+
+        // Check if delete
+        if ($uri === '/api/users/delete' || ($data['action'] ?? '') === 'delete') {
+            $id = (int)($data['id'] ?? 0);
+            if ($id <= 0) {
+                http_response_code(422);
+                echo json_encode(['ok' => false, 'error' => 'ID pengguna tidak valid.']);
+                exit();
+            }
+
+            try {
+                Database::deleteUser($id);
+                echo json_encode(['ok' => true, 'message' => 'Pengguna berhasil dihapus.']);
+                exit();
+            } catch (\Exception $e) {
+                http_response_code(400);
+                echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+                exit();
+            }
+        }
+    }
+
+    // PUT: Update user
+    if ($method === 'PUT') {
+        $raw = file_get_contents('php://input');
+        $data = json_decode($raw, true) ?? [];
+        $id = (int)($data['id'] ?? 0);
+        $username = trim($data['username'] ?? '');
+        $name = trim($data['name'] ?? '');
+        $email = trim($data['email'] ?? '');
+        $role = trim($data['role'] ?? 'Administrator');
+        $password = !empty($data['password']) ? trim($data['password']) : null;
+
+        if ($id <= 0 || empty($username) || empty($name)) {
+            http_response_code(422);
+            echo json_encode(['ok' => false, 'error' => 'ID, Username, dan Nama Lengkap wajib diisi.']);
+            exit();
+        }
+
+        try {
+            Database::updateUser($id, $username, $name, $email, $role, $password);
+            echo json_encode(['ok' => true, 'message' => 'Profil pengguna berhasil diperbarui!']);
+            exit();
+        } catch (\Exception $e) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+            exit();
+        }
+    }
+
+    // DELETE: Delete user
+    if ($method === 'DELETE') {
+        $raw = file_get_contents('php://input');
+        $data = json_decode($raw, true) ?? [];
+        $id = (int)($data['id'] ?? $_GET['id'] ?? 0);
+
+        if ($id <= 0) {
+            http_response_code(422);
+            echo json_encode(['ok' => false, 'error' => 'ID pengguna tidak valid.']);
+            exit();
+        }
+
+        try {
+            Database::deleteUser($id);
+            echo json_encode(['ok' => true, 'message' => 'Pengguna berhasil dihapus.']);
+            exit();
+        } catch (\Exception $e) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+            exit();
+        }
+    }
+}
+
+// 9. HEALTH CHECK
 if ($uri === '/api/health' || $uri === '/') {
     header('Content-Type: application/json');
     echo json_encode([

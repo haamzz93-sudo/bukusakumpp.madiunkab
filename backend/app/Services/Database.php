@@ -710,6 +710,115 @@ class Database
         return $stmt->fetchAll();
     }
 
+    public static function createUser(string $username, string $password, string $name, string $email = '', string $role = 'Administrator'): array
+    {
+        $pdo = self::getPdo();
+        $u = trim($username);
+        $existing = $pdo->prepare("SELECT id FROM users WHERE LOWER(username) = LOWER(:u)");
+        $existing->execute([':u' => $u]);
+        if ($existing->fetch()) {
+            throw new \Exception("Username '{$u}' sudah terdaftar. Silakan pilih username lain.");
+        }
+
+        $hash = password_hash($password, PASSWORD_BCRYPT);
+        $stmt = $pdo->prepare("
+            INSERT INTO users (username, password_hash, name, email, role)
+            VALUES (:u, :p, :name, :email, :role)
+        ");
+        $stmt->execute([
+            ':u' => $u,
+            ':p' => $hash,
+            ':name' => trim($name),
+            ':email' => trim($email),
+            ':role' => trim($role)
+        ]);
+
+        $newId = (int)$pdo->lastInsertId();
+        self::recordEvent('admin', "Admin menambahkan akun pengguna baru: \"{$u}\" ({$role})");
+
+        return [
+            'id' => $newId,
+            'username' => $u,
+            'name' => trim($name),
+            'email' => trim($email),
+            'role' => trim($role),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    public static function updateUser(int $id, string $username, string $name, string $email = '', string $role = 'Administrator', ?string $newPassword = null): bool
+    {
+        $pdo = self::getPdo();
+        $u = trim($username);
+
+        // Check if username conflict with another user
+        $check = $pdo->prepare("SELECT id FROM users WHERE LOWER(username) = LOWER(:u) AND id != :id");
+        $check->execute([':u' => $u, ':id' => $id]);
+        if ($check->fetch()) {
+            throw new \Exception("Username '{$u}' sudah digunakan oleh akun lain.");
+        }
+
+        if (!empty($newPassword)) {
+            $hash = password_hash($newPassword, PASSWORD_BCRYPT);
+            $stmt = $pdo->prepare("
+                UPDATE users 
+                SET username = :u, name = :name, email = :email, role = :role, password_hash = :p
+                WHERE id = :id
+            ");
+            $stmt->execute([
+                ':u' => $u,
+                ':name' => trim($name),
+                ':email' => trim($email),
+                ':role' => trim($role),
+                ':p' => $hash,
+                ':id' => $id
+            ]);
+            self::recordEvent('admin', "Admin memperbarui profil dan password akun: \"{$u}\"");
+        } else {
+            $stmt = $pdo->prepare("
+                UPDATE users 
+                SET username = :u, name = :name, email = :email, role = :role
+                WHERE id = :id
+            ");
+            $stmt->execute([
+                ':u' => $u,
+                ':name' => trim($name),
+                ':email' => trim($email),
+                ':role' => trim($role),
+                ':id' => $id
+            ]);
+            self::recordEvent('admin', "Admin memperbarui profil akun: \"{$u}\"");
+        }
+
+        return true;
+    }
+
+    public static function deleteUser(int $id): bool
+    {
+        $pdo = self::getPdo();
+
+        // Prevent deleting the root administrator (id 1)
+        if ($id === 1) {
+            throw new \Exception("Akun Administrator Utama (ID 1) tidak dapat dihapus demi keamanan sistem.");
+        }
+
+        // Count remaining users
+        $count = (int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+        if ($count <= 1) {
+            throw new \Exception("Tidak dapat menghapus. Harus tersisa minimal 1 akun administrator aktif.");
+        }
+
+        $userStmt = $pdo->prepare("SELECT username FROM users WHERE id = :id");
+        $userStmt->execute([':id' => $id]);
+        $u = $userStmt->fetchColumn() ?: "ID #{$id}";
+
+        $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+
+        self::recordEvent('admin', "Admin menghapus akun pengguna: \"{$u}\"");
+        return true;
+    }
+
     public static function updateUserPassword(string $username, string $newPassword): bool
     {
         $pdo = self::getPdo();

@@ -97,8 +97,8 @@ import { CustomDropdown, DropdownOption } from './CustomDropdown';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface AdminDashboardProps {
-  initialTab?: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster';
-  onTabChange?: (tab: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster') => void;
+  initialTab?: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users';
+  onTabChange?: (tab: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users') => void;
   onLogout: () => void;
   onViewLandingPage: () => void;
   onTriggerCloudflare: () => void;
@@ -112,7 +112,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onTriggerCloudflare
 }) => {
   // Navigation & Layout State
-  const [activeTab, setActiveTabState] = useState<'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster'>(initialTab);
+  const [activeTab, setActiveTabState] = useState<'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users'>(initialTab);
 
   useEffect(() => {
     if (initialTab && initialTab !== activeTab) {
@@ -120,7 +120,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   }, [initialTab]);
 
-  const setActiveTab = (tab: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster') => {
+  const setActiveTab = (tab: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users') => {
     setActiveTabState(tab);
     onTabChange?.(tab);
   };
@@ -132,6 +132,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Real Telemetry & Stats State
   const [realStats, setRealStats] = useState<RealStats | null>(null);
   const [isStatsLoading, setIsStatsLoading] = useState(false);
+
+  // User Management State (Backed by SQLite Database)
+  interface AdminUserItem {
+    id: number;
+    username: string;
+    name: string;
+    email: string;
+    role: string;
+    created_at: string;
+  }
+  const [usersList, setUsersList] = useState<AdminUserItem[]>([]);
+  const [isUsersLoading, setIsUsersLoading] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<AdminUserItem | null>(null);
+  const [formUserUsername, setFormUserUsername] = useState('');
+  const [formUserName, setFormUserName] = useState('');
+  const [formUserEmail, setFormUserEmail] = useState('');
+  const [formUserRole, setFormUserRole] = useState('Administrator');
+  const [formUserPassword, setFormUserPassword] = useState('');
+  const [formUserConfirmPassword, setFormUserConfirmPassword] = useState('');
+  const [deletingUser, setDeletingUser] = useState<AdminUserItem | null>(null);
 
   // Perizinan Data State
   const [perizinanList, setPerizinanList] = useState<Perizinan[]>([]);
@@ -245,8 +266,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       setKlasterList(updated);
     });
 
-    // Fetch initial real stats
+    // Fetch initial real stats and users
     loadStats();
+    loadUsers();
 
     // Auto refresh real stats every 15 seconds
     const interval = setInterval(() => {
@@ -279,6 +301,125 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       console.error('Error fetching real stats:', e);
     } finally {
       setIsStatsLoading(false);
+    }
+  };
+
+  const loadUsers = async () => {
+    setIsUsersLoading(true);
+    try {
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/api/users`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok && Array.isArray(data.users)) {
+          setUsersList(data.users);
+        }
+      }
+    } catch (e) {
+      console.error('Error fetching users:', e);
+    } finally {
+      setIsUsersLoading(false);
+    }
+  };
+
+  const handleOpenAddUser = () => {
+    setEditingUser(null);
+    setFormUserUsername('');
+    setFormUserName('');
+    setFormUserEmail('');
+    setFormUserRole('Administrator');
+    setFormUserPassword('');
+    setFormUserConfirmPassword('');
+    setIsUserModalOpen(true);
+  };
+
+  const handleOpenEditUser = (u: AdminUserItem) => {
+    setEditingUser(u);
+    setFormUserUsername(u.username);
+    setFormUserName(u.name);
+    setFormUserEmail(u.email || '');
+    setFormUserRole(u.role || 'Administrator');
+    setFormUserPassword('');
+    setFormUserConfirmPassword('');
+    setIsUserModalOpen(true);
+  };
+
+  const handleSaveUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formUserUsername.trim() || !formUserName.trim()) {
+      showToast('Username dan Nama Lengkap wajib diisi!');
+      return;
+    }
+    if (!editingUser && !formUserPassword) {
+      showToast('Password wajib diisi untuk pengguna baru!');
+      return;
+    }
+    if (formUserPassword && formUserPassword !== formUserConfirmPassword) {
+      showToast('Password baru dan konfirmasi password tidak cocok!');
+      return;
+    }
+    if (formUserPassword && formUserPassword.length < 5) {
+      showToast('Password minimal 5 karakter!');
+      return;
+    }
+
+    const baseUrl = getApiBaseUrl();
+    try {
+      if (editingUser) {
+        const res = await fetch(`${baseUrl}/api/users/update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: editingUser.id,
+            username: formUserUsername.trim(),
+            name: formUserName.trim(),
+            email: formUserEmail.trim(),
+            role: formUserRole,
+            password: formUserPassword.trim() || undefined
+          })
+        });
+        const d = await res.json();
+        if (!d.ok) throw new Error(d.error || 'Gagal memperbarui pengguna');
+        showToast('Profil akun & password berhasil diperbarui!');
+      } else {
+        const res = await fetch(`${baseUrl}/api/users/create`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: formUserUsername.trim(),
+            password: formUserPassword.trim(),
+            name: formUserName.trim(),
+            email: formUserEmail.trim(),
+            role: formUserRole
+          })
+        });
+        const d = await res.json();
+        if (!d.ok) throw new Error(d.error || 'Gagal membuat pengguna');
+        showToast(`Akun admin "${formUserUsername}" berhasil dibuat!`);
+      }
+      setIsUserModalOpen(false);
+      setEditingUser(null);
+      loadUsers();
+    } catch (err: any) {
+      showToast(err.message || 'Terjadi kesalahan sistem');
+    }
+  };
+
+  const handleDeleteUser = async (u: AdminUserItem) => {
+    const baseUrl = getApiBaseUrl();
+    try {
+      const res = await fetch(`${baseUrl}/api/users/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: u.id })
+      });
+      const d = await res.json();
+      if (!d.ok) throw new Error(d.error || 'Gagal menghapus pengguna');
+      showToast(`Akun "${u.username}" berhasil dihapus.`);
+      setDeletingUser(null);
+      loadUsers();
+    } catch (err: any) {
+      showToast(err.message || 'Gagal menghapus pengguna');
     }
   };
 
@@ -826,6 +967,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </span>
                 )}
               </button>
+
+              {/* Manajemen Pengguna / Admin Users CRUD */}
+              <button
+                type="button"
+                onClick={() => setActiveTab('users')}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all relative cursor-pointer ${
+                  activeTab === 'users'
+                    ? 'bg-emerald-500/10 text-emerald-400 font-bold'
+                    : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'
+                }`}
+                title="Kelola Akun Admin, Tambah Pengguna Baru & Ganti Password"
+              >
+                {activeTab === 'users' && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-emerald-500 rounded-r-full" />
+                )}
+                <div className="flex items-center gap-3 min-w-0">
+                  <Users className={`w-4 h-4 shrink-0 ${activeTab === 'users' ? 'text-emerald-400' : 'text-slate-400'}`} />
+                  {sidebarOpen && <span className="truncate whitespace-nowrap">Kelola Pengguna</span>}
+                </div>
+                {sidebarOpen && (
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700 shrink-0 ml-2">
+                    {usersList.length || 1} User
+                  </span>
+                )}
+              </button>
             </div>
           </div>
 
@@ -876,14 +1042,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         {/* User Profile Pill at Bottom (matching Gentelella v4 screenshot) */}
         <div className="p-3 border-t border-slate-800/80 shrink-0 bg-slate-950/40 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 truncate">
-            <div className="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs ring-2 ring-emerald-500/30 shrink-0">
+          <div 
+            onClick={() => setActiveTab('users')}
+            className="flex items-center gap-2.5 truncate cursor-pointer group hover:opacity-90 transition-opacity"
+            title="Kelola Akun & Ganti Password"
+          >
+            <div className="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs ring-2 ring-emerald-500/30 shrink-0 group-hover:ring-emerald-400">
               A
             </div>
             {sidebarOpen && (
               <div className="truncate text-left">
-                <div className="text-xs font-bold text-white truncate">Test Admin</div>
-                <div className="text-[10px] text-slate-400">Administrator</div>
+                <div className="text-xs font-bold text-white truncate group-hover:text-emerald-400 transition-colors">Admin MPP</div>
+                <div className="text-[10px] text-slate-400">Administrator Utama</div>
               </div>
             )}
           </div>
@@ -935,7 +1105,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 {activeTab === 'dashboard' ? 'Dashboard' : 
                  activeTab === 'perizinan' ? 'Data Perizinan' : 
                  activeTab === 'ai' ? 'Pengaturan AI' : 
-                 activeTab === 'klaster' ? 'Basis Pengetahuan Klaster' : 'Landing Page & Web'}
+                 activeTab === 'klaster' ? 'Basis Pengetahuan Klaster' : 
+                 activeTab === 'users' ? 'Manajemen Pengguna' : 'Landing Page & Web'}
               </span>
             </div>
           </div>
@@ -2523,8 +2694,355 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           )}
 
+          {/* ========================================================
+              TAB 6: MANAJEMEN PENGGUNA & AKUN ADMIN (CRUD)
+              ======================================================== */}
+          {activeTab === 'users' && (
+            <div className="space-y-6">
+              
+              {/* Header Card */}
+              <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 uppercase tracking-wider">
+                      Autentikasi & Hak Akses
+                    </span>
+                    <span className="text-xs text-slate-400">Database: SQLite Terhubung</span>
+                  </div>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                    Manajemen Pengguna & Akun Administrator
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
+                    Kelola akun admin, tambahkan petugas baru, atau perbarui username dan password login sistem Buku Saku MPP Kabupaten Madiun.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleOpenAddUser}
+                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 flex items-center gap-2 transition-all active:scale-95 cursor-pointer shrink-0 self-start sm:self-center"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Tambah Pengguna Baru</span>
+                </button>
+              </div>
+
+              {/* Quick Profile Summary Banner */}
+              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-900/20 via-teal-900/10 to-transparent border border-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shadow-md ring-2 ring-emerald-500/40 shrink-0">
+                    A
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <span>Sesi Akun Aktif: Administrator Utama</span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 font-mono">@admin</span>
+                    </div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      Ingin mengganti username atau password Anda? Klik tombol di samping.
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const me = usersList.find(u => u.username === 'admin') || usersList[0];
+                    if (me) handleOpenEditUser(me);
+                    else handleOpenAddUser();
+                  }}
+                  className="px-3.5 py-1.5 rounded-lg bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                >
+                  <Key className="w-3.5 h-3.5" />
+                  <span>Ganti Username / Password Saya</span>
+                </button>
+              </div>
+
+              {/* Users Table */}
+              <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center gap-2.5">
+                    <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-sm font-bold text-slate-900 dark:text-white">
+                      Daftar Akun Pengguna ({usersList.length})
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={loadUsers}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                    title="Muat Ulang Pengguna"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isUsersLoading ? 'animate-spin' : ''}`} />
+                  </button>
+                </div>
+
+                {isUsersLoading ? (
+                  <div className="py-12 text-center text-xs text-slate-400">
+                    Memuat data pengguna dari database SQLite...
+                  </div>
+                ) : usersList.length === 0 ? (
+                  <div className="py-12 text-center text-xs text-slate-400">
+                    Belum ada pengguna terdaftar selain akun default.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-200 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                          <th className="py-3 px-3">Pengguna</th>
+                          <th className="py-3 px-3">Username</th>
+                          <th className="py-3 px-3">Email</th>
+                          <th className="py-3 px-3">Role / Jabatan</th>
+                          <th className="py-3 px-3">Terdaftar Sejak</th>
+                          <th className="py-3 px-3 text-right">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs text-slate-700 dark:text-slate-300">
+                        {usersList.map((u) => (
+                          <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                            <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-7 h-7 rounded-full bg-emerald-600/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xs ring-1 ring-emerald-500/30">
+                                  {u.name ? u.name.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                                <div>
+                                  <div>{u.name}</div>
+                                  {u.id === 1 && (
+                                    <span className="text-[10px] font-normal text-emerald-600 dark:text-emerald-400">Akun Utama</span>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-3 px-3 font-mono font-medium text-emerald-700 dark:text-emerald-400">
+                              @{u.username}
+                            </td>
+                            <td className="py-3 px-3 text-slate-500 dark:text-slate-400">
+                              {u.email || '-'}
+                            </td>
+                            <td className="py-3 px-3">
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                                u.role?.includes('Utama') || u.role === 'Administrator'
+                                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+                                  : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-800'
+                              }`}>
+                                {u.role || 'Administrator'}
+                              </span>
+                            </td>
+                            <td className="py-3 px-3 text-slate-400 text-[11px]">
+                              {u.created_at ? u.created_at.slice(0, 10) : '-'}
+                            </td>
+                            <td className="py-3 px-3 text-right">
+                              <div className="inline-flex items-center gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenEditUser(u)}
+                                  className="p-1.5 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors cursor-pointer"
+                                  title="Edit Profil & Ganti Password"
+                                >
+                                  <Edit className="w-3.5 h-3.5" />
+                                </button>
+                                {u.id !== 1 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setDeletingUser(u)}
+                                    className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                                    title="Hapus Akun Pengguna"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          )}
+
         </main>
       </div>
+
+      {/* ========================================================
+          MODAL: TAMBAH / EDIT PENGGUNA ADMIN & GANTI PASSWORD
+          ======================================================== */}
+      {isUserModalOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
+          <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 my-8 space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  {editingUser ? `Edit Akun: @${editingUser.username}` : 'Tambah Pengguna Admin Baru'}
+                </h3>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setIsUserModalOpen(false)}
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveUser} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Nama Lengkap / Petugas <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formUserName}
+                  onChange={(e) => setFormUserName(e.target.value)}
+                  placeholder="Contoh: Budi Santoso, S.Kom"
+                  className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Username Login <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formUserUsername}
+                    onChange={(e) => setFormUserUsername(e.target.value)}
+                    placeholder="Contoh: admin_mpp"
+                    className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Role / Jabatan
+                  </label>
+                  <select
+                    value={formUserRole}
+                    onChange={(e) => setFormUserRole(e.target.value)}
+                    className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
+                  >
+                    <option value="Administrator Utama">Administrator Utama</option>
+                    <option value="Administrator">Administrator</option>
+                    <option value="Petugas Loket MPP">Petugas Loket MPP</option>
+                    <option value="Operator RAG & AI">Operator RAG & AI</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Email Petugas (Opsional)
+                </label>
+                <input
+                  type="email"
+                  value={formUserEmail}
+                  onChange={(e) => setFormUserEmail(e.target.value)}
+                  placeholder="budi@madiunkab.go.id"
+                  className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                <div className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <Key className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>{editingUser ? 'Ganti Password (Kosongkan jika tidak diubah)' : 'Password Akun Baru'}</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                      {editingUser ? 'Password Baru' : 'Password Login *'}
+                    </label>
+                    <input
+                      type="password"
+                      required={!editingUser}
+                      value={formUserPassword}
+                      onChange={(e) => setFormUserPassword(e.target.value)}
+                      placeholder="Minimal 5 karakter"
+                      className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                      Konfirmasi Password
+                    </label>
+                    <input
+                      type="password"
+                      required={!editingUser && !!formUserPassword}
+                      value={formUserConfirmPassword}
+                      onChange={(e) => setFormUserConfirmPassword(e.target.value)}
+                      placeholder="Ulangi password"
+                      className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsUserModalOpen(false)}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
+                >
+                  {editingUser ? 'Simpan Perubahan' : 'Buat Pengguna'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL: KONFIRMASI HAPUS PENGGUNA
+          ======================================================== */}
+      {deletingUser && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto">
+              <Trash2 className="w-6 h-6" />
+            </div>
+            <div className="text-center space-y-1">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                Hapus Akun Pengguna?
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Anda yakin ingin menghapus akun <span className="font-semibold text-rose-600 dark:text-rose-400">@{deletingUser.username}</span> ({deletingUser.name})? Pengguna ini tidak akan dapat login lagi.
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeletingUser(null)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDeleteUser(deletingUser)}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-md shadow-rose-600/20 transition-all active:scale-95 cursor-pointer"
+              >
+                Ya, Hapus Akun
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ========================================================
           MODAL: TAMBAH / EDIT PERIZINAN (WITH CUSTOM DROPDOWNS & NO +)

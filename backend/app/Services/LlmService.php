@@ -16,11 +16,15 @@ class LlmService
         $this->model = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.1-flash-lite');
         $this->fallbackModel = getenv('GEMINI_FALLBACK_MODEL') ?: ($_ENV['GEMINI_FALLBACK_MODEL'] ?? 'gemini-flash-lite-latest');
 
+        // 1. Check settings.json
         $settingsFile = __DIR__ . '/../../storage/settings.json';
         if (file_exists($settingsFile)) {
             $settings = json_decode(file_get_contents($settingsFile), true) ?? [];
+            if (!empty($settings['geminiApiKey'])) {
+                $this->apiKey = trim($settings['geminiApiKey']);
+            }
             if (!empty($settings['geminiModel'])) {
-                $this->model = $settings['geminiModel'];
+                $this->model = trim($settings['geminiModel']);
             }
             if (isset($settings['temperature']) && is_numeric($settings['temperature'])) {
                 $this->temperature = (float)$settings['temperature'];
@@ -28,6 +32,25 @@ class LlmService
             if (!empty($settings['systemPrompt'])) {
                 $this->customSystemPrompt = $settings['systemPrompt'];
             }
+        }
+
+        // 2. Check backend/.env directly if still empty
+        if (empty($this->apiKey)) {
+            $envFile = __DIR__ . '/../../.env';
+            if (file_exists($envFile)) {
+                $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                foreach ($lines as $line) {
+                    if (str_starts_with(trim($line), 'GEMINI_API_KEY=')) {
+                        $this->apiKey = trim(explode('=', $line, 2)[1] ?? '');
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Ensure active model is supported
+        if ($this->model === 'gemini-2.5-flash' || empty($this->model)) {
+            $this->model = 'gemini-3.1-flash-lite';
         }
     }
 
@@ -138,8 +161,8 @@ class LlmService
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json'
             ],
-            CURLOPT_TIMEOUT => 12,
-            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 25,
+            CURLOPT_CONNECTTIMEOUT => 8,
             CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
             CURLOPT_SSL_VERIFYPEER => false
         ]);

@@ -18,8 +18,8 @@ class RagSearchService
         $cleanQ = mb_strtolower(trim($query));
         $tokens = array_filter(explode(' ', preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $cleanQ)));
         
-        // Exclude common stop words (including general verbs like 'buka')
-        $stopWords = ['apa', 'saja', 'syarat', 'cara', 'bagaimana', 'alur', 'izin', 'perizinan', 'di', 'ke', 'dari', 'dan', 'yang', 'untuk', 'madiun', 'kabupaten', 'buku', 'saku', 'mpp', 'buka', 'mau', 'bisa', 'tolong', 'tanya'];
+        // Exclude common stop words
+        $stopWords = ['apa', 'saja', 'syarat', 'cara', 'bagaimana', 'alur', 'izin', 'perizinan', 'di', 'ke', 'dari', 'dan', 'yang', 'untuk', 'madiun', 'kabupaten', 'buku', 'saku', 'mpp', 'mau', 'bisa', 'tolong', 'tanya'];
         $meaningfulTokens = array_values(array_filter($tokens, fn($t) => !in_array($t, $stopWords) && mb_strlen($t) > 2));
 
         if (empty($meaningfulTokens)) {
@@ -52,6 +52,17 @@ class RagSearchService
             }
 
             // High-precision Domain Intent Boosters & Collision Guards
+
+            // 0. Jam Buka / Jadwal Operasional / Alamat / Kontak Helpdesk MPP Kabupaten Madiun
+            if (preg_match('/jadwal|jam buka|jam operasional|jam kerja|hari kerja|hari apa|buka jam|tutup jam|alamat mpp|lokasi mpp|kontak mpp|call center|nomor mpp|nomor wa mpp|operasional/u', $cleanQ)) {
+                if (($page['page'] ?? 0) >= 250 || str_contains($titleLower, 'kontak') || str_contains($titleLower, 'jam') || str_contains($contentLower, 'senin') || str_contains($contentLower, 'aloon-aloon')) {
+                    $score += 260;
+                }
+                // Penalty: jangan mencocokkan jadwal angsuran kredit/deposito bank saat bertanya jadwal operasional MPP
+                if (str_contains($titleLower, 'bank') || str_contains($titleLower, 'deposito') || str_contains($titleLower, 'kredit') || str_contains($titleLower, 'bpr')) {
+                    $score -= 220;
+                }
+            }
             
             // 1. Usaha Warung Kopi / Usaha Kuliner / Cafe / Makanan & Minuman
             if (preg_match('/warung|kopi|warkop|kedai|kafe|cafe|kuliner|restoran|rumah makan|minuman|56303/u', $cleanQ)) {

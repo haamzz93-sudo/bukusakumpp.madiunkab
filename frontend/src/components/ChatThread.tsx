@@ -234,35 +234,37 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
       <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-emerald-100/50 via-slate-100/20 to-transparent dark:from-emerald-950 dark:via-slate-950/90 dark:to-transparent pointer-events-none z-0" />
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Subheader Toolbar */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-emerald-500/20">
-          <button
-            onClick={onBackToHome}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl liquid-glass-sidebar text-slate-800 dark:text-slate-200 font-semibold text-sm shadow-sm transition-all self-start cursor-pointer hover:scale-[1.02] active:scale-95 border border-slate-200 dark:border-emerald-500/20"
-          >
-            <ArrowLeft className="w-4 h-4 text-emerald-600 dark:text-mpp-bright" />
-            <span>Kembali ke Beranda</span>
-          </button>
+        {/* Subheader Toolbar - Sticky under top navbar */}
+        <div className="sticky top-16 sm:top-20 z-40 bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-md py-3 -mt-2 mb-6 border-b border-slate-200/80 dark:border-emerald-500/20 shadow-xs">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <button
+              onClick={onBackToHome}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl liquid-glass-sidebar text-slate-800 dark:text-slate-200 font-semibold text-sm shadow-sm transition-all self-start cursor-pointer hover:scale-[1.02] active:scale-95 border border-slate-200 dark:border-emerald-500/20"
+            >
+              <ArrowLeft className="w-4 h-4 text-emerald-600 dark:text-mpp-bright" />
+              <span>Kembali ke Beranda</span>
+            </button>
 
-          {/* Active Query Banner */}
-          <div className="flex-1 max-w-xl sm:mx-4">
-            <form onSubmit={handleHeaderSearchSubmit} className="relative flex items-center">
-              <input
-                type="text"
-                value={headerSearchText}
-                onChange={(e) => setHeaderSearchText(e.target.value)}
-                placeholder="Tanyakan hal lain seputar perizinan..."
-                className="w-full py-2 pl-9 pr-24 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-emerald-500/25 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-emerald-600 dark:focus:border-mpp-bright shadow-sm"
-              />
-              <Search className="w-4 h-4 text-slate-400 absolute left-3" />
-              <button
-                type="submit"
-                disabled={!headerSearchText.trim() || isLoading}
-                className="absolute right-1.5 px-3 py-1 bg-mpp-bright hover:bg-mpp-yellow text-slate-950 font-bold text-xs rounded-lg shadow-sm transition-transform active:scale-95 disabled:opacity-50 cursor-pointer"
-              >
-                Tanya
-              </button>
-            </form>
+            {/* Active Query Banner */}
+            <div className="flex-1 max-w-xl sm:mx-4">
+              <form onSubmit={handleHeaderSearchSubmit} className="relative flex items-center">
+                <input
+                  type="text"
+                  value={headerSearchText}
+                  onChange={(e) => setHeaderSearchText(e.target.value)}
+                  placeholder="Tanyakan hal lain seputar perizinan..."
+                  className="w-full py-2 pl-9 pr-24 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-emerald-500/25 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-emerald-600 dark:focus:border-mpp-bright shadow-sm"
+                />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3" />
+                <button
+                  type="submit"
+                  disabled={!headerSearchText.trim() || isLoading}
+                  className="absolute right-1.5 px-3 py-1 bg-mpp-bright hover:bg-mpp-yellow text-slate-950 font-bold text-xs rounded-lg shadow-sm transition-transform active:scale-95 disabled:opacity-50 cursor-pointer"
+                >
+                  Tanya
+                </button>
+              </form>
+            </div>
           </div>
         </div>
 
