@@ -1718,8 +1718,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
 
               {/* Table Data Perizinan */}
-              <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
+              <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div className="overflow-x-auto rounded-t-2xl">
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
                       <tr className="bg-slate-100/70 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wider text-[11px]">
@@ -1802,8 +1802,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </table>
                 </div>
 
-                {/* Table Footer Pagination with CUSTOM DROPDOWN */}
-                <div className="p-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400 bg-slate-50/60 dark:bg-slate-900/60">
+                {/* Table Footer Pagination with CUSTOM DROPDOWN (Pops UP smoothly) */}
+                <div className="p-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400 bg-slate-50/60 dark:bg-slate-900/60 rounded-b-2xl relative z-20">
                   
                   <div className="flex items-center gap-2">
                     <span className="font-medium">Tampilkan per halaman:</span>
@@ -1816,6 +1816,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           setCurrentPage(1);
                         }}
                         size="sm"
+                        direction="up"
                       />
                     </div>
                   </div>

@@ -16,6 +16,7 @@ interface CustomDropdownProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
+  direction?: 'up' | 'down' | 'auto';
 }
 
 export const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -25,10 +26,50 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
   placeholder = 'Pilih opsi...',
   className = '',
   size = 'md',
-  fullWidth = true
+  fullWidth = true,
+  direction = 'auto'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [openUpward, setOpenUpward] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Determine direction (up/down/auto) when opening
+  useEffect(() => {
+    if (!isOpen) return;
+    if (direction === 'up') {
+      setOpenUpward(true);
+      return;
+    }
+    if (direction === 'down') {
+      setOpenUpward(false);
+      return;
+    }
+
+    // Auto-detect based on viewport and scrollable container space
+    if (dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      const spaceBelowWindow = window.innerHeight - rect.bottom;
+      let spaceBelow = spaceBelowWindow;
+
+      let parent = dropdownRef.current.parentElement;
+      while (parent && parent !== document.body) {
+        const overflowY = window.getComputedStyle(parent).overflowY;
+        if (overflowY === 'auto' || overflowY === 'scroll') {
+          const parentRect = parent.getBoundingClientRect();
+          const spaceBelowParent = parentRect.bottom - rect.bottom;
+          spaceBelow = Math.min(spaceBelow, spaceBelowParent);
+          break;
+        }
+        parent = parent.parentElement;
+      }
+
+      if (spaceBelow < 220 && rect.top > 180) {
+        setOpenUpward(true);
+      } else {
+        setOpenUpward(false);
+      }
+    }
+  }, [isOpen, direction]);
 
   // Close when clicking outside
   useEffect(() => {
@@ -98,10 +139,12 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
         />
       </button>
 
-      {/* Popover Menu with Liquid Glass styling - Full Width & No Truncation */}
+      {/* Popover Menu with Liquid Glass styling - Full Width & Direction Aware */}
       {isOpen && (
         <div 
-          className="absolute left-0 mt-1.5 w-max min-w-full max-w-[360px] sm:max-w-md z-50 rounded-2xl bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-slate-950/20 py-1.5 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          className={`absolute left-0 ${
+            openUpward ? 'bottom-full mb-1.5 origin-bottom' : 'top-full mt-1.5 origin-top'
+          } w-max min-w-full max-w-[360px] sm:max-w-md z-50 rounded-2xl bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-slate-950/20 py-1.5 overflow-hidden animate-in fade-in zoom-in-95 duration-150`}
           role="listbox"
         >
           <div className="max-h-64 overflow-y-auto px-1 space-y-0.5 custom-scrollbar">
