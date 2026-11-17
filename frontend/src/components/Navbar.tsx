@@ -99,25 +99,34 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-50 px-2.5 sm:px-6 pt-2.5 sm:pt-3 pb-2 transition-all duration-500 pointer-events-none">
       
-      {/* Dynamic Island Header Container:
-          - Initial (scrollY <= 40): Rectangular bar (kotak) with rounded-2xl
-          - Scrolled (scrollY > 40): Compact Dynamic Island capsule (perkecil) with rounded-full
-          - Animated smoothly with cubic-bezier spring curve & Liquid Glass CSS
-      */}
+      {/* Dynamic Island Header Outer Container with Continuous Running Warm-White Border Beam */}
       <div 
-        className={`pointer-events-auto relative mx-auto text-white flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] liquid-glass-dark ${
+        className={`pointer-events-auto relative mx-auto p-[1.5px] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isScrolled 
-            ? 'max-w-4xl rounded-full px-4 sm:px-5 py-2 shadow-2xl shadow-emerald-950/50 scale-[0.98] border border-white/25'
-            : 'max-w-7xl rounded-2xl px-4 sm:px-6 py-2.5 sm:py-3.5 shadow-xl border border-white/20 scale-100'
+            ? 'max-w-4xl rounded-full shadow-2xl shadow-emerald-950/40 scale-[0.98]'
+            : 'max-w-7xl rounded-2xl shadow-xl shadow-emerald-950/20 scale-100'
         }`}
       >
-        
-        {/* Strictly Clipped Internal Sheen Layer (Prevents Glow From Bleeding Past Capsule Borders) */}
-        <div className={`absolute inset-0 pointer-events-none overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isScrolled ? 'rounded-full' : 'rounded-2xl'
-        }`}>
-          <div className="liquid-sheen-beam" />
+        {/* Continuous Running Border Beam in Warm White */}
+        <div className="absolute -inset-[250%] pointer-events-none animate-border-beam-spin">
+          <div className="w-full h-full bg-conic-warm-white filter drop-shadow-[0_0_8px_rgba(255,248,230,0.85)]" />
         </div>
+
+        {/* Base Static Border for Always-Crisp Definition */}
+        <div className="absolute inset-0 rounded-[inherit] border border-white/25 pointer-events-none z-[1]" />
+
+        {/* Inner Liquid Glass Container */}
+        <div 
+          className={`relative z-10 w-full rounded-[inherit] flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] liquid-glass-dark text-white ${
+            isScrolled 
+              ? 'px-4 sm:px-5 py-2' 
+              : 'px-4 sm:px-6 py-2.5 sm:py-3.5'
+          }`}
+        >
+          {/* Strictly Clipped Internal Sheen Layer (Prevents Glow From Bleeding Past Capsule Borders) */}
+          <div className="liquid-sheen-clipper">
+            <div className="liquid-sheen-beam" />
+          </div>
         
         {/* Dual Brand: Official MPP Madiun & Buku Saku */}
         <button 
@@ -278,6 +287,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
         </div>
+
+      </div>
 
       </div>
 

@@ -116,6 +116,66 @@
 }
 
 /* ==========================================================================
+   Continuous Running Border Beam Animation (Warm White Glow)
+   ========================================================================== */
+@keyframes border-beam-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-beam-spin {
+  animation: border-beam-spin 8s linear infinite;
+  will-change: transform;
+}
+
+.animate-border-beam-fast {
+  animation: border-beam-spin 5.5s linear infinite;
+  will-change: transform;
+}
+
+/* Warm White Conic Light Beam for running borders */
+.bg-conic-warm-white {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 260deg,
+    rgba(255, 248, 230, 0.12) 285deg,
+    rgba(255, 245, 215, 0.6) 320deg,
+    rgba(255, 254, 248, 1) 345deg,
+    rgba(255, 245, 215, 0.6) 355deg,
+    transparent 360deg
+  );
+}
+
+/* Enhanced Liquid Glass for Sidebar & High-Profile Cards (Light & Dark) */
+.liquid-glass-sidebar {
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 16px 36px -4px rgba(6, 78, 59, 0.08),
+    0 4px 12px -2px rgba(6, 78, 59, 0.04),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.dark .liquid-glass-sidebar {
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 20px 48px 0 rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
    Scroll Reveal Animation System
    ========================================================================== */
 .reveal-on-scroll {

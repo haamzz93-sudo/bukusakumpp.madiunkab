@@ -635,7 +635,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           GENTELELLA V4 DARK SIDEBAR NAVIGATION
           ======================================================== */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-50 bg-[#0f172a] text-slate-300 flex flex-col border-r border-slate-800 transition-all duration-300 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-50 bg-[#0f172a]/95 backdrop-blur-2xl text-slate-300 flex flex-col border-r border-slate-800/80 transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full overflow-hidden'
         } ${mobileSidebarOpen ? 'w-72 translate-x-0' : ''}`}
       >
@@ -893,7 +893,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         }`}
       >
         {/* Top Navbar Header */}
-        <header className="sticky top-0 z-30 h-16 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6">
+        <header className="sticky top-0 z-30 h-16 liquid-glass-sidebar border-b border-slate-200/70 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6">
           
           {/* Left: Hamburger & Breadcrumb */}
           <div className="flex items-center gap-3">

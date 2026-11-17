@@ -486,66 +486,78 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
           {/* Right Column: Helpdesk & Escalation Sidebar (Mimicking AIDA sidebar) */}
           <div className="lg:col-span-4 space-y-4">
             
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4">
-              <div className="space-y-1">
-                <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-display">
-                  Belum Terbantu?
-                </div>
-                <h3 className="font-display font-bold text-base text-slate-900 dark:text-white">
-                  Hubungi Loket MPP Langsung
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Untuk konsultasi kasus khusus, verifikasi berkas bermasalah, atau percepatan NIB:
-                </p>
+            {/* Helpdesk Card with Liquid Glass & Warm-White Running Border Beam */}
+            <div className="relative p-[1.5px] rounded-2xl overflow-hidden shadow-lg">
+              {/* Continuous Running Border Beam in Warm White */}
+              <div className="absolute -inset-[250%] pointer-events-none animate-border-beam-spin">
+                <div className="w-full h-full bg-conic-warm-white filter drop-shadow-[0_0_8px_rgba(255,248,230,0.85)]" />
               </div>
 
-              {/* WhatsApp Button */}
-              <a
-                href={`https://wa.me/628113778776?text=${encodeURIComponent(`Halo Mal Pelayanan Publik (MPP) Kabupaten Madiun, saya butuh informasi perizinan terkait: ${currentQuery}`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#008060] hover:bg-[#006e52] text-white font-bold text-sm shadow-md shadow-emerald-900/20 transition-all hover:scale-[1.01]"
-              >
-                <WhatsAppIcon size={18} className="text-white shrink-0" />
-                <span>WhatsApp 0811-3778-776</span>
-              </a>
+              {/* Base Static Border */}
+              <div className="absolute inset-0 rounded-[inherit] border border-white/60 dark:border-white/10 pointer-events-none z-[1]" />
 
-              {/* Direct Phone */}
-              <a
-                href="tel:0351497206"
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors"
-              >
-                <Phone className="w-3.5 h-3.5" />
-                <span>Telepon: (0351) 497206</span>
-              </a>
+              {/* Inner Liquid Glass Card */}
+              <div className="relative z-10 w-full rounded-[inherit] liquid-glass-sidebar p-5 space-y-4">
+                <div className="space-y-1">
+                  <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-display">
+                    Belum Terbantu?
+                  </div>
+                  <h3 className="font-display font-bold text-base text-slate-900 dark:text-white">
+                    Hubungi Loket MPP Langsung
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Untuk konsultasi kasus khusus, verifikasi berkas bermasalah, atau percepatan NIB:
+                  </p>
+                </div>
 
-              <div className="border-t border-slate-100 dark:border-slate-800 pt-3 space-y-2 text-xs text-slate-500">
-                <div className="flex items-start gap-2">
-                  <Clock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Jam Layanan Loket:</span><br />
-                    Senin – Jumat, 08.00 – 15.00 WIB
+                {/* WhatsApp Button */}
+                <a
+                  href={`https://wa.me/628113778776?text=${encodeURIComponent(`Halo Mal Pelayanan Publik (MPP) Kabupaten Madiun, saya butuh informasi perizinan terkait: ${currentQuery}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#008060] hover:bg-[#006e52] text-white font-bold text-sm shadow-md shadow-emerald-900/20 transition-all hover:scale-[1.01]"
+                >
+                  <WhatsAppIcon size={18} className="text-white shrink-0" />
+                  <span>WhatsApp 0811-3778-776</span>
+                </a>
+
+                {/* Direct Phone */}
+                <a
+                  href="tel:0351497206"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Telepon: (0351) 497206</span>
+                </a>
+
+                <div className="border-t border-slate-200/60 dark:border-slate-800 pt-3 space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                  <div className="flex items-start gap-2">
+                    <Clock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Jam Layanan Loket:</span><br />
+                      Senin – Jumat, 08.00 – 15.00 WIB
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Gedung MPP Kab. Madiun:</span><br />
+                      Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Madiun 63121
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Gedung MPP Kab. Madiun:</span><br />
-                    Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Madiun 63121
-                  </div>
-                </div>
               </div>
-
             </div>
 
-            {/* Quick Links Card */}
-            <div className="bg-emerald-50/70 dark:bg-slate-900/60 rounded-2xl border border-emerald-100 dark:border-slate-800 p-4 space-y-2 text-xs">
+            {/* Quick Links Card with Liquid Glass */}
+            <div className="liquid-glass-sidebar rounded-2xl p-4 space-y-2 text-xs">
               <div className="font-bold text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Tautan Terintegrasi:</span>
               </div>
-              <ul className="space-y-1.5 pl-1 text-slate-600 dark:text-slate-400">
+              <ul className="space-y-1.5 pl-1 text-slate-600 dark:text-slate-300">
                 <li>• <a href="https://oss.go.id" target="_blank" rel="noopener noreferrer" className="text-emerald-700 dark:text-emerald-400 hover:underline">Sistem OSS RBA (NIB Berusaha)</a></li>
                 <li>• <a href="https://coretaxdjp.pajak.go.id" target="_blank" rel="noopener noreferrer" className="text-emerald-700 dark:text-emerald-400 hover:underline">Coretax DJP (NPWP Online)</a></li>
                 <li>• <a href="https://e-sertifikasi.pom.go.id" target="_blank" rel="noopener noreferrer" className="text-emerald-700 dark:text-emerald-400 hover:underline">e-Sertifikasi BPOM (CPPOB/CPKB)</a></li>

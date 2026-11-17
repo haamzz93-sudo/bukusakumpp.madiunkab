@@ -79,11 +79,10 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
 
       <div className="relative max-w-4xl mx-auto text-center z-10">
         
-        {/* Official Service Notice Pill */}
-        <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-xs font-semibold tracking-wider text-emerald-200/95 uppercase mb-5 backdrop-blur-md shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-mpp-bright animate-ping" />
-          <span>{settings.heroBadge}</span>
-        </div>
+        {/* Official Service Notice - Clean typography only, no capsule, no blinking dot */}
+        <p className="text-xs sm:text-sm font-semibold tracking-widest text-emerald-300 uppercase mb-4 drop-shadow-sm">
+          {settings.heroBadge}
+        </p>
 
         {/* Hero Headline */}
         <h1 className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-tight mb-4 drop-shadow-md">
