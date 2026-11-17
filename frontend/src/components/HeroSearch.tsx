@@ -8,9 +8,9 @@ interface HeroSearchProps {
 }
 
 const BG_IMAGES = [
+  '/images/backgrounds/bg_mpp_building_2d.jpg',
   '/images/backgrounds/bg_liquid_glass.jpg',
-  '/images/backgrounds/bg_topographic_mesh.jpg',
-  '/images/backgrounds/bg_mpp_civic.jpg'
+  '/images/backgrounds/bg_topographic_mesh.jpg'
 ];
 
 export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) => {
