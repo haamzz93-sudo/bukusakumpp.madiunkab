@@ -196,8 +196,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="fixed inset-0 z-40" 
                   onClick={() => setDropdownOpen(false)}
                 />
-                <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-80 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/40 dark:border-slate-800 py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="px-4 py-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-80 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="px-4 py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                     Klaster Pelayanan Terpadu
                   </div>
                   {klasterList.map((cat) => (
@@ -207,24 +207,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onSelectCategory(cat);
                         setDropdownOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2 hover:bg-emerald-50 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors text-slate-700 dark:text-slate-200"
+                      className="w-full text-left px-4 py-2 hover:bg-emerald-50/80 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors text-slate-800 dark:text-slate-200"
                     >
-                      <div className="p-1.5 rounded-lg bg-emerald-50 dark:bg-slate-800 border border-emerald-100 dark:border-slate-700">
+                      <div className="p-1.5 rounded-lg bg-emerald-50 dark:bg-slate-800 border border-emerald-200 dark:border-slate-700">
                         {getCategoryIcon(cat.key)}
                       </div>
                       <div>
                         <div className="text-sm font-semibold">{cat.name}</div>
-                        <div className="text-xs text-slate-400 line-clamp-1">{cat.desc}</div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{cat.desc}</div>
                       </div>
                     </button>
                   ))}
-                  <div className="border-t border-slate-100 dark:border-slate-800 mt-1 pt-1.5 px-2">
+                  <div className="border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 px-2">
                     <button
                       onClick={() => {
                         onTelusuriClick();
                         setDropdownOpen(false);
                       }}
-                      className="w-full text-center py-2 text-xs font-bold text-madiun-forest dark:text-emerald-400 hover:underline"
+                      className="w-full text-center py-2 text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline"
                     >
                       Lihat Semua Klaster Pertanyaan
                     </button>

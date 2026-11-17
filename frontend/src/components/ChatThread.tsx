@@ -231,7 +231,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200 pt-24 sm:pt-28 pb-12 px-4 relative">
       {/* Seamless Top Liquid Glass Backdrop for Navbar */}
-      <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-emerald-950 via-slate-950/90 to-transparent pointer-events-none z-0" />
+      <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-emerald-100/50 via-slate-100/20 to-transparent dark:from-emerald-950 dark:via-slate-950/90 dark:to-transparent pointer-events-none z-0" />
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Subheader Toolbar */}
@@ -383,7 +383,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                   )}
 
                   {/* Actions: Copy & Feedback */}
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500">
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
                     <button
                       onClick={() => handleCopy(msg.text, msg.id)}
                       className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors"
@@ -391,7 +391,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                       {copiedId === msg.id ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-600">Tersalin</span>
+                          <span className="text-emerald-600 font-semibold">Tersalin</span>
                         </>
                       ) : (
                         <>
@@ -402,7 +402,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                     </button>
 
                     <div className="flex items-center gap-1">
-                      <span className="mr-1 text-[11px] text-slate-400">Membantu?</span>
+                      <span className="mr-1 text-[11px] text-slate-500 dark:text-slate-400">Membantu?</span>
                       <button
                         onClick={() => handleVote(msg.id, 'up')}
                         className={`p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors ${currentVote === 'up' ? 'text-emerald-600 font-bold' : ''}`}
@@ -425,7 +425,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                     <strong>Penting:</strong> Jawaban disusun otomatis dari dokumen standar pelayanan resmi Mal Pelayanan Publik (MPP) & DPMPTSP Kabupaten Madiun. Untuk keputusan hukum atau kasus administratif pribadi, mohon konfirmasi ke loket pelayanan terkait.
                   </div>
 
-                  <p className="text-[11px] text-slate-400 dark:text-slate-500 italic">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
                     Mohon tidak menuliskan kata sandi, NIK sensitif, atau data rekening pribadi. Percakapan dicatat tanpa nama untuk evaluasi peningkatan pelayanan publik.
                   </p>
 
@@ -444,7 +444,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
             {/* Related Questions Chips */}
             {latestAssistantMessage?.relatedQuestions && latestAssistantMessage.relatedQuestions.length > 0 && (
               <div className="pt-2">
-                <div className="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
+                <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 uppercase tracking-wider">
                   Mungkin ini yang ingin Anda tanyakan selanjutnya:
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -452,7 +452,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                     <button
                       key={idx}
                       onClick={() => onSendFollowup(q, false)}
-                      className="text-left text-xs px-3 py-2 rounded-xl bg-slate-900 border border-emerald-500/20 text-slate-200 hover:border-emerald-400 hover:text-white shadow-sm transition-all cursor-pointer"
+                      className="text-left text-xs px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/20 text-slate-800 dark:text-slate-200 hover:border-emerald-500 dark:hover:border-emerald-400 hover:text-emerald-700 dark:hover:text-white hover:bg-emerald-50/70 dark:hover:bg-slate-800 shadow-xs transition-all cursor-pointer font-medium"
                     >
                       {q}
                     </button>
@@ -469,7 +469,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                   value={bottomFollowupText}
                   onChange={(e) => setBottomFollowupText(e.target.value)}
                   placeholder="Ketik pertanyaan lanjutan Anda di sini..."
-                  className="flex-1 py-3 px-4 rounded-xl bg-slate-900 border border-emerald-500/25 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-mpp-bright shadow-sm"
+                  className="flex-1 py-3 px-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-emerald-500/25 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-emerald-600 dark:focus:border-mpp-bright shadow-xs"
                   disabled={isLoading}
                 />
                 <button
