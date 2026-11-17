@@ -254,21 +254,26 @@ class Database
 
     public static function recordEvent(string $type, string $title, ?string $clientIp = null, ?string $ua = null): void
     {
-        $pdo = self::getPdo();
-        $ipInfo = self::resolveClientIp($clientIp);
-        $device = self::parseDevice($ua ?? ($_SERVER['HTTP_USER_AGENT'] ?? 'Web Browser'));
+        try {
+            $pdo = self::getPdo();
+            $ipInfo = self::resolveClientIp($clientIp);
+            $device = self::parseDevice($ua ?? ($_SERVER['HTTP_USER_AGENT'] ?? 'Web Browser'));
 
-        $stmt = $pdo->prepare("
-            INSERT INTO visitor_logs (ip, network_tag, event_type, title, device, created_at)
-            VALUES (:ip, :net, :type, :title, :device, datetime('now'))
-        ");
-        $stmt->execute([
-            ':ip' => $ipInfo['ip'],
-            ':net' => $ipInfo['tag'],
-            ':type' => $type,
-            ':title' => $title,
-            ':device' => $device
-        ]);
+            $stmt = $pdo->prepare("
+                INSERT INTO visitor_logs (ip, network_tag, event_type, title, device, created_at)
+                VALUES (:ip, :net, :type, :title, :device, datetime('now'))
+            ");
+            $stmt->execute([
+                ':ip' => $ipInfo['ip'],
+                ':net' => $ipInfo['tag'],
+                ':type' => $type,
+                ':title' => $title,
+                ':device' => $device
+            ]);
+        } catch (\Throwable $e) {
+            // Silently ignore if SQLite file permissions are restricted
+            error_log('Visitor log write skipped: ' . $e->getMessage());
+        }
     }
 
     public static function getLogs(int $limit = 50, ?string $type = null): array
@@ -591,10 +596,6 @@ class Database
 
     public static function generateCaptcha(): array
     {
-        $pdo = self::getPdo();
-        // Clean expired tokens older than 10 minutes
-        $pdo->exec("DELETE FROM captcha_tokens WHERE expires_at < " . time());
-
         // Characters omitting confusing ones like 0, O, 1, l, I
         $chars = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
         $code = '';
@@ -602,16 +603,26 @@ class Database
             $code .= $chars[random_int(0, strlen($chars) - 1)];
         }
 
-        $token = bin2hex(random_bytes(16));
         $expiresAt = time() + 300; // 5 minutes validity
+        $secretKey = 'bukusaku_mpp_captcha_signature_key_2026';
+        $hmacSig = hash_hmac('sha256', strtoupper($code) . ':' . $expiresAt, $secretKey);
+        $token = "cpt_{$expiresAt}_{$hmacSig}";
 
-        $stmt = $pdo->prepare("INSERT INTO captcha_tokens (token, code, created_at, expires_at) VALUES (:t, :c, :created, :exp)");
-        $stmt->execute([
-            ':t' => $token,
-            ':c' => strtoupper($code),
-            ':created' => time(),
-            ':exp' => $expiresAt
-        ]);
+        // Attempt to insert into SQLite if database is writable
+        try {
+            $pdo = self::getPdo();
+            $pdo->exec("DELETE FROM captcha_tokens WHERE expires_at < " . time());
+            $stmt = $pdo->prepare("INSERT INTO captcha_tokens (token, code, created_at, expires_at) VALUES (:t, :c, :created, :exp)");
+            $stmt->execute([
+                ':t' => $token,
+                ':c' => strtoupper($code),
+                ':created' => time(),
+                ':exp' => $expiresAt
+            ]);
+        } catch (\Throwable $e) {
+            // Silently allow HMAC token verification so login continues seamlessly even if DB is temporarily read-only
+            error_log("Captcha DB write notice: " . $e->getMessage());
+        }
 
         // Generate SVG captcha with noise lines and skewed text
         $w = 120;
@@ -648,23 +659,49 @@ class Database
 
     public static function verifyCaptcha(string $token, string $userInput): bool
     {
-        $pdo = self::getPdo();
-        $stmt = $pdo->prepare("SELECT code FROM captcha_tokens WHERE token = :t AND expires_at >= :now");
-        $stmt->execute([':t' => trim($token), ':now' => time()]);
-        $row = $stmt->fetch();
-        if (!$row) {
+        $token = trim($token);
+        $input = strtoupper(trim($userInput));
+        if (empty($token) || empty($input)) {
             return false;
         }
 
-        $isMatch = (strtoupper(trim($row['code'])) === strtoupper(trim($userInput)));
-
-        // Delete used token once verified
-        if ($isMatch) {
-            $del = $pdo->prepare("DELETE FROM captcha_tokens WHERE token = :t");
-            $del->execute([':t' => trim($token)]);
+        // 1. High-reliability cryptographic HMAC verification (immune to SQLite locks or permission issues)
+        if (str_starts_with($token, 'cpt_')) {
+            $parts = explode('_', $token, 3);
+            if (count($parts) === 3) {
+                $expiresAt = (int)$parts[1];
+                $sig = $parts[2];
+                if (time() <= $expiresAt) {
+                    $secretKey = 'bukusaku_mpp_captcha_signature_key_2026';
+                    $expectedSig = hash_hmac('sha256', $input . ':' . $expiresAt, $secretKey);
+                    if (hash_equals($expectedSig, $sig)) {
+                        try {
+                            $pdo = self::getPdo();
+                            $del = $pdo->prepare("DELETE FROM captcha_tokens WHERE token = :t");
+                            $del->execute([':t' => $token]);
+                        } catch (\Throwable $e) {}
+                        return true;
+                    }
+                }
+            }
         }
 
-        return $isMatch;
+        // 2. Database verification fallback
+        try {
+            $pdo = self::getPdo();
+            $stmt = $pdo->prepare("SELECT code FROM captcha_tokens WHERE token = :t AND expires_at >= :now");
+            $stmt->execute([':t' => $token, ':now' => time()]);
+            $row = $stmt->fetch();
+            if ($row && strtoupper(trim($row['code'])) === $input) {
+                $del = $pdo->prepare("DELETE FROM captcha_tokens WHERE token = :t");
+                $del->execute([':t' => $token]);
+                return true;
+            }
+        } catch (\Throwable $e) {
+            error_log("Captcha DB read notice: " . $e->getMessage());
+        }
+
+        return false;
     }
 
     public static function authenticate(string $username, string $password): ?array
@@ -687,7 +724,11 @@ class Database
         if (password_verify($p, $user['password_hash']) || $isDefaultAdmin) {
             // Automatically update password_hash in SQLite to bcrypt of current used password
             if ($isDefaultAdmin) {
-                self::updateUserPassword($user['username'], $p);
+                try {
+                    self::updateUserPassword($user['username'], $p);
+                } catch (\Throwable $e) {
+                    error_log("Password hash update notice: " . $e->getMessage());
+                }
             }
             self::recordEvent('admin', "User \"{$u}\" ({$user['name']}) berhasil login ke panel");
             return [
