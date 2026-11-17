@@ -124,7 +124,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setActiveTabState(tab);
     onTabChange?.(tab);
   };
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 1024 : true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [dashboardSubView, setDashboardSubView] = useState<'operations' | 'analytics'>('operations');
   const [activityTimeRange, setActivityTimeRange] = useState<'7d' | '30d' | '90d'>('7d');
@@ -561,7 +561,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       setAiTestResult({
         status: 'error',
         latencyMs,
-        response: `Gagal menghubungkan ke backend API (127.0.0.1:8002): ${err.message}`
+        response: `Gagal menghubungi backend API: ${err.message}`
       });
     } finally {
       setIsAiTesting(false);
@@ -638,24 +638,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       <aside 
         className={`fixed inset-y-0 left-0 z-50 bg-[#0f172a]/95 backdrop-blur-2xl text-slate-300 flex flex-col border-r border-slate-800/80 transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full overflow-hidden'
-        } ${mobileSidebarOpen ? 'w-72 translate-x-0' : ''}`}
+        } ${mobileSidebarOpen ? 'w-72 translate-x-0 shadow-2xl z-50' : ''}`}
       >
         {/* Brand Lockup at Top with Authentic MPP Emblem */}
-        <div className="h-16 flex items-center px-4 border-b border-slate-800/80 shrink-0 gap-3">
-          <img 
-            src="/images/logo_mpp_madiun_hd.png" 
-            alt="Logo MPP Kabupaten Madiun" 
-            className="w-10 h-10 object-contain shrink-0 drop-shadow"
-          />
-          {sidebarOpen && (
-            <div className="overflow-hidden truncate text-left">
-              <div className="font-bold text-white text-base tracking-tight flex items-center gap-1.5">
-                <span>Buku Saku</span>
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">v4</span>
+        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800/80 shrink-0 gap-3">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <img 
+              src="/images/logo_mpp_madiun_hd.png" 
+              alt="Logo MPP Kabupaten Madiun" 
+              className="w-10 h-10 object-contain shrink-0 drop-shadow"
+            />
+            {sidebarOpen && (
+              <div className="overflow-hidden truncate text-left">
+                <div className="font-bold text-white text-base tracking-tight flex items-center gap-1.5">
+                  <span>Buku Saku</span>
+                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">v4</span>
+                </div>
+                <div className="text-[11px] text-slate-400 truncate">MPP Kabupaten Madiun</div>
               </div>
-              <div className="text-[11px] text-slate-400 truncate">MPP Kabupaten Madiun</div>
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* Close/Hide Sidebar Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setSidebarOpen(false);
+              setMobileSidebarOpen(false);
+            }}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+            title="Sembunyikan Sidebar"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Sidebar Nav Menus */}
@@ -1047,7 +1062,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </div>
                       <div className="flex items-baseline gap-2 mt-1">
                         <span className="text-2xl font-extrabold text-slate-900 dark:text-white">
-                          {(realStats?.total_users || 2500).toLocaleString('id-ID')}
+                          {(realStats?.total_users ?? 0).toLocaleString('id-ID')}
                         </span>
                         <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
                           <TrendingUp className="w-3 h-3" /> +12%
@@ -1166,7 +1181,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </div>
                       <div className="flex items-baseline gap-2 mt-1">
                         <span className="text-2xl font-extrabold text-slate-900 dark:text-white">
-                          {(realStats?.total_queries || 2315).toLocaleString('id-ID')}
+                          {(realStats?.total_queries ?? 0).toLocaleString('id-ID')}
                         </span>
                         <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
                           <TrendingUp className="w-3 h-3" /> +5%
@@ -1227,7 +1242,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </div>
                       <div className="flex items-baseline gap-2 mt-1">
                         <span className="text-2xl font-black text-slate-900 dark:text-white">
-                          {(realStats?.weekly_sessions || 6782).toLocaleString('id-ID')}
+                          {(realStats?.weekly_sessions ?? realStats?.total_users ?? 0).toLocaleString('id-ID')}
                         </span>
                         <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                           ↑ 7% sesi aktif

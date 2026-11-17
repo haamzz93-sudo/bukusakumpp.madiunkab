@@ -488,16 +488,43 @@ class Database
     {
         $pdo = self::getPdo();
 
-        $totalUsersStmt = $pdo->query("SELECT COUNT(*) FROM visitor_logs");
-        $totalUsers = (int)$totalUsersStmt->fetchColumn() + 2500;
+        // 1. Real total unique visitors from database
+        $totalUsersStmt = $pdo->query("SELECT COUNT(DISTINCT ip) FROM visitor_logs");
+        $totalUsers = (int)$totalUsersStmt->fetchColumn();
+        if ($totalUsers === 0) {
+            $totalUsers = (int)$pdo->query("SELECT COUNT(*) FROM visitor_logs")->fetchColumn();
+        }
 
+        // 2. Real total questions asked to AI
         $totalQueriesStmt = $pdo->query("SELECT COUNT(*) FROM visitor_logs WHERE event_type = 'tanya_ai'");
-        $totalQueries = (int)$totalQueriesStmt->fetchColumn() + 2315;
+        $totalQueries = (int)$totalQueriesStmt->fetchColumn();
 
+        // 3. Real total perizinan items in database
         $totalPerizinanStmt = $pdo->query("SELECT COUNT(*) FROM perizinan");
         $totalPerizinan = (int)$totalPerizinanStmt->fetchColumn();
 
-        $logs = self::getLogs(10);
+        // 4. Real recent logs from database
+        $logs = self::getLogs(15);
+
+        // 5. Real daily traffic for the past 7 days
+        $dailyHistory = [
+            'Sen' => 0, 'Sel' => 0, 'Rab' => 0, 'Kam' => 0, 'Jum' => 0, 'Sab' => 0, 'Min' => 0
+        ];
+        try {
+            $dailyStmt = $pdo->query("
+                SELECT strftime('%w', created_at) as day_of_week, COUNT(*) as count 
+                FROM visitor_logs 
+                WHERE created_at >= date('now', '-7 days')
+                GROUP BY day_of_week
+            ");
+            $dayMap = ['0' => 'Min', '1' => 'Sen', '2' => 'Sel', '3' => 'Rab', '4' => 'Kam', '5' => 'Jum', '6' => 'Sab'];
+            while ($row = $dailyStmt->fetch()) {
+                $d = $dayMap[$row['day_of_week']] ?? null;
+                if ($d) {
+                    $dailyHistory[$d] = (int)$row['count'];
+                }
+            }
+        } catch (\Exception $e) {}
 
         return [
             'ok' => true,
@@ -507,17 +534,9 @@ class Database
             'avg_response_time' => '1.8 dtk',
             'accuracy_rate' => '98.4%',
             'rag_pages' => 254,
-            'weekly_sessions' => 6782 + (int)($totalUsers % 100),
+            'weekly_sessions' => array_sum($dailyHistory) ?: $totalUsers,
             'activities' => $logs,
-            'daily_history' => [
-                'Sen' => 640,
-                'Sel' => 780,
-                'Rab' => 920,
-                'Kam' => 840,
-                'Jum' => 1100,
-                'Sab' => 1250,
-                'Min' => 1252
-            ]
+            'daily_history' => $dailyHistory
         ];
     }
 
