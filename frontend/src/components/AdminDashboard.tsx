@@ -755,7 +755,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#0b1120] text-slate-900 dark:text-slate-100 flex font-sans transition-colors overflow-x-hidden">
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#0b1120] text-slate-900 dark:text-slate-100 flex font-sans transition-colors relative">
       
       {/* Toast Notification */}
       {toastMessage && (
@@ -768,7 +768,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Mobile Sidebar Overlay */}
       {mobileSidebarOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden animate-in fade-in duration-200"
           onClick={() => setMobileSidebarOpen(false)}
         />
       )}
@@ -777,9 +777,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           GENTELELLA V4 DARK SIDEBAR NAVIGATION
           ======================================================== */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-50 bg-[#0f172a]/95 backdrop-blur-2xl text-slate-300 flex flex-col border-r border-slate-800/80 transition-all duration-300 ease-in-out ${
-          sidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full overflow-hidden'
-        } ${mobileSidebarOpen ? 'w-72 translate-x-0 shadow-2xl z-50' : ''}`}
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#0f172a]/95 backdrop-blur-2xl text-slate-300 flex flex-col border-r border-slate-800/80 transition-transform duration-300 ease-in-out ${
+          mobileSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+        } ${sidebarOpen ? 'lg:translate-x-0' : 'lg:-translate-x-full'}`}
       >
         {/* Brand Lockup at Top with Authentic MPP Emblem */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800/80 shrink-0 gap-3">
@@ -789,15 +789,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               alt="Logo MPP Kabupaten Madiun" 
               className="w-10 h-10 object-contain shrink-0 drop-shadow"
             />
-            {sidebarOpen && (
-              <div className="overflow-hidden truncate text-left">
-                <div className="font-bold text-white text-base tracking-tight flex items-center gap-1.5">
-                  <span>Buku Saku</span>
-                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">v4</span>
-                </div>
-                <div className="text-[11px] text-slate-400 truncate">MPP Kabupaten Madiun</div>
+            <div className="overflow-hidden truncate text-left">
+              <div className="font-bold text-white text-base tracking-tight flex items-center gap-1.5">
+                <span>Buku Saku</span>
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">v4</span>
               </div>
-            )}
+              <div className="text-[11px] text-slate-400 truncate">MPP Kabupaten Madiun</div>
+            </div>
           </div>
 
           {/* Close/Hide Sidebar Button */}
@@ -833,6 +831,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   onClick={() => {
                     setActiveTab('dashboard');
                     setDashboardSubView('operations');
+                    setMobileSidebarOpen(false);
                   }}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all relative cursor-pointer ${
                     activeTab === 'dashboard'
@@ -845,15 +844,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-emerald-500 rounded-r-full" />
                   )}
                   <Home className={`w-4 h-4 shrink-0 ${activeTab === 'dashboard' ? 'text-emerald-400' : 'text-slate-400'}`} />
-                  {sidebarOpen && <span className="truncate">Dashboards</span>}
+                  <span className="truncate">Dashboards</span>
                 </button>
 
                 {/* Submenu for Dashboard */}
-                {sidebarOpen && activeTab === 'dashboard' && (
+                {activeTab === 'dashboard' && (
                   <div className="pl-9 pr-2 py-1 space-y-1 animate-in fade-in duration-200">
                     <button
                       type="button"
-                      onClick={() => setDashboardSubView('operations')}
+                      onClick={() => {
+                        setDashboardSubView('operations');
+                        setMobileSidebarOpen(false);
+                      }}
                       className={`w-full text-left py-1.5 px-2 rounded-lg text-xs transition-colors cursor-pointer ${
                         dashboardSubView === 'operations'
                           ? 'text-emerald-400 font-semibold bg-slate-800/50'
@@ -864,7 +866,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </button>
                     <button
                       type="button"
-                      onClick={() => setDashboardSubView('analytics')}
+                      onClick={() => {
+                        setDashboardSubView('analytics');
+                        setMobileSidebarOpen(false);
+                      }}
                       className={`w-full text-left py-1.5 px-2 rounded-lg text-xs transition-colors cursor-pointer ${
                         dashboardSubView === 'analytics'
                           ? 'text-emerald-400 font-semibold bg-slate-800/50'
@@ -880,7 +885,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               {/* Data Perizinan Item */}
               <button
                 type="button"
-                onClick={() => setActiveTab('perizinan')}
+                onClick={() => {
+                  setActiveTab('perizinan');
+                  setMobileSidebarOpen(false);
+                }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all relative cursor-pointer ${
                   activeTab === 'perizinan'
                     ? 'bg-emerald-500/10 text-emerald-400 font-bold'
@@ -893,19 +901,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 )}
                 <div className="flex items-center gap-3 truncate">
                   <BookOpen className={`w-4 h-4 shrink-0 ${activeTab === 'perizinan' ? 'text-emerald-400' : 'text-slate-400'}`} />
-                  {sidebarOpen && <span className="truncate">Data Perizinan</span>}
+                  <span className="truncate">Data Perizinan</span>
                 </div>
-                {sidebarOpen && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
-                    {perizinanList.length}
-                  </span>
-                )}
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                  {perizinanList.length}
+                </span>
               </button>
 
               {/* Pengaturan AI Item */}
               <button
                 type="button"
-                onClick={() => setActiveTab('ai')}
+                onClick={() => {
+                  setActiveTab('ai');
+                  setMobileSidebarOpen(false);
+                }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all relative cursor-pointer ${
                   activeTab === 'ai'
                     ? 'bg-emerald-500/10 text-emerald-400 font-bold'
@@ -918,17 +927,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 )}
                 <div className="flex items-center gap-3 truncate">
                   <Cpu className={`w-4 h-4 shrink-0 ${activeTab === 'ai' ? 'text-emerald-400' : 'text-slate-400'}`} />
-                  {sidebarOpen && <span className="truncate">Pengaturan AI</span>}
+                  <span className="truncate">Pengaturan AI</span>
                 </div>
-                {sidebarOpen && (
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 ring-4 ring-emerald-500/20 animate-pulse" />
-                )}
+                <span className="w-2 h-2 rounded-full bg-emerald-400 ring-4 ring-emerald-500/20 animate-pulse" />
               </button>
 
               {/* Landing Page & Web Item */}
               <button
                 type="button"
-                onClick={() => setActiveTab('web')}
+                onClick={() => {
+                  setActiveTab('web');
+                  setMobileSidebarOpen(false);
+                }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all relative cursor-pointer ${
                   activeTab === 'web'
                     ? 'bg-emerald-500/10 text-emerald-400 font-bold'
@@ -940,13 +950,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-emerald-500 rounded-r-full" />
                 )}
                 <Layout className={`w-4 h-4 shrink-0 ${activeTab === 'web' ? 'text-emerald-400' : 'text-slate-400'}`} />
-                {sidebarOpen && <span className="truncate">Landing Page & Web</span>}
+                <span className="truncate">Landing Page & Web</span>
               </button>
 
               {/* Klaster & Basis Pengetahuan (CRUD Pertanyaan Telusuri) */}
               <button
                 type="button"
-                onClick={() => setActiveTab('klaster')}
+                onClick={() => {
+                  setActiveTab('klaster');
+                  setMobileSidebarOpen(false);
+                }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all relative cursor-pointer ${
                   activeTab === 'klaster'
                     ? 'bg-emerald-500/10 text-emerald-400 font-bold'
@@ -959,19 +972,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 )}
                 <div className="flex items-center gap-3 min-w-0">
                   <HelpCircle className={`w-4 h-4 shrink-0 ${activeTab === 'klaster' ? 'text-emerald-400' : 'text-slate-400'}`} />
-                  {sidebarOpen && <span className="truncate whitespace-nowrap">Basis Pengetahuan</span>}
+                  <span className="truncate whitespace-nowrap">Basis Pengetahuan</span>
                 </div>
-                {sidebarOpen && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800 shrink-0 ml-2">
-                    {klasterList.reduce((acc, c) => acc + (c.questions?.length || 0), 0)} Q
-                  </span>
-                )}
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800 shrink-0 ml-2">
+                  {klasterList.reduce((acc, c) => acc + (c.questions?.length || 0), 0)} Q
+                </span>
               </button>
 
               {/* Manajemen Pengguna / Admin Users CRUD */}
               <button
                 type="button"
-                onClick={() => setActiveTab('users')}
+                onClick={() => {
+                  setActiveTab('users');
+                  setMobileSidebarOpen(false);
+                }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all relative cursor-pointer ${
                   activeTab === 'users'
                     ? 'bg-emerald-500/10 text-emerald-400 font-bold'
@@ -984,57 +998,60 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 )}
                 <div className="flex items-center gap-3 min-w-0">
                   <Users className={`w-4 h-4 shrink-0 ${activeTab === 'users' ? 'text-emerald-400' : 'text-slate-400'}`} />
-                  {sidebarOpen && <span className="truncate whitespace-nowrap">Kelola Pengguna</span>}
+                  <span className="truncate whitespace-nowrap">Kelola Pengguna</span>
                 </div>
-                {sidebarOpen && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700 shrink-0 ml-2">
-                    {usersList.length || 1} User
-                  </span>
-                )}
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700 shrink-0 ml-2">
+                  {usersList.length || 1} User
+                </span>
               </button>
             </div>
           </div>
 
           {/* Group 2: APPS & SECURITY */}
           <div>
-            {sidebarOpen && (
-              <div className="px-3 pb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
-                Apps & Security
-              </div>
-            )}
+            <div className="px-3 pb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+              Apps & Security
+            </div>
             
             <div className="space-y-1">
               <button
                 type="button"
                 onClick={() => {
                   setActiveTab('ai');
+                  setMobileSidebarOpen(false);
                   setTimeout(() => handleTestAi(), 100);
                 }}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-all cursor-pointer"
                 title="Live Test AI Chat"
               >
                 <Zap className="w-4 h-4 text-amber-400 shrink-0" />
-                {sidebarOpen && <span className="truncate">Live Test AI</span>}
+                <span className="truncate">Live Test AI</span>
               </button>
 
               <button
                 type="button"
-                onClick={onTriggerCloudflare}
+                onClick={() => {
+                  onTriggerCloudflare();
+                  setMobileSidebarOpen(false);
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-all cursor-pointer"
                 title="Cloudflare Madiun Verification Test"
               >
                 <ShieldCheck className="w-4 h-4 text-teal-400 shrink-0" />
-                {sidebarOpen && <span className="truncate">Uji Cloudflare</span>}
+                <span className="truncate">Uji Cloudflare</span>
               </button>
 
               <button
                 type="button"
-                onClick={onViewLandingPage}
+                onClick={() => {
+                  onViewLandingPage();
+                  setMobileSidebarOpen(false);
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-all cursor-pointer"
                 title="Buka Halaman Web Publik"
               >
                 <ExternalLink className="w-4 h-4 text-blue-400 shrink-0" />
-                {sidebarOpen && <span className="truncate">Lihat Web Publik</span>}
+                <span className="truncate">Lihat Web Publik</span>
               </button>
             </div>
           </div>
@@ -1043,30 +1060,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         {/* User Profile Pill at Bottom (matching Gentelella v4 screenshot) */}
         <div className="p-3 border-t border-slate-800/80 shrink-0 bg-slate-950/40 flex items-center justify-between">
           <div 
-            onClick={() => setActiveTab('users')}
+            onClick={() => {
+              setActiveTab('users');
+              setMobileSidebarOpen(false);
+            }}
             className="flex items-center gap-2.5 truncate cursor-pointer group hover:opacity-90 transition-opacity"
             title="Kelola Akun & Ganti Password"
           >
             <div className="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs ring-2 ring-emerald-500/30 shrink-0 group-hover:ring-emerald-400">
               A
             </div>
-            {sidebarOpen && (
-              <div className="truncate text-left">
-                <div className="text-xs font-bold text-white truncate group-hover:text-emerald-400 transition-colors">Admin MPP</div>
-                <div className="text-[10px] text-slate-400">Administrator Utama</div>
-              </div>
-            )}
+            <div className="truncate text-left">
+              <div className="text-xs font-bold text-white truncate group-hover:text-emerald-400 transition-colors">Admin MPP</div>
+              <div className="text-[10px] text-slate-400">Administrator Utama</div>
+            </div>
           </div>
-          {sidebarOpen && (
-            <button
-              type="button"
-              onClick={onLogout}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 transition-colors cursor-pointer"
-              title="Keluar dari Panel Admin"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={onLogout}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 transition-colors cursor-pointer"
+            title="Keluar dari Panel Admin"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </aside>
 
@@ -1074,12 +1090,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           MAIN CONTENT AREA (WITH TOPBAR HEADER)
           ======================================================== */}
       <div 
-        className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${
+        className={`flex-1 flex flex-col min-h-screen transition-all duration-300 min-w-0 ${
           sidebarOpen ? 'lg:pl-72' : 'lg:pl-0'
         }`}
       >
-        {/* Top Navbar Header */}
-        <header className="sticky top-0 z-30 h-16 liquid-glass-sidebar border-b border-slate-200/70 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6">
+        {/* Top Navbar Header - Truly Fixed at top */}
+        <header className={`fixed top-0 right-0 z-30 h-16 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between px-3 sm:px-6 transition-all duration-300 shadow-xs ${
+          sidebarOpen ? 'lg:left-72 left-0' : 'left-0'
+        }`}>
           
           {/* Left: Hamburger & Breadcrumb */}
           <div className="flex items-center gap-3">
@@ -1087,9 +1105,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               type="button"
               onClick={() => {
                 if (window.innerWidth < 1024) {
-                  setMobileSidebarOpen(!mobileSidebarOpen);
+                  setMobileSidebarOpen(prev => !prev);
                 } else {
-                  setSidebarOpen(!sidebarOpen);
+                  setSidebarOpen(prev => !prev);
                 }
               }}
               className="p-2 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
@@ -1170,7 +1188,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </header>
 
         {/* Page Content Body */}
-        <main className="p-4 sm:p-6 lg:p-8 space-y-6 flex-1">
+        <main className="pt-20 p-4 sm:p-6 lg:p-8 space-y-6 flex-1 min-w-0 max-w-7xl w-full mx-auto">
 
           {/* ========================================================
               TAB 1: GENTELELLA V4 DASHBOARD OVERVIEW (REAL TELEMETRY)
@@ -2864,6 +2882,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
             </div>
           )}
+
+          {/* Admin Panel Responsive Bottom Footer */}
+          <footer className="pt-8 pb-4 text-center border-t border-slate-200/60 dark:border-slate-800/60 text-xs text-slate-400 dark:text-slate-500">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <span>© 2026 Mal Pelayanan Publik (MPP) & DPMPTSP Kabupaten Madiun.</span>
+              <span>Buku Saku Digital v4.0 · Real AI Gemini & 254 Halaman RAG Terintegrasi</span>
+            </div>
+          </footer>
 
         </main>
       </div>

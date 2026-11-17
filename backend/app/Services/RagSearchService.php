@@ -26,6 +26,15 @@ class RagSearchService
             $meaningfulTokens = $tokens;
         }
 
+        // High-precision Domain Intent Boosters & Collision Guards
+        $isGeneralMppInfo = (
+            preg_match('/(jam|jadwal|operasional|waktu|hari|buka|tutup|kapan|alamat|lokasi|telepon|kontak|nomor|call center|kantor|gedung)/u', $cleanQ)
+            && (
+                preg_match('/(mpp|mal pelayanan|dpmptsp|kabupaten madiun|pelayanan|kantor|gedung)/u', $cleanQ)
+                || preg_match('/(jam berapa|buka jam|tutup jam|hari apa|kapan buka|jam layanan|jam operasional|jam kerja)/u', $cleanQ)
+            )
+        );
+
         // Rank pages based on token hits in title, agency, and full content
         $scoredPages = [];
         foreach ($this->pages as $page) {
@@ -51,16 +60,14 @@ class RagSearchService
                 }
             }
 
-            // High-precision Domain Intent Boosters & Collision Guards
-
             // 0. Jam Buka / Jadwal Operasional / Alamat / Kontak Helpdesk MPP Kabupaten Madiun
-            if (preg_match('/jadwal|jam buka|jam operasional|jam kerja|hari kerja|hari apa|buka jam|tutup jam|alamat mpp|lokasi mpp|kontak mpp|call center|nomor mpp|nomor wa mpp|operasional/u', $cleanQ)) {
+            if ($isGeneralMppInfo) {
                 if (($page['page'] ?? 0) >= 250 || str_contains($titleLower, 'kontak') || str_contains($titleLower, 'jam') || str_contains($contentLower, 'senin') || str_contains($contentLower, 'aloon-aloon')) {
-                    $score += 260;
+                    $score += 450;
                 }
                 // Penalty: jangan mencocokkan jadwal angsuran kredit/deposito bank saat bertanya jadwal operasional MPP
-                if (str_contains($titleLower, 'bank') || str_contains($titleLower, 'deposito') || str_contains($titleLower, 'kredit') || str_contains($titleLower, 'bpr')) {
-                    $score -= 220;
+                if (str_contains($titleLower, 'bank') || str_contains($titleLower, 'deposito') || str_contains($titleLower, 'kredit') || str_contains($titleLower, 'bpr') || str_contains($titleLower, 'tabungan')) {
+                    $score -= 600;
                 }
             }
             
@@ -139,6 +146,27 @@ class RagSearchService
 
         // Sort descending by relevance score
         usort($scoredPages, fn($a, $b) => $b['score'] <=> $a['score']);
+
+        // If asking for general MPP hours, schedule, location or contacts, prioritize official MPP operational chunk
+        if ($isGeneralMppInfo) {
+            $mppOfficialChunk = [
+                'page' => 254,
+                'agency' => 'Mal Pelayanan Publik (MPP) & DPMPTSP Kab. Madiun',
+                'title' => 'Standar Pelayanan, Jam Operasional & Kontak Resmi MPP',
+                'content' => "Informasi Resmi Mal Pelayanan Publik (MPP) Kabupaten Madiun:\n"
+                    . "Alamat Gedung: Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Kota Madiun, Jawa Timur 63121.\n"
+                    . "Jam Layanan: Buka setiap hari Senin s/d Jumat, pukul 08.00 – 15.00 WIB (Buka pukul 08.00 WIB, tutup pukul 15.00 WIB. Sabtu, Minggu, & Libur Nasional TUTUP).\n"
+                    . "Kontak Kantor: Telepon (0351) 497206 / (0351) 4773980.\n"
+                    . "Helpdesk Layanan Perizinan WhatsApp: 0811-3778-776.\n"
+                    . "WhatsApp Layanan Pengaduan: 0811-3783-785.\n"
+                    . "WhatsApp Layanan LKPM: 0851-5884-5871.\n"
+                    . "Email Resmi: dpmptsp.madiunkab@gmail.com | Website: https://dpmptsp.id\n"
+                    . "Mal Pelayanan Publik Kabupaten Madiun melayani 80+ standar pelayanan perizinan berusaha OSS RBA, administrasi kependudukan (KTP/KK), perpajakan daerah (PBB/BPHTB), SKCK, Paspor, BPJS, perbankan, dan pengadilan.",
+                'score' => 9999
+            ];
+            array_unshift($scoredPages, $mppOfficialChunk);
+        }
+
         $topChunks = array_slice($scoredPages, 0, 4);
 
         // Fallback default chunks if no specific match found

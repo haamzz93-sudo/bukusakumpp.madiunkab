@@ -235,7 +235,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Subheader Toolbar - Sticky under top navbar */}
-        <div className="sticky top-16 sm:top-20 z-40 bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-md py-3 -mt-2 mb-6 border-b border-slate-200/80 dark:border-emerald-500/20 shadow-xs">
+        <div className="sticky top-16 sm:top-20 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md py-3 px-3 sm:px-4 mb-6 border border-slate-200/80 dark:border-emerald-500/20 rounded-2xl shadow-sm">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <button
               onClick={onBackToHome}
