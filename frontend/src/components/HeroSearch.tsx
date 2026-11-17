@@ -56,7 +56,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
   };
 
   return (
-    <section className="relative overflow-hidden text-white pt-24 sm:pt-28 pb-20 px-4 transition-all duration-700 bg-slate-950">
+    <section className="relative overflow-hidden text-white pt-28 sm:pt-32 pb-20 px-4 transition-all duration-700 bg-slate-950 -mt-[72px] sm:-mt-[76px]">
       
       {/* Background Slideshow Layer with Smooth Crossfade */}
       {BG_IMAGES.map((img, i) => (

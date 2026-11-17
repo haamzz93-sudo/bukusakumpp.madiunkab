@@ -229,18 +229,18 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   const latestAssistantMessage = [...messages].reverse().find(m => m.role === 'assistant');
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-darkbg-base transition-colors duration-200 pt-24 sm:pt-28 pb-12 px-4 relative">
+    <div className="min-h-screen bg-slate-950 text-slate-100 transition-colors duration-200 pt-24 sm:pt-28 pb-12 px-4 relative">
       {/* Seamless Top Liquid Glass Backdrop for Navbar */}
       <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-emerald-950 via-slate-950/90 to-transparent pointer-events-none z-0" />
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Subheader Toolbar */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-emerald-500/20">
           <button
             onClick={onBackToHome}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl liquid-glass-sidebar text-slate-700 dark:text-slate-200 font-semibold text-sm shadow-sm transition-all self-start cursor-pointer hover:scale-[1.02] active:scale-95"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl liquid-glass-sidebar text-slate-200 font-semibold text-sm shadow-sm transition-all self-start cursor-pointer hover:scale-[1.02] active:scale-95 border border-emerald-500/20"
           >
-            <ArrowLeft className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <ArrowLeft className="w-4 h-4 text-mpp-bright" />
             <span>Kembali ke Beranda</span>
           </button>
 
@@ -252,7 +252,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                 value={headerSearchText}
                 onChange={(e) => setHeaderSearchText(e.target.value)}
                 placeholder="Tanyakan hal lain seputar perizinan..."
-                className="w-full py-2 pl-9 pr-24 rounded-xl liquid-glass-sidebar text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40 shadow-sm"
+                className="w-full py-2 pl-9 pr-24 rounded-xl bg-slate-900/90 border border-emerald-500/25 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-mpp-bright shadow-sm"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3" />
               <button
@@ -272,8 +272,8 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
           {/* Left Column: Chat Conversation Thread */}
           <div className="lg:col-span-8 space-y-6">
             
-            <div className="text-sm font-semibold text-slate-500 dark:text-slate-400">
-              Buku Saku menjawab: <span className="text-slate-800 dark:text-slate-100 font-bold">"{currentQuery}"</span>
+            <div className="text-sm font-semibold text-slate-400">
+              Buku Saku menjawab: <span className="text-white font-bold">"{currentQuery}"</span>
             </div>
 
             {messages.map((msg) => {
@@ -452,7 +452,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                     <button
                       key={idx}
                       onClick={() => onSendFollowup(q, false)}
-                      className="text-left text-xs px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 shadow-sm transition-all cursor-pointer"
+                      className="text-left text-xs px-3 py-2 rounded-xl bg-slate-900 border border-emerald-500/20 text-slate-200 hover:border-emerald-400 hover:text-white shadow-sm transition-all cursor-pointer"
                     >
                       {q}
                     </button>
@@ -469,7 +469,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                   value={bottomFollowupText}
                   onChange={(e) => setBottomFollowupText(e.target.value)}
                   placeholder="Ketik pertanyaan lanjutan Anda di sini..."
-                  className="flex-1 py-3 px-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-emerald-600 shadow-sm"
+                  className="flex-1 py-3 px-4 rounded-xl bg-slate-900 border border-emerald-500/25 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-mpp-bright shadow-sm"
                   disabled={isLoading}
                 />
                 <button
@@ -488,16 +488,16 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
           {/* Right Column: Helpdesk & Escalation Sidebar (Mimicking AIDA sidebar) */}
           <div className="lg:col-span-4 space-y-4">
             
-            {/* Helpdesk Card with Clean Sleek Liquid Glass (Zero Harsh White Lines) */}
-            <div className="rounded-2xl liquid-glass-sidebar p-5 space-y-4 shadow-md border border-emerald-500/20">
+            {/* Helpdesk Card with Clean Sleek Liquid Glass */}
+            <div className="rounded-2xl liquid-glass-sidebar p-5 space-y-4 shadow-xl border border-emerald-500/20 text-white">
               <div className="space-y-1">
-                <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-display">
+                <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 font-display">
                   Belum Terbantu?
                 </div>
-                <h3 className="font-display font-bold text-base text-slate-900 dark:text-white">
+                <h3 className="font-display font-bold text-base text-white">
                   Hubungi Loket MPP Langsung
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-300 leading-relaxed">
                   Untuk konsultasi kasus khusus, verifikasi berkas bermasalah, atau percepatan NIB:
                 </p>
               </div>
@@ -516,25 +516,25 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
               {/* Direct Phone */}
               <a
                 href="tel:0351497206"
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-emerald-500/20 font-semibold text-xs transition-colors"
               >
-                <Phone className="w-3.5 h-3.5" />
+                <Phone className="w-3.5 h-3.5 text-mpp-bright" />
                 <span>Telepon: (0351) 497206</span>
               </a>
 
-              <div className="border-t border-slate-200/60 dark:border-slate-800 pt-3 space-y-2 text-xs text-slate-500 dark:text-slate-400">
+              <div className="border-t border-emerald-500/20 pt-3 space-y-2 text-xs text-slate-300">
                 <div className="flex items-start gap-2">
-                  <Clock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                  <Clock className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Jam Layanan Loket:</span><br />
+                    <span className="font-semibold text-white">Jam Layanan Loket:</span><br />
                     Senin – Jumat, 08.00 – 15.00 WIB
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Gedung MPP Kab. Madiun:</span><br />
+                    <span className="font-semibold text-white">Gedung MPP Kab. Madiun:</span><br />
                     Jl. Aloon-Aloon Utara No. 4, Pangongangan, Kec. Manguharjo, Madiun 63121
                   </div>
                 </div>
@@ -543,9 +543,9 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
             </div>
 
             {/* Quick Links Card with Liquid Glass */}
-            <div className="liquid-glass-sidebar rounded-2xl p-4 space-y-2 text-xs">
-              <div className="font-bold text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <div className="liquid-glass-sidebar rounded-2xl p-4 space-y-2 text-xs border border-emerald-500/20 text-white">
+              <div className="font-bold text-emerald-300 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 <span>Tautan Terintegrasi:</span>
               </div>
               <ul className="space-y-1.5 pl-1 text-slate-600 dark:text-slate-300">

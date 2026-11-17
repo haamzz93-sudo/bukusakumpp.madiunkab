@@ -58,23 +58,23 @@ export const PopulerSection: React.FC<PopulerSectionProps> = ({ onSelectQuery })
   ];
 
   return (
-    <section id="populer" className="py-16 px-4 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 transition-colors duration-200">
+    <section id="populer" className="py-16 px-4 bg-slate-950 text-slate-100 border-t border-emerald-500/10 transition-colors duration-200">
       <div className="max-w-7xl mx-auto">
         
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 text-xs font-bold tracking-wider uppercase mb-2">
-              <TrendingUp className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/30 text-amber-300 text-xs font-bold tracking-wider uppercase mb-2">
+              <TrendingUp className="w-3.5 h-3.5 text-mpp-bright" />
               <span>Paling Sering Ditanya Warga</span>
             </div>
-            <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white">
+            <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white">
               Topik Populer Perizinan Madiun
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+            <p className="text-slate-300 text-sm mt-1">
               Pertanyaan nyata yang paling sering diajukan masyarakat dan pelaku usaha dalam 30 hari terakhir.
             </p>
           </div>
-          <div className="text-xs text-slate-400 font-medium">
+          <div className="text-xs text-emerald-300/80 font-medium">
             Klik topik mana pun untuk langsung melihat jawabannya
           </div>
         </div>
@@ -85,24 +85,24 @@ export const PopulerSection: React.FC<PopulerSectionProps> = ({ onSelectQuery })
             <button
               key={item.rank}
               onClick={() => onSelectQuery(item.text)}
-              className="text-left p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 hover:border-emerald-500/80 dark:hover:border-emerald-400 hover:bg-emerald-50/40 dark:hover:bg-slate-800 shadow-sm transition-all group flex items-start justify-between gap-3"
+              className="text-left p-4 rounded-2xl liquid-glass-card border border-emerald-500/20 hover:border-emerald-400/50 hover:bg-emerald-950/40 shadow-lg transition-all group flex items-start justify-between gap-3 text-white"
             >
               <div className="flex items-start gap-3">
-                <span className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-madiun-forest dark:text-emerald-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-7 h-7 rounded-lg bg-emerald-950 border border-emerald-500/30 text-emerald-300 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                   {item.rank}
                 </span>
                 <div>
-                  <div className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-madiun-forest dark:group-hover:text-emerald-300 transition-colors leading-snug">
+                  <div className="text-sm font-semibold text-slate-100 group-hover:text-mpp-bright transition-colors leading-snug">
                     {item.text}
                   </div>
-                  <div className="flex items-center gap-2 mt-2 text-xs text-slate-400 font-medium">
-                    <span className="text-emerald-700 dark:text-emerald-400">{item.category}</span>
+                  <div className="flex items-center gap-2 mt-2 text-xs text-slate-300 font-medium">
+                    <span className="text-emerald-400">{item.category}</span>
                     <span>•</span>
                     <span>SLA: {item.time}</span>
                   </div>
                 </div>
               </div>
-              <div className="w-6 h-6 rounded-md bg-white dark:bg-slate-700 group-hover:bg-mpp-bright text-slate-400 group-hover:text-slate-950 flex items-center justify-center shrink-0 transition-colors mt-0.5 shadow-sm">
+              <div className="w-6 h-6 rounded-md bg-slate-900 border border-emerald-500/20 group-hover:bg-mpp-bright text-slate-400 group-hover:text-slate-950 flex items-center justify-center shrink-0 transition-colors mt-0.5 shadow-sm">
                 <ArrowRight className="w-3.5 h-3.5" />
               </div>
             </button>

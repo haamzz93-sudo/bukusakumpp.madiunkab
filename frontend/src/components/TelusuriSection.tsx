@@ -62,18 +62,18 @@ export const TelusuriSection: React.FC<TelusuriSectionProps> = ({
   };
 
   return (
-    <section id="telusuri" className="py-16 px-4 bg-slate-50 dark:bg-darkbg-base transition-colors duration-200">
+    <section id="telusuri" className="py-16 px-4 bg-slate-950 text-slate-100 border-t border-emerald-500/10 transition-colors duration-200">
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-block px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 text-xs font-bold tracking-wider uppercase mb-2">
+          <div className="inline-block px-3 py-1 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/30 text-xs font-bold tracking-wider uppercase mb-2">
             Telusuri Per Klaster
           </div>
-          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white">
+          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white">
             Jelajahi Basis Pengetahuan MPP
           </h2>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">
+          <p className="text-slate-300 text-sm mt-2">
             Pilih klaster pelayanan untuk melihat daftar pertanyaan resmi yang siap dijawab secara instan.
           </p>
         </div>
@@ -88,14 +88,14 @@ export const TelusuriSection: React.FC<TelusuriSectionProps> = ({
                 onClick={() => setActiveKey(cat.key)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                   isActive
-                    ? 'bg-madiun-forest text-white shadow-md scale-[1.02]'
-                    : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    ? 'bg-madiun-forest text-white shadow-md border border-emerald-400/50 scale-[1.02]'
+                    : 'bg-slate-900/80 text-slate-200 border border-emerald-500/20 hover:bg-slate-800 hover:text-white'
                 }`}
               >
                 <span>{getCategoryIcon(cat.key)}</span>
                 <span>{cat.name}</span>
                 <span className={`ml-1 text-[10px] px-1.5 py-0.5 rounded-full ${
-                  isActive ? 'bg-emerald-800 text-emerald-100' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                  isActive ? 'bg-emerald-800 text-emerald-100' : 'bg-slate-800 text-slate-400'
                 }`}>
                   {cat.questionCount}
                 </span>
@@ -107,35 +107,35 @@ export const TelusuriSection: React.FC<TelusuriSectionProps> = ({
         {/* Two-Column Display: Category Details & Question List on Left, Helpdesk on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Left Column: Questions List (Mimicking Screenshot 4 of AIDA) */}
-          <div className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm p-6 sm:p-8">
+          {/* Left Column: Questions List */}
+          <div className="lg:col-span-8 liquid-glass-sidebar rounded-2xl border border-emerald-500/20 shadow-xl p-6 sm:p-8">
             
-            <div className="flex items-center gap-3 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
-              <div className="p-3 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-madiun-forest dark:text-emerald-400">
+            <div className="flex items-center gap-3 pb-4 mb-4 border-b border-emerald-500/15">
+              <div className="p-3 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-500/30">
                 {getCategoryIcon(activeCategory.key, true)}
               </div>
               <div>
-                <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white">
+                <h3 className="font-display font-bold text-lg text-white">
                   {activeCategory.name}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-300">
                   {activeCategory.desc}
                 </p>
               </div>
             </div>
 
             {/* List of Questions with Arrow Right */}
-            <div className="divide-y divide-slate-100 dark:divide-slate-800">
+            <div className="divide-y divide-emerald-500/15">
               {activeCategory.questions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => onSelectQuestion(q)}
-                  className="w-full text-left py-3.5 px-3 -mx-3 rounded-xl hover:bg-emerald-50/70 dark:hover:bg-slate-800/80 transition-colors flex items-center justify-between gap-4 group"
+                  className="w-full text-left py-3.5 px-3 -mx-3 rounded-xl hover:bg-emerald-950/50 transition-colors flex items-center justify-between gap-4 group"
                 >
-                  <span className="text-sm font-medium text-slate-800 dark:text-slate-200 group-hover:text-madiun-forest dark:group-hover:text-emerald-400">
+                  <span className="text-sm font-medium text-slate-200 group-hover:text-mpp-bright transition-colors">
                     {q}
                   </span>
-                  <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 group-hover:bg-mpp-bright text-slate-400 group-hover:text-slate-950 flex items-center justify-center shrink-0 transition-colors">
+                  <div className="w-7 h-7 rounded-lg bg-slate-900 border border-emerald-500/20 group-hover:bg-mpp-bright text-slate-400 group-hover:text-slate-950 flex items-center justify-center shrink-0 transition-colors">
                     <ArrowRight className="w-4 h-4" />
                   </div>
                 </button>
@@ -145,15 +145,15 @@ export const TelusuriSection: React.FC<TelusuriSectionProps> = ({
           </div>
 
           {/* Right Column: Fast Helpdesk Contact */}
-          <div className="lg:col-span-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-sm space-y-4">
+          <div className="lg:col-span-4 liquid-glass-sidebar rounded-2xl border border-emerald-500/20 p-6 shadow-xl space-y-4">
             <div className="space-y-1">
-              <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-display">
+              <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 font-display">
                 Butuh Bantuan Cepat?
               </div>
-              <h4 className="font-display font-bold text-base text-slate-900 dark:text-white">
+              <h4 className="font-display font-bold text-base text-white">
                 Konsultasi Tatap Muka & WA
               </h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-300 leading-relaxed">
                 Staf perizinan dan helpdesk MPP Kabupaten Madiun siap membantu memeriksa kelengkapan berkas Anda.
               </p>
             </div>
