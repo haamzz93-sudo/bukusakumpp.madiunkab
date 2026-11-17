@@ -6,6 +6,18 @@ const STORAGE_KEY = 'bukusaku_perizinan_master_v1';
 const LISTEN_EVENT = 'bukusaku_perizinan_updated';
 const BACKEND_URL = getApiBaseUrl();
 
+const normalizePerizinanList = (items: any[]): Perizinan[] => {
+  if (!Array.isArray(items)) return [];
+  return items.map(item => ({
+    ...item,
+    keywords: Array.isArray(item.keywords)
+      ? item.keywords
+      : typeof item.keywords === 'string'
+      ? item.keywords.split(',').map((k: string) => k.trim()).filter(Boolean)
+      : []
+  }));
+};
+
 // Helper to load perizinan items
 export const getStoredPerizinan = (): Perizinan[] => {
   try {
@@ -13,13 +25,13 @@ export const getStoredPerizinan = (): Perizinan[] => {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+        return normalizePerizinanList(parsed);
       }
     }
   } catch (e) {
     console.error('Error loading perizinan from localStorage:', e);
   }
-  return default80Items as unknown as Perizinan[];
+  return normalizePerizinanList(default80Items as unknown as Perizinan[]);
 };
 
 // Sync Perizinan from SQLite Database
@@ -29,9 +41,10 @@ export const syncPerizinanFromDatabase = async (): Promise<Perizinan[]> => {
     if (res.ok) {
       const json = await res.json();
       if (json.ok && Array.isArray(json.data) && json.data.length > 0) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(json.data));
-        window.dispatchEvent(new CustomEvent(LISTEN_EVENT, { detail: json.data }));
-        return json.data;
+        const normalized = normalizePerizinanList(json.data);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+        window.dispatchEvent(new CustomEvent(LISTEN_EVENT, { detail: normalized }));
+        return normalized;
       }
     }
   } catch (e) {

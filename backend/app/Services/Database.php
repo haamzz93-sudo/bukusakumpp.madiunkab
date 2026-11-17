@@ -341,7 +341,8 @@ class Database
                 'categoryName' => $r['category_name'],
                 'persyaratan' => json_decode($r['persyaratan'] ?? '[]', true) ?: [],
                 'mekanismeProsedur' => json_decode($r['mekanisme'] ?? '[]', true) ?: [],
-                'portalUrl' => $r['portal_url']
+                'portalUrl' => $r['portal_url'],
+                'keywords' => !empty($r['keywords']) ? (json_decode($r['keywords'], true) ?: array_map('trim', explode(',', $r['keywords']))) : []
             ];
         }, $rows);
     }

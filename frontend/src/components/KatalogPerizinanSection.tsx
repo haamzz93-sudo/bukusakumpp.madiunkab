@@ -29,13 +29,20 @@ export const KatalogPerizinanSection: React.FC<KatalogPerizinanSectionProps> = (
 
   const filteredItems = useMemo(() => {
     return perizinanList.filter((item) => {
+      if (!item) return false;
       const matchCat = selectedCat === 'all' || item.categoryId === selectedCat;
       const q = searchQuery.toLowerCase().trim();
-      const matchQuery = !q || 
-        item.title.toLowerCase().includes(q) ||
-        item.instansi.toLowerCase().includes(q) ||
-        item.keywords.some(k => k.toLowerCase().includes(q));
-      return matchCat && matchQuery;
+      if (!q) return matchCat;
+
+      const titleMatch = Boolean(item.title && item.title.toLowerCase().includes(q));
+      const instansiMatch = Boolean(item.instansi && item.instansi.toLowerCase().includes(q));
+      const keywordsMatch = Array.isArray(item.keywords)
+        ? item.keywords.some(k => typeof k === 'string' && k.toLowerCase().includes(q))
+        : typeof item.keywords === 'string'
+        ? (item.keywords as string).toLowerCase().includes(q)
+        : false;
+
+      return matchCat && (titleMatch || instansiMatch || keywordsMatch);
     });
   }, [perizinanList, searchQuery, selectedCat]);
 

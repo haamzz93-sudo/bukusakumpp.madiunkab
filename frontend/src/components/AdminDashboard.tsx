@@ -433,14 +433,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Filter and Search logic for Perizinan
   const filteredItems = useMemo(() => {
     return perizinanList.filter((item) => {
-      const matchSearch = 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.instansi.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.keywords && item.keywords.some(k => k.toLowerCase().includes(searchQuery.toLowerCase())));
+      if (!item) return false;
+      const q = searchQuery.toLowerCase().trim();
+      const titleMatch = Boolean(item.title && item.title.toLowerCase().includes(q));
+      const instansiMatch = Boolean(item.instansi && item.instansi.toLowerCase().includes(q));
+      const keywordsMatch = Array.isArray(item.keywords)
+        ? item.keywords.some(k => typeof k === 'string' && k.toLowerCase().includes(q))
+        : typeof item.keywords === 'string'
+        ? (item.keywords as string).toLowerCase().includes(q)
+        : false;
 
-      const matchJenis = filterJenis === '' || item.jenisPerizinan.toLowerCase() === filterJenis.toLowerCase();
+      const matchSearch = !q || titleMatch || instansiMatch || keywordsMatch;
+      const matchJenis = filterJenis === '' || (item.jenisPerizinan && item.jenisPerizinan.toLowerCase() === filterJenis.toLowerCase());
 
-      return matchSearch && matchJenis;
+      return Boolean(matchSearch && matchJenis);
     });
   }, [perizinanList, searchQuery, filterJenis]);
 
