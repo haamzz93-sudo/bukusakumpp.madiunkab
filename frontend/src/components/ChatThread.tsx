@@ -338,7 +338,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                                 <div className="font-semibold text-slate-800 dark:text-slate-100">{item.name}</div>
                                 <div className="text-slate-500 dark:text-slate-400">{item.instansi} • {item.waktu || 'Standar Pelayanan'}</div>
                               </div>
-                              {item.portal && item.portal.startsWith('http') && (
+                              {item.portal && item.portal.startsWith('http') && !item.portal.includes('bukusakumpp') && (
                                 <a
                                   href={item.portal}
                                   target="_blank"

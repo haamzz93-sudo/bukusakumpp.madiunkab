@@ -101,7 +101,6 @@ Aturan Penting:
   footerAbout: 'Panduan digital perizinan resmi dari Mal Pelayanan Publik (MPP) Kabupaten Madiun. Hadir untuk mempermudah masyarakat dan pelaku usaha memperoleh informasi syarat, alur, dan ketentuan perizinan secara cepat, transparan, dan bebas pungutan liar.',
 
   footerLinks: [
-    { title: 'Buku Saku MPP Madiun', url: 'https://bukusakumpp.madiunkab.go.id/' },
     { title: 'DPMPTSP Kabupaten Madiun', url: 'https://dpmptsp.id/' },
     { title: 'Portal OSS-RBA (BKPM RI)', url: 'https://oss.go.id/' },
     { title: 'Pemerintah Kab. Madiun', url: 'https://madiunkab.go.id/' },

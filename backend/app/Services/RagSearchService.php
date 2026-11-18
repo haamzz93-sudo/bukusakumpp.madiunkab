@@ -194,7 +194,7 @@ class RagSearchService
         // Construct source items citing actual PDF pages with authentic portal URLs
         $sourceItems = [];
         foreach ($topChunks as $chunk) {
-            $portal = 'https://bukusakumpp.madiunkab.go.id';
+            $portal = 'https://dpmptsp.id';
             $agencyLower = mb_strtolower($chunk['agency'] ?? '');
             if (str_contains($agencyLower, 'pertanahan') || str_contains($agencyLower, 'bpn')) {
                 $portal = 'https://atrbpn.go.id';
@@ -210,6 +210,14 @@ class RagSearchService
                 $portal = 'https://mpaspor.imigrasi.go.id';
             } elseif (str_contains($agencyLower, 'bpom') || str_contains($agencyLower, 'obat')) {
                 $portal = 'https://e-sertifikasi.pom.go.id';
+            } elseif (str_contains($agencyLower, 'agama') || str_contains($agencyLower, 'itsbat') || str_contains($agencyLower, 'nikah')) {
+                $portal = 'https://pa-kabmadiun.go.id';
+            } elseif (str_contains($agencyLower, 'kemenag') || str_contains($agencyLower, 'kua')) {
+                $portal = 'https://simkah4.kemenag.go.id';
+            } elseif (str_contains($agencyLower, 'dishub') || str_contains($agencyLower, 'lalin')) {
+                $portal = 'https://dishub.madiunkab.go.id';
+            } elseif (str_contains($agencyLower, 'lingkungan') || str_contains($agencyLower, 'dlh')) {
+                $portal = 'https://dlh.madiunkab.go.id';
             }
 
             $isCustomDoc = str_starts_with((string)($chunk['page'] ?? ''), 'DOKUMEN-');
@@ -217,7 +225,7 @@ class RagSearchService
                 'name' => $isCustomDoc ? "Dokumen Regulasi: {$chunk['title']}" : "Standar Pelayanan: {$chunk['title']}",
                 'instansi' => $chunk['agency'],
                 'waktu' => $isCustomDoc ? "Dokumen RAG Mandiri (PDF / Regulasi AI)" : "Halaman {$chunk['page']} (Buku Saku MPP 2026)",
-                'portal' => $portal
+                'portal' => $isCustomDoc ? null : $portal
             ];
         }
 

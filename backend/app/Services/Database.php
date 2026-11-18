@@ -116,6 +116,10 @@ class Database
             // Column already exists
         }
 
+        try {
+            $pdo->exec("UPDATE perizinan SET portal_url = 'https://dpmptsp.id' WHERE portal_url LIKE '%bukusakumpp.madiunkab.go.id%';");
+        } catch (\Throwable $e) {}
+
         // Table 3: Klaster Questions
         try {
             $pdo->exec("
