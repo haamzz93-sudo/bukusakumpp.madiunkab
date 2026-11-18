@@ -18,6 +18,12 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
   const [settings, setSettings] = useState<AppSettings>(getStoredSettings());
   const [bgIndex, setBgIndex] = useState(0);
 
+  // Typewriter State
+  const [displayedTitle, setDisplayedTitle] = useState('');
+  const [displayedSubtitle, setDisplayedSubtitle] = useState('');
+  const [isTypingTitle, setIsTypingTitle] = useState(true);
+  const [isTypingDone, setIsTypingDone] = useState(false);
+
   // Subscribe to settings changes from Admin Panel
   useEffect(() => {
     setSettings(getStoredSettings());
@@ -43,6 +49,46 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
     return () => clearInterval(timer);
   }, [settings.bgMode, settings.bgAutoIntervalSeconds, settings.selectedFixedBg]);
 
+  // Smooth Typewriter Animation with Warm White Glow
+  const fullTitle = settings.heroTitle || 'Halo, saya Buku Saku.';
+  const fullSubtitle = settings.heroSubtitle || 'Mau tanya apa soal perizinan di Kabupaten Madiun?';
+
+  useEffect(() => {
+    let titleChar = 0;
+    let subChar = 0;
+    setDisplayedTitle('');
+    setDisplayedSubtitle('');
+    setIsTypingTitle(true);
+    setIsTypingDone(false);
+
+    // Speed: 40ms per char for Title
+    const titleTimer = setInterval(() => {
+      titleChar++;
+      if (titleChar <= fullTitle.length) {
+        setDisplayedTitle(fullTitle.slice(0, titleChar));
+      } else {
+        clearInterval(titleTimer);
+        setIsTypingTitle(false);
+        // Short natural pause, then type Subtitle
+        setTimeout(() => {
+          const subTimer = setInterval(() => {
+            subChar++;
+            if (subChar <= fullSubtitle.length) {
+              setDisplayedSubtitle(fullSubtitle.slice(0, subChar));
+            } else {
+              clearInterval(subTimer);
+              setIsTypingDone(true);
+            }
+          }, 32);
+        }, 220);
+      }
+    }, 42);
+
+    return () => {
+      clearInterval(titleTimer);
+    };
+  }, [fullTitle, fullSubtitle]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputVal.trim() && !isLoading) {
@@ -56,7 +102,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
   };
 
   return (
-    <section className="relative overflow-hidden text-white pt-24 sm:pt-28 pb-14 sm:pb-20 px-4 min-h-[750px] sm:min-h-[82vh] lg:min-h-[90vh] flex flex-col justify-center transition-all duration-700 bg-slate-950">
+    <section className="relative overflow-hidden text-white pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 min-h-[750px] sm:min-h-[85vh] lg:min-h-[90vh] flex flex-col justify-center transition-all duration-700 bg-slate-950">
       
       {/* Background Slideshow Layer with Smooth Crossfade - 16:9 Full Bleed */}
       {BG_IMAGES.map((img, i) => (
@@ -69,65 +115,101 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
         />
       ))}
 
-      {/* High-Grade Liquid Glass Overlay: Crystal Clear to showcase 16:9 2D building illustration */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-emerald-950/25 to-slate-950/75 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(2,6,23,0.45)_100%)] pointer-events-none" />
+      {/* Modern Frosted Dark Ambient Overlay - Keeps 2D building visible while maximizing text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950/90 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(6,78,59,0.35)_0%,_transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(2,6,23,0.5)_100%)] pointer-events-none" />
 
-      {/* Radial Glass Glow Orbs */}
-      <div className="absolute -left-20 -top-20 w-96 h-96 rounded-full bg-emerald-400/15 blur-3xl pointer-events-none" />
-      <div className="absolute right-[-10%] top-[10%] w-[500px] h-[500px] rounded-full bg-mpp-bright/10 blur-3xl pointer-events-none" />
+      {/* Luminous Warm White & Champagne Amber Glow Orbs (Diffused Ambience) */}
+      <div className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] max-w-[95vw] h-[350px] bg-[radial-gradient(ellipse_at_center,_rgba(255,250,235,0.18)_0%,_rgba(254,243,199,0.08)_45%,_transparent_75%)] blur-3xl pointer-events-none" />
+      <div className="absolute -left-20 -top-20 w-96 h-96 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute right-[-10%] top-[15%] w-[500px] h-[500px] rounded-full bg-amber-400/10 blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-4xl mx-auto text-center z-10">
+      <div className="relative max-w-4xl mx-auto text-center z-10 w-full">
         
-        {/* Official Service Notice - Clean typography only, no capsule, no blinking dot */}
-        <p className="text-xs sm:text-sm font-semibold tracking-widest text-emerald-300 uppercase mb-4 drop-shadow-sm">
-          {settings.heroBadge}
-        </p>
+        {/* Modern Pill Badge */}
+        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.06] border border-amber-200/25 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.3)] mb-6 transition-all hover:bg-white/[0.1] hover:border-amber-200/40">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+          </span>
+          <span className="text-[11px] sm:text-xs font-semibold tracking-wider text-amber-100/95 uppercase">
+            {settings.heroBadge}
+          </span>
+        </div>
 
-        {/* Hero Headline */}
-        <h1 className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-tight mb-4 drop-shadow-md">
-          {settings.heroTitle} <br className="hidden sm:inline" />
-          <span className="text-mpp-bright">{settings.heroSubtitle}</span>
-        </h1>
+        {/* Hero Headline with Animated Typewriter & Warm White Radiance */}
+        <div className="relative min-h-[120px] sm:min-h-[145px] flex flex-col justify-center items-center mb-5">
+          {/* Subtle Ambient Backlight specifically for the text */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,253,245,0.20)_0%,_rgba(254,240,138,0.07)_50%,_transparent_70%)] blur-xl pointer-events-none" />
 
-        {/* Subtitle */}
-        <p className="text-slate-200/95 text-sm sm:text-base max-w-2xl mx-auto mb-8 font-normal leading-relaxed drop-shadow-sm">
+          <h1 className="relative font-display font-black text-3xl sm:text-5xl lg:text-[3.25rem] tracking-tight leading-[1.2] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+            {/* Line 1: Halo, saya Buku Saku. */}
+            <span className="text-white drop-shadow-[0_0_28px_rgba(255,253,245,0.85)] drop-shadow-[0_0_55px_rgba(254,243,199,0.45)]">
+              {displayedTitle}
+            </span>
+            {isTypingTitle && (
+              <span className="inline-block w-[3px] h-[0.9em] ml-1.5 bg-amber-200 rounded-full shadow-[0_0_12px_rgba(255,250,230,0.95)] animate-pulse align-middle" />
+            )}
+
+            <br className="hidden sm:inline" />
+
+            {/* Line 2: Mau tanya apa soal perizinan di Kabupaten Madiun? */}
+            <span className="bg-gradient-to-r from-amber-100 via-amber-200 to-yellow-300 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(254,243,199,0.65)] drop-shadow-[0_0_65px_rgba(251,191,36,0.35)]">
+              {displayedSubtitle}
+            </span>
+            {!isTypingTitle && !isTypingDone && (
+              <span className="inline-block w-[3px] h-[0.9em] ml-1.5 bg-amber-300 rounded-full shadow-[0_0_14px_rgba(252,211,77,0.95)] animate-pulse align-middle" />
+            )}
+            {isTypingDone && (
+              <span className="inline-block w-[3px] h-[0.85em] ml-1.5 bg-amber-200/80 rounded-full shadow-[0_0_10px_rgba(255,250,230,0.8)] animate-[pulse_2s_ease-in-out_infinite] align-middle opacity-75" />
+            )}
+          </h1>
+        </div>
+
+        {/* Clean, Modern Subtitle */}
+        <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-8 font-normal leading-relaxed drop-shadow-sm px-2">
           {settings.heroDesc}
         </p>
 
-        {/* Search Box with Liquid Glass Effect */}
-        <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto mb-5">
-          <div className="flex items-center rounded-2xl liquid-glass p-2.5 shadow-2xl transition-all focus-within:border-mpp-bright/80 focus-within:ring-2 focus-within:ring-mpp-bright/30">
-            <div className="pl-3 pr-2 text-emerald-200">
-              <Search className="w-5 h-5" />
+        {/* Search Box - Modern Deep Frosted Glass with Warm Amber Glow */}
+        <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto mb-5 px-1 sm:px-0">
+          <div className="relative group">
+            {/* Luminous Glow Halo behind search bar */}
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-amber-300/25 via-emerald-400/20 to-amber-300/25 blur-xl opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+            <div className="relative flex items-center rounded-2xl bg-slate-900/80 backdrop-blur-2xl border border-white/20 p-2 sm:p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-300 focus-within:border-amber-300/80 focus-within:ring-2 focus-within:ring-amber-300/30 focus-within:shadow-[0_20px_60px_rgba(254,243,199,0.18)]">
+              <div className="pl-3.5 pr-2 text-amber-200/90 shrink-0">
+                <Search className="w-5 h-5 drop-shadow-[0_0_8px_rgba(254,243,199,0.5)]" />
+              </div>
+              <input
+                type="text"
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                placeholder="Tanya Buku Saku... misal: syarat izin buka warung kopi"
+                className="w-full bg-transparent py-2 px-2 text-white placeholder-slate-400/80 focus:outline-none text-sm sm:text-base font-medium"
+                disabled={isLoading}
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !inputVal.trim()}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-bold text-sm shadow-[0_4px_18px_rgba(245,158,11,0.35)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shrink-0 cursor-pointer"
+              >
+                <span>{isLoading ? 'Memproses...' : 'Tanya'}</span>
+                {!isLoading && <ArrowRight className="w-4 h-4 stroke-[2.5]" />}
+              </button>
             </div>
-            <input
-              type="text"
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              placeholder="Tanya Buku Saku... misal: syarat izin buka warung kopi"
-              className="w-full bg-transparent py-2 px-2 text-white placeholder-emerald-200/70 focus:outline-none text-sm sm:text-base font-medium"
-              disabled={isLoading}
-            />
-            <button
-              type="submit"
-              disabled={isLoading || !inputVal.trim()}
-              className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-mpp-bright hover:bg-mpp-yellow text-slate-950 font-bold text-sm shadow-lg transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-            >
-              <span>{isLoading ? 'Memproses...' : 'Tanya'}</span>
-              {!isLoading && <ArrowRight className="w-4 h-4" />}
-            </button>
           </div>
         </form>
 
-        {/* Quick Suggestion Chips */}
-        <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-emerald-200/90 mb-7 max-w-2xl mx-auto">
-          <span className="font-semibold text-white/80">Coba:</span>
+        {/* Quick Suggestion Chips - Clean Modern Minimalist Pills */}
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs mb-8 max-w-2xl mx-auto px-2">
+          <span className="font-semibold text-slate-300/90 mr-1">Coba:</span>
           {settings.quickChips.map((chip, idx) => (
             <button
               key={idx}
               onClick={() => handleChipClick(chip)}
-              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-emerald-100 hover:text-white border border-white/20 backdrop-blur-md transition-all cursor-pointer font-medium active:scale-95"
+              className="px-3.5 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.14] text-slate-200 hover:text-white border border-white/15 hover:border-amber-200/40 backdrop-blur-md transition-all duration-200 cursor-pointer font-medium active:scale-95 shadow-sm hover:shadow-[0_0_12px_rgba(254,243,199,0.18)]"
             >
               {chip}
             </button>
@@ -135,28 +217,36 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
         </div>
 
         {/* Trust Verification Note */}
-        <div className="flex items-center justify-center gap-2 text-xs text-emerald-200/80 mb-10">
-          <ShieldCheck className="w-4 h-4 text-mpp-bright" />
+        <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/25 text-xs text-emerald-200/90 mb-10 shadow-sm backdrop-blur-sm">
+          <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{settings.trustBadge}</span>
         </div>
 
-        {/* 4 Stats Band - Liquid Glass Style */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 max-w-3xl mx-auto text-center">
-          <div className="p-4 rounded-2xl liquid-glass transition-transform hover:-translate-y-1">
-            <div className="font-display font-extrabold text-2xl text-mpp-bright">{settings.stat1Value}</div>
-            <div className="text-xs text-emerald-200 font-medium mt-1">{settings.stat1Label}</div>
+        {/* 4 Stats Band - Clean, Modern Floating Glass Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto text-center px-1">
+          <div className="p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-amber-200/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(254,243,199,0.08)] group">
+            <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300 group-hover:text-amber-200 transition-colors drop-shadow-[0_0_12px_rgba(252,211,77,0.3)]">
+              {settings.stat1Value}
+            </div>
+            <div className="text-xs text-slate-300 font-medium mt-1">{settings.stat1Label}</div>
           </div>
-          <div className="p-4 rounded-2xl liquid-glass transition-transform hover:-translate-y-1">
-            <div className="font-display font-extrabold text-2xl text-emerald-300">{settings.stat2Value}</div>
-            <div className="text-xs text-emerald-200 font-medium mt-1">{settings.stat2Label}</div>
+          <div className="p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-emerald-300/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(52,211,153,0.08)] group">
+            <div className="font-display font-extrabold text-2xl sm:text-3xl text-emerald-300 group-hover:text-emerald-200 transition-colors drop-shadow-[0_0_12px_rgba(52,211,153,0.3)]">
+              {settings.stat2Value}
+            </div>
+            <div className="text-xs text-slate-300 font-medium mt-1">{settings.stat2Label}</div>
           </div>
-          <div className="p-4 rounded-2xl liquid-glass transition-transform hover:-translate-y-1">
-            <div className="font-display font-extrabold text-2xl text-mpp-bright">{settings.stat3Value}</div>
-            <div className="text-xs text-emerald-200 font-medium mt-1">{settings.stat3Label}</div>
+          <div className="p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-amber-200/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(254,243,199,0.08)] group">
+            <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300 group-hover:text-amber-200 transition-colors drop-shadow-[0_0_12px_rgba(252,211,77,0.3)]">
+              {settings.stat3Value}
+            </div>
+            <div className="text-xs text-slate-300 font-medium mt-1">{settings.stat3Label}</div>
           </div>
-          <div className="p-4 rounded-2xl liquid-glass transition-transform hover:-translate-y-1">
-            <div className="font-display font-extrabold text-2xl text-emerald-300">{settings.stat4Value}</div>
-            <div className="text-xs text-emerald-200 font-medium mt-1">{settings.stat4Label}</div>
+          <div className="p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-emerald-300/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(52,211,153,0.08)] group">
+            <div className="font-display font-extrabold text-2xl sm:text-3xl text-emerald-300 group-hover:text-emerald-200 transition-colors drop-shadow-[0_0_12px_rgba(52,211,153,0.3)]">
+              {settings.stat4Value}
+            </div>
+            <div className="text-xs text-slate-300 font-medium mt-1">{settings.stat4Label}</div>
           </div>
         </div>
 
