@@ -97,8 +97,8 @@ import { CustomDropdown, DropdownOption } from './CustomDropdown';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface AdminDashboardProps {
-  initialTab?: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users';
-  onTabChange?: (tab: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users') => void;
+  initialTab?: 'dashboard' | 'perizinan' | 'rag' | 'ai' | 'web' | 'klaster' | 'users';
+  onTabChange?: (tab: 'dashboard' | 'perizinan' | 'rag' | 'ai' | 'web' | 'klaster' | 'users') => void;
   onLogout: () => void;
   onViewLandingPage: () => void;
   onTriggerCloudflare: () => void;
@@ -112,7 +112,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onTriggerCloudflare
 }) => {
   // Navigation & Layout State
-  const [activeTab, setActiveTabState] = useState<'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users'>(initialTab);
+  const [activeTab, setActiveTabState] = useState<'dashboard' | 'perizinan' | 'rag' | 'ai' | 'web' | 'klaster' | 'users'>(initialTab);
 
   useEffect(() => {
     if (initialTab && initialTab !== activeTab) {
@@ -120,7 +120,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   }, [initialTab]);
 
-  const setActiveTab = (tab: 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users') => {
+  const setActiveTab = (tab: 'dashboard' | 'perizinan' | 'rag' | 'ai' | 'web' | 'klaster' | 'users') => {
     setActiveTabState(tab);
     onTabChange?.(tab);
   };
@@ -267,9 +267,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       setKlasterList(updated);
     });
 
-    // Fetch initial real stats and users
+    // Fetch initial real stats, users, and RAG docs
     loadStats();
     loadUsers();
+    loadRagDocs();
 
     // Auto refresh real stats every 15 seconds
     const interval = setInterval(() => {
@@ -423,6 +424,148 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       showToast(err.message || 'Gagal menghapus pengguna');
     }
   };
+
+  // ========================================================
+  // RAG CUSTOM DOCUMENTS STATE & HANDLERS (PDF / Non-SOP)
+  // ========================================================
+  const [ragDocsList, setRagDocsList] = useState<any[]>([]);
+  const [isRagDocsLoading, setIsRagDocsLoading] = useState(false);
+  const [isAddRagModalOpen, setIsAddRagModalOpen] = useState(false);
+  const [viewingRagDoc, setViewingRagDoc] = useState<any | null>(null);
+  const [deletingRagDoc, setDeletingRagDoc] = useState<any | null>(null);
+  
+  const [ragFormMode, setRagFormMode] = useState<'upload' | 'text'>('upload');
+  const [ragFormTitle, setRagFormTitle] = useState('');
+  const [ragFormAgency, setRagFormAgency] = useState('MPP Kabupaten Madiun');
+  const [ragFormContent, setRagFormContent] = useState('');
+  const [ragFormFile, setRagFormFile] = useState<File | null>(null);
+  const [isSubmittingRag, setIsSubmittingRag] = useState(false);
+  const [ragSearchQuery, setRagSearchQuery] = useState('');
+
+  const loadRagDocs = async () => {
+    setIsRagDocsLoading(true);
+    try {
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/api/rag-documents`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok && Array.isArray(data.data)) {
+          setRagDocsList(data.data);
+        }
+      }
+    } catch (e) {
+      console.error('Error fetching RAG docs:', e);
+    } finally {
+      setIsRagDocsLoading(false);
+    }
+  };
+
+  const handleOpenAddRag = () => {
+    setRagFormMode('upload');
+    setRagFormTitle('');
+    setRagFormAgency('MPP Kabupaten Madiun');
+    setRagFormContent('');
+    setRagFormFile(null);
+    setIsAddRagModalOpen(true);
+  };
+
+  const handleSaveRagDoc = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (ragFormMode === 'upload' && !ragFormFile) {
+      showToast('Pilih file PDF atau TXT dokumen terlebih dahulu!');
+      return;
+    }
+    if (ragFormMode === 'text' && (!ragFormTitle.trim() || !ragFormContent.trim())) {
+      showToast('Judul dan isi dokumen wajib diisi!');
+      return;
+    }
+
+    setIsSubmittingRag(true);
+    try {
+      const baseUrl = getApiBaseUrl();
+      let res;
+      if (ragFormMode === 'upload' && ragFormFile) {
+        const formData = new FormData();
+        formData.append('file', ragFormFile);
+        formData.append('title', ragFormTitle || ragFormFile.name.replace(/\.[^/.]+$/, ""));
+        formData.append('agency', ragFormAgency);
+        res = await fetch(`${baseUrl}/api/rag-documents`, {
+          method: 'POST',
+          body: formData
+        });
+      } else {
+        res = await fetch(`${baseUrl}/api/rag-documents`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: ragFormTitle,
+            agency: ragFormAgency,
+            source_type: 'text_input',
+            content: ragFormContent
+          })
+        });
+      }
+
+      if (res.ok) {
+        showToast('Dokumen berhasil ditambahkan ke memori RAG AI!');
+        setIsAddRagModalOpen(false);
+        await loadRagDocs();
+      } else {
+        const err = await res.json();
+        showToast(err.error || 'Gagal menambahkan dokumen RAG');
+      }
+    } catch (e) {
+      showToast('Terjadi kesalahan saat mengunggah dokumen RAG.');
+    } finally {
+      setIsSubmittingRag(false);
+    }
+  };
+
+  const handleDeleteRagDoc = async () => {
+    if (!deletingRagDoc) return;
+    try {
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/api/rag-documents/${deletingRagDoc.id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        showToast(`Dokumen "${deletingRagDoc.title}" berhasil dihapus dari RAG.`);
+        setDeletingRagDoc(null);
+        await loadRagDocs();
+      } else {
+        showToast('Gagal menghapus dokumen RAG');
+      }
+    } catch (e) {
+      showToast('Terjadi kesalahan saat menghapus dokumen RAG.');
+    }
+  };
+
+  const handleOpenViewRagDoc = async (item: any) => {
+    try {
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/api/rag-documents/${item.id}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok && data.data) {
+          setViewingRagDoc(data.data);
+          return;
+        }
+      }
+      setViewingRagDoc(item);
+    } catch (e) {
+      setViewingRagDoc(item);
+    }
+  };
+
+  const filteredRagDocs = useMemo(() => {
+    if (!ragSearchQuery.trim()) return ragDocsList;
+    const q = ragSearchQuery.toLowerCase();
+    return ragDocsList.filter((d: any) => 
+      (d.title && d.title.toLowerCase().includes(q)) || 
+      (d.agency && d.agency.toLowerCase().includes(q)) || 
+      (d.file_name && d.file_name.toLowerCase().includes(q))
+    );
+  }, [ragDocsList, ragSearchQuery]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -928,6 +1071,32 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </span>
               </button>
 
+              {/* Dokumen RAG (PDF / Non-SOP - AI Only) Item */}
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('rag');
+                  setMobileSidebarOpen(false);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all relative cursor-pointer ${
+                  activeTab === 'rag'
+                    ? 'bg-emerald-500/10 text-emerald-400 font-bold'
+                    : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'
+                }`}
+                title="Dokumen RAG (PDF / Non-SOP - Pengetahuan AI Saja)"
+              >
+                {activeTab === 'rag' && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-emerald-500 rounded-r-full" />
+                )}
+                <div className="flex items-center gap-3 truncate">
+                  <FileText className={`w-4 h-4 shrink-0 ${activeTab === 'rag' ? 'text-emerald-400' : 'text-slate-400'}`} />
+                  <span className="truncate">Dokumen RAG (PDF)</span>
+                </div>
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  {ragDocsList.length > 0 ? ragDocsList.length : 'AI Only'}
+                </span>
+              </button>
+
               {/* Pengaturan AI Item */}
               <button
                 type="button"
@@ -1142,6 +1311,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <span className="font-semibold text-slate-900 dark:text-white capitalize">
                 {activeTab === 'dashboard' ? 'Dashboard' : 
                  activeTab === 'perizinan' ? 'Data Perizinan' : 
+                 activeTab === 'rag' ? 'Dokumen RAG (PDF & Regulasi)' : 
                  activeTab === 'ai' ? 'Pengaturan AI' : 
                  activeTab === 'klaster' ? 'Basis Pengetahuan Klaster' : 
                  activeTab === 'users' ? 'Manajemen Pengguna' : 'Landing Page & Web'}
@@ -1866,6 +2036,214 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   </div>
 
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* ========================================================
+              TAB: BASIS PENGETAHUAN DOKUMEN RAG (PDF & NON-SOP)
+              Hanya untuk Pengetahuan AI, Tidak Tampil di Landing Page
+              ======================================================== */}
+          {activeTab === 'rag' && (
+            <div className="space-y-6 animate-in fade-in duration-200">
+              
+              {/* Header Page */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                      RAG KNOWLEDGE BASE • AI ONLY
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                      Tidak Tampil di Landing Page
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
+                    Dokumen RAG (PDF & Regulasi Tambahan)
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-2xl">
+                    Kelola dokumen PDF, Perda, SK Bupati, dan pedoman umum yang menjadi memori pengetahuan AI Chatbot. Dokumen di halaman ini <strong>hanya dipelajari oleh AI untuk menjawab pertanyaan masyarakat</strong> dan tidak akan muncul sebagai kartu layanan di katalog landing page publik.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <button
+                    type="button"
+                    onClick={loadRagDocs}
+                    className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all cursor-pointer"
+                    title="Segarkan Data Dokumen"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isRagDocsLoading ? 'animate-spin' : ''}`} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleOpenAddRag}
+                    className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-lg shadow-purple-600/20 flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Tambah Dokumen RAG (PDF / Teks)</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 3 Metric Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center gap-3.5">
+                  <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Dokumen Induk</div>
+                    <div className="text-base font-extrabold text-slate-900 dark:text-white">Buku Saku MPP 2026</div>
+                    <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">254 Halaman PDF Terindeks</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center gap-3.5">
+                  <div className="p-3 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Dokumen Tambahan Mandiri</div>
+                    <div className="text-base font-extrabold text-slate-900 dark:text-white">{ragDocsList.length} Dokumen Aktif</div>
+                    <div className="text-[11px] text-purple-600 dark:text-purple-400 font-medium">Non-SOP (Hanya Masuk AI)</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center gap-3.5">
+                  <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                    <Cpu className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Integrasi Mesin RAG</div>
+                    <div className="text-base font-extrabold text-slate-900 dark:text-white">100% Real-Time</div>
+                    <div className="text-[11px] text-blue-600 dark:text-blue-400 font-medium">Tersambung ke Chatbot AI</div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Search Toolbar */}
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div className="relative flex-1 max-w-md">
+                  <input
+                    type="text"
+                    value={ragSearchQuery}
+                    onChange={(e) => setRagSearchQuery(e.target.value)}
+                    placeholder="Cari judul dokumen, instansi, atau nama file..."
+                    className="w-full text-xs py-2 pl-3 pr-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:border-purple-500 shadow-sm transition-all"
+                  />
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-2.5 pointer-events-none" />
+                </div>
+                <div className="text-xs text-slate-500 font-medium self-end sm:self-center">
+                  Menampilkan <span className="font-bold text-slate-900 dark:text-white">{filteredRagDocs.length}</span> dokumen RAG tambahan
+                </div>
+              </div>
+
+              {/* Table List of RAG Documents */}
+              <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div className="overflow-x-auto rounded-2xl">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-slate-100/70 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wider text-[11px]">
+                        <th className="py-3 px-4 w-12 text-center">#</th>
+                        <th className="py-3 px-4">Nama Dokumen / Regulasi</th>
+                        <th className="py-3 px-4 w-44">Instansi Terkait</th>
+                        <th className="py-3 px-4 w-36">Tipe Sumber</th>
+                        <th className="py-3 px-4 w-32">Panjang Teks</th>
+                        <th className="py-3 px-4 w-32">Tanggal Input</th>
+                        <th className="py-3 px-4 w-28 text-center">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                      {isRagDocsLoading ? (
+                        <tr>
+                          <td colSpan={7} className="py-12 text-center text-slate-400">
+                            Memuat dokumen RAG dari database...
+                          </td>
+                        </tr>
+                      ) : filteredRagDocs.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="py-12 text-center text-slate-400">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <FileText className="w-8 h-8 text-slate-300 dark:text-slate-600" />
+                              <div className="font-semibold text-slate-700 dark:text-slate-300">Belum ada dokumen RAG tambahan mandiri.</div>
+                              <div className="text-xs text-slate-400 max-w-sm">
+                                Saat ini AI menggunakan 254 halaman Buku Saku MPP 2026. Anda dapat mengunggah file PDF (Perda, SK, regulasi) atau menempelkan teks pedoman non-SOP di sini.
+                              </div>
+                              <button
+                                type="button"
+                                onClick={handleOpenAddRag}
+                                className="mt-2 px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-md cursor-pointer"
+                              >
+                                + Unggah Dokumen PDF Pertama
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredRagDocs.map((doc: any, idx: number) => (
+                          <tr key={doc.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                            <td className="py-3.5 px-4 text-center font-semibold text-slate-400">
+                              {idx + 1}
+                            </td>
+                            <td className="py-3.5 px-4">
+                              <div className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <FileText className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                                <span>{doc.title}</span>
+                              </div>
+                              {doc.file_name && (
+                                <div className="text-[11px] text-slate-400 font-mono mt-0.5 pl-6">
+                                  File: {doc.file_name}
+                                </div>
+                              )}
+                            </td>
+                            <td className="py-3.5 px-4 font-medium text-slate-700 dark:text-slate-300">
+                              {doc.agency}
+                            </td>
+                            <td className="py-3.5 px-4">
+                              <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                doc.source_type === 'pdf_upload'
+                                  ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
+                                  : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                              }`}>
+                                {doc.source_type === 'pdf_upload' ? 'PDF Upload' : 'Teks Regulasi'}
+                              </span>
+                            </td>
+                            <td className="py-3.5 px-4 text-slate-500 font-mono text-[11px]">
+                              {Number(doc.total_chars || 0).toLocaleString()} karakter
+                            </td>
+                            <td className="py-3.5 px-4 text-slate-400 text-[11px]">
+                              {doc.created_at ? doc.created_at.slice(0, 10) : '-'}
+                            </td>
+                            <td className="py-3.5 px-4 text-center">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenViewRagDoc(doc)}
+                                  className="p-1.5 rounded-lg text-slate-500 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950/40 transition-colors cursor-pointer"
+                                  title="Lihat Isi Dokumen"
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setDeletingRagDoc(doc)}
+                                  className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                                  title="Hapus Dokumen dari RAG"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -3436,6 +3814,316 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               >
                 <Trash2 className="w-4 h-4" />
                 <span>Ya, Hapus Data</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL: TAMBAH DOKUMEN RAG (PDF / TEKS REGULASI NON-SOP)
+          ======================================================== */}
+      {isAddRagModalOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl max-h-[92vh] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            
+            {/* Header: Fixed top */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shrink-0 z-10">
+              <div className="flex items-center gap-2.5">
+                <FileText className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    Tambah Dokumen ke Basis Pengetahuan RAG
+                  </h3>
+                  <p className="text-[11px] text-purple-600 dark:text-purple-400 font-semibold">
+                    AI Knowledge Only • Tidak Ditampilkan di Katalog Landing Page
+                  </p>
+                </div>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setIsAddRagModalOpen(false)}
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Scrollable Body */}
+            <form id="rag-add-form" onSubmit={handleSaveRagDoc} className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+              
+              {/* Notice Banner */}
+              <div className="p-3.5 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-xs text-purple-900 dark:text-purple-200 flex items-start gap-2.5">
+                <ShieldCheck className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5" />
+                <div className="leading-relaxed">
+                  Dokumen ini akan diindeks oleh <strong>Mesin RAG AI Gemini</strong> untuk melengkapi 254 halaman Buku Saku. Gunakan untuk Perda, SK Bupati, pedoman dinas, atau FAQ khusus. Dokumen ini <strong>tidak akan muncul sebagai kartu</strong> di halaman depan web.
+                </div>
+              </div>
+
+              {/* Mode Selector Tabs */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                  Metode Penambahan Dokumen
+                </label>
+                <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">
+                  <button
+                    type="button"
+                    onClick={() => setRagFormMode('upload')}
+                    className={`py-2 px-3 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                      ragFormMode === 'upload'
+                        ? 'bg-white dark:bg-slate-900 text-purple-600 dark:text-purple-400 shadow-sm font-bold'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>Upload File (PDF / TXT)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRagFormMode('text')}
+                    className={`py-2 px-3 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                      ragFormMode === 'text'
+                        ? 'bg-white dark:bg-slate-900 text-purple-600 dark:text-purple-400 shadow-sm font-bold'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <Edit className="w-4 h-4" />
+                    <span>Input / Tempel Teks Langsung</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Title & Agency */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Judul Dokumen / Nama Regulasi <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required={ragFormMode === 'text'}
+                    value={ragFormTitle}
+                    onChange={(e) => setRagFormTitle(e.target.value)}
+                    placeholder="Contoh: Perda No. 5 Tahun 2024 tentang Retribusi"
+                    className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500 font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Instansi / Dinas Terkait
+                  </label>
+                  <input
+                    type="text"
+                    value={ragFormAgency}
+                    onChange={(e) => setRagFormAgency(e.target.value)}
+                    placeholder="Contoh: Bapenda / DPMPTSP"
+                    className="w-full text-xs py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500 font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Mode Upload File */}
+              {ragFormMode === 'upload' ? (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Pilih File PDF atau Dokumen Teks (.pdf, .txt, .md) <span className="text-rose-500">*</span>
+                  </label>
+                  <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-purple-500 rounded-2xl p-6 text-center transition-all bg-slate-50/50 dark:bg-slate-800/40">
+                    <input
+                      type="file"
+                      id="rag-file-input"
+                      accept=".pdf,.txt,.md"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const f = e.target.files[0];
+                          setRagFormFile(f);
+                          if (!ragFormTitle) {
+                            setRagFormTitle(f.name.replace(/\.[^/.]+$/, ""));
+                          }
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    <label htmlFor="rag-file-input" className="cursor-pointer flex flex-col items-center justify-center gap-2">
+                      <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center shadow-sm">
+                        <FileText className="w-6 h-6" />
+                      </div>
+                      {ragFormFile ? (
+                        <div>
+                          <div className="text-xs font-bold text-purple-600 dark:text-purple-400">
+                            {ragFormFile.name}
+                          </div>
+                          <div className="text-[11px] text-slate-400 mt-0.5 font-mono">
+                            {(ragFormFile.size / 1024).toFixed(1)} KB • Klik untuk ganti file
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                            Klik untuk memilih file PDF atau TXT
+                          </div>
+                          <div className="text-[11px] text-slate-400 mt-0.5">
+                            Sistem akan mengekstrak teks seluruh halaman dokumen secara otomatis
+                          </div>
+                        </div>
+                      )}
+                    </label>
+                  </div>
+                </div>
+              ) : (
+                /* Mode Text Input */
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Isi Teks Dokumen / Pedoman / Pasal Regulasi <span className="text-rose-500">*</span>
+                  </label>
+                  <textarea
+                    rows={8}
+                    required
+                    value={ragFormContent}
+                    onChange={(e) => setRagFormContent(e.target.value)}
+                    placeholder="Tempelkan isi peraturan, pedoman, alur khusus, pasal-pasal, atau FAQ tambahan di sini..."
+                    className="w-full text-xs p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500 font-sans leading-relaxed"
+                  />
+                  <div className="text-[11px] text-slate-400 text-right mt-1">
+                    {ragFormContent.length} karakter
+                  </div>
+                </div>
+              )}
+
+            </form>
+
+            {/* Footer: Fixed bottom */}
+            <div className="px-6 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-900/90 backdrop-blur-md flex items-center justify-end gap-2.5 shrink-0 z-10">
+              <button
+                type="button"
+                onClick={() => setIsAddRagModalOpen(false)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                form="rag-add-form"
+                disabled={isSubmittingRag}
+                className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white text-xs font-bold shadow-md shadow-purple-600/20 flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+              >
+                {isSubmittingRag ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Mengekstrak & Menyimpan ke RAG...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Simpan ke Memori RAG</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL: LIHAT ISI DOKUMEN RAG
+          ======================================================== */}
+      {viewingRagDoc && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+          <div className="w-full max-w-3xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shrink-0 z-10">
+              <div>
+                <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
+                  {viewingRagDoc.agency} • {viewingRagDoc.source_type === 'pdf_upload' ? 'PDF Upload' : 'Teks Regulasi'}
+                </span>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
+                  {viewingRagDoc.title}
+                </h3>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setViewingRagDoc(null)}
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+              <div className="flex items-center justify-between text-xs text-slate-500 pb-2 border-b border-slate-100 dark:border-slate-800">
+                <div>Panjang Teks: <strong>{Number(viewingRagDoc.total_chars || viewingRagDoc.content?.length || 0).toLocaleString()}</strong> karakter</div>
+                {viewingRagDoc.file_name && <div>Nama File Asli: <strong className="font-mono">{viewingRagDoc.file_name}</strong></div>}
+              </div>
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 text-xs font-mono text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-relaxed select-text">
+                {viewingRagDoc.content || 'Isi dokumen kosong.'}
+              </div>
+            </div>
+
+            <div className="px-6 py-3.5 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-900/90 backdrop-blur-md shrink-0 z-10">
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(viewingRagDoc.content || '');
+                  showToast('Isi dokumen berhasil disalin ke clipboard!');
+                }}
+                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-md flex items-center gap-1.5 cursor-pointer"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Salin Teks Dokumen</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewingRagDoc(null)}
+                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+              >
+                Tutup
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL: KONFIRMASI HAPUS DOKUMEN RAG
+          ======================================================== */}
+      {deletingRagDoc && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+            
+            <div className="flex items-center gap-3 text-rose-600 dark:text-rose-400">
+              <div className="p-2.5 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  Hapus Dokumen dari RAG?
+                </h3>
+                <div className="text-xs text-slate-500">Tindakan ini tidak dapat dibatalkan.</div>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Apakah Anda yakin ingin menghapus dokumen <strong className="text-slate-900 dark:text-white">"{deletingRagDoc.title}"</strong> dari basis pengetahuan AI? AI tidak akan lagi menggunakan dokumen ini untuk menjawab pertanyaan pemohon.
+            </p>
+
+            <div className="pt-2 flex justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setDeletingRagDoc(null)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteRagDoc}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-lg shadow-rose-600/20 flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Ya, Hapus Dokumen</span>
               </button>
             </div>
 

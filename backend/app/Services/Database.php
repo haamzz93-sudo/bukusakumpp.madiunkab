@@ -121,6 +121,22 @@ class Database
             CREATE INDEX IF NOT EXISTS idx_captcha_expires ON captcha_tokens(expires_at);
         ");
 
+        // Table 7: Custom Non-SOP RAG Documents (PDF, Regulations, Guidelines - AI Knowledge Only)
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS rag_documents (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                agency TEXT NOT NULL,
+                source_type TEXT NOT NULL,
+                file_name TEXT,
+                content TEXT NOT NULL,
+                total_chars INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE INDEX IF NOT EXISTS idx_rag_agency ON rag_documents(agency);
+        ");
+
         self::seedUsers();
     }
 
@@ -895,5 +911,102 @@ class Database
         $stmt->execute([':p' => $hash, ':u' => trim($username)]);
         self::recordEvent('admin', "Admin memperbarui password akun: \"{$username}\"");
         return true;
+    }
+
+    // ========================================================
+    // RAG CUSTOM DOCUMENTS (PDF, Non-SOP, Regulasi, Pedoman)
+    // ========================================================
+
+    public static function getRagDocumentsList(): array
+    {
+        $pdo = self::getPdo();
+        $stmt = $pdo->query("SELECT id, title, agency, source_type, file_name, total_chars, created_at, updated_at FROM rag_documents ORDER BY id DESC");
+        return $stmt->fetchAll();
+    }
+
+    public static function getRagDocumentById(int $id): ?array
+    {
+        $pdo = self::getPdo();
+        $stmt = $pdo->prepare("SELECT * FROM rag_documents WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+
+    public static function saveRagDocument(array $data): array
+    {
+        $pdo = self::getPdo();
+        $id = isset($data['id']) && $data['id'] > 0 ? (int)$data['id'] : null;
+        $title = trim($data['title'] ?? 'Dokumen RAG Tambahan');
+        $agency = trim($data['agency'] ?? 'MPP Kabupaten Madiun');
+        $sourceType = $data['source_type'] ?? 'text_input';
+        $fileName = $data['file_name'] ?? null;
+        $content = trim($data['content'] ?? '');
+        $totalChars = mb_strlen($content);
+
+        if ($id) {
+            $stmt = $pdo->prepare("
+                UPDATE rag_documents 
+                SET title = :title, agency = :agency, source_type = :source_type, file_name = :file_name, content = :content, total_chars = :total_chars, updated_at = datetime('now')
+                WHERE id = :id
+            ");
+            $stmt->execute([
+                ':id' => $id,
+                ':title' => $title,
+                ':agency' => $agency,
+                ':source_type' => $sourceType,
+                ':file_name' => $fileName,
+                ':content' => $content,
+                ':total_chars' => $totalChars
+            ]);
+        } else {
+            $stmt = $pdo->prepare("
+                INSERT INTO rag_documents (title, agency, source_type, file_name, content, total_chars, created_at, updated_at)
+                VALUES (:title, :agency, :source_type, :file_name, :content, :total_chars, datetime('now'), datetime('now'))
+            ");
+            $stmt->execute([
+                ':title' => $title,
+                ':agency' => $agency,
+                ':source_type' => $sourceType,
+                ':file_name' => $fileName,
+                ':content' => $content,
+                ':total_chars' => $totalChars
+            ]);
+            $id = (int)$pdo->lastInsertId();
+        }
+
+        self::recordEvent('admin', "Admin menambahkan dokumen RAG (Non-SOP): \"{$title}\"");
+
+        return [
+            'id' => $id,
+            'title' => $title,
+            'agency' => $agency,
+            'source_type' => $sourceType,
+            'file_name' => $fileName,
+            'content' => $content,
+            'total_chars' => $totalChars
+        ];
+    }
+
+    public static function deleteRagDocument(int $id): bool
+    {
+        $pdo = self::getPdo();
+        $stmt = $pdo->prepare("SELECT title FROM rag_documents WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $row = $stmt->fetch();
+        $title = $row['title'] ?? "ID #{$id}";
+
+        $delStmt = $pdo->prepare("DELETE FROM rag_documents WHERE id = :id");
+        $delStmt->execute([':id' => $id]);
+
+        self::recordEvent('admin', "Admin menghapus dokumen RAG: \"{$title}\"");
+        return true;
+    }
+
+    public static function getAllRagDocumentContents(): array
+    {
+        $pdo = self::getPdo();
+        $stmt = $pdo->query("SELECT id, title, agency, content FROM rag_documents ORDER BY id DESC");
+        return $stmt->fetchAll();
     }
 }

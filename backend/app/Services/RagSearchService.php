@@ -285,6 +285,23 @@ class RagSearchService
             }
         }
 
+        // Merge custom non-SOP RAG documents from SQLite (PDFs, regulations, guidelines)
+        try {
+            $customDocs = Database::getAllRagDocumentContents();
+            if (is_array($customDocs)) {
+                foreach ($customDocs as $cd) {
+                    $this->pages[] = [
+                        'page' => "DOKUMEN-" . $cd['id'],
+                        'agency' => $cd['agency'],
+                        'title' => $cd['title'],
+                        'content' => $cd['content']
+                    ];
+                }
+            }
+        } catch (\Throwable $e) {
+            // ignore
+        }
+
         // Merge official perizinan catalog services into knowledge base (from SQLite DB with fallback to JSON)
         $items = [];
         try {

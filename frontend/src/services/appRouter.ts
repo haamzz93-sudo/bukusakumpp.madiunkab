@@ -13,7 +13,7 @@
  * - /admin/login         -> Modal Login Admin
  */
 
-export type AdminTab = 'dashboard' | 'perizinan' | 'ai' | 'web' | 'klaster' | 'users';
+export type AdminTab = 'dashboard' | 'perizinan' | 'rag' | 'ai' | 'web' | 'klaster' | 'users';
 
 export type AppRoute =
   | { name: 'home' }
