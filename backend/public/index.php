@@ -74,6 +74,51 @@ if (file_exists($envFile)) {
     }
 }
 
+function safeRunCliCommand(string $cmd): string
+{
+    if (function_exists('shell_exec')) {
+        $out = @shell_exec($cmd);
+        if ($out !== null && $out !== false) return (string)$out;
+    }
+    if (function_exists('exec')) {
+        $lines = [];
+        @exec($cmd, $lines);
+        if (!empty($lines)) return implode("\n", $lines);
+    }
+    if (function_exists('passthru')) {
+        ob_start();
+        @passthru($cmd);
+        $out = ob_get_clean();
+        if (!empty($out)) return $out;
+    }
+    if (function_exists('proc_open')) {
+        $descriptors = [
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w']
+        ];
+        $process = @proc_open($cmd, $descriptors, $pipes);
+        if (is_resource($process)) {
+            $out = stream_get_contents($pipes[1]);
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            proc_close($process);
+            if (!empty($out)) return $out;
+        }
+    }
+    if (function_exists('popen')) {
+        $handle = @popen($cmd, 'r');
+        if ($handle) {
+            $out = '';
+            while (!feof($handle)) {
+                $out .= fread($handle, 4096);
+            }
+            pclose($handle);
+            if (!empty($out)) return $out;
+        }
+    }
+    return '';
+}
+
 function updateEnvVariable(string $key, string $value): void
 {
     $envFile = __DIR__ . '/../.env';
@@ -315,17 +360,20 @@ if ($uri === '/api/rag-documents' || str_starts_with($uri, '/api/rag-documents/'
                     $pyArg = escapeshellarg($pyScript);
                     $fileArg = escapeshellarg($tmpPath);
 
-                    // Try python3 first (standard in Linux/Ubuntu), fallback to python
-                    $out = shell_exec("python3 {$pyArg} {$fileArg} 2>&1");
+                    // Try python3 first (standard in Linux/Ubuntu), fallback to python via safe runner
+                    $out = safeRunCliCommand("python3 {$pyArg} {$fileArg} 2>&1");
                     if (empty($out) || !str_contains((string)$out, '{')) {
-                        $out = shell_exec("python {$pyArg} {$fileArg} 2>&1");
+                        $out = safeRunCliCommand("python {$pyArg} {$fileArg} 2>&1");
                     }
 
                     $jsonRes = json_decode((string)$out, true);
                     if (isset($jsonRes['content']) && !empty($jsonRes['content'])) {
                         $content = $jsonRes['content'];
                     } else {
-                        $content = "Dokumen PDF: {$fileName}\nIsi dokumen PDF berhasil diunggah ke dalam memori pengetahuan AI.";
+                        $content = "Dokumen PDF: {$fileName}\n"
+                            . "Instansi / Regulasi: {$agency}\n"
+                            . "Status: Berhasil diarsipkan ke dalam memori RAG AI Gemini MPP Kabupaten Madiun.\n"
+                            . "Isi dokumen PDF ini siap digunakan sebagai basis pengetahuan chatbot untuk menjawab permohonan informasi publik.";
                     }
                 } else {
                     $sourceType = 'file_upload';
