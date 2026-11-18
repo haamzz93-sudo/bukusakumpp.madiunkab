@@ -95,12 +95,15 @@ export const parseCurrentRoute = (): AppRoute => {
   }
 
   if (pathname === '/admin') {
-    return { name: 'admin', tab: 'dashboard' };
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('bukusaku_admin_active_tab') : null;
+    const validTabs: AdminTab[] = ['dashboard', 'perizinan', 'rag', 'ai', 'web', 'klaster', 'users'];
+    const tab = saved && validTabs.includes(saved as AdminTab) ? (saved as AdminTab) : 'dashboard';
+    return { name: 'admin', tab };
   }
 
   if (pathname.startsWith('/admin/')) {
     const rawTab = pathname.substring('/admin/'.length) as AdminTab;
-    const validTabs: AdminTab[] = ['dashboard', 'perizinan', 'ai', 'web', 'klaster'];
+    const validTabs: AdminTab[] = ['dashboard', 'perizinan', 'rag', 'ai', 'web', 'klaster', 'users'];
     const tab = validTabs.includes(rawTab) ? rawTab : 'dashboard';
     return { name: 'admin', tab };
   }

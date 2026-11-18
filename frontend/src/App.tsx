@@ -188,7 +188,11 @@ export const App: React.FC = () => {
       case 'admin':
         if (isAdminLoggedIn) {
           setViewMode('admin');
-          setAdminTab(route.tab || 'dashboard');
+          const savedTab = (typeof window !== 'undefined' ? localStorage.getItem('bukusaku_admin_active_tab') : null) as any;
+          const chosenTab = route.tab && route.tab !== 'dashboard'
+            ? route.tab
+            : (savedTab && ['dashboard', 'perizinan', 'rag', 'ai', 'web', 'klaster', 'users'].includes(savedTab) ? savedTab : 'dashboard');
+          setAdminTab(chosenTab);
           setIsLoginOpen(false);
           setIsDetailModalOpen(false);
         } else {

@@ -112,16 +112,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onTriggerCloudflare
 }) => {
   // Navigation & Layout State
-  const [activeTab, setActiveTabState] = useState<'dashboard' | 'perizinan' | 'rag' | 'ai' | 'web' | 'klaster' | 'users'>(initialTab);
+  const [activeTab, setActiveTabState] = useState<'dashboard' | 'perizinan' | 'rag' | 'ai' | 'web' | 'klaster' | 'users'>(() => {
+    if (initialTab && initialTab !== 'dashboard') return initialTab;
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('bukusaku_admin_active_tab') as any;
+      if (saved && ['dashboard', 'perizinan', 'rag', 'ai', 'web', 'klaster', 'users'].includes(saved)) {
+        return saved;
+      }
+    }
+    return initialTab || 'dashboard';
+  });
 
   useEffect(() => {
     if (initialTab && initialTab !== activeTab) {
       setActiveTabState(initialTab);
+      localStorage.setItem('bukusaku_admin_active_tab', initialTab);
     }
   }, [initialTab]);
 
   const setActiveTab = (tab: 'dashboard' | 'perizinan' | 'rag' | 'ai' | 'web' | 'klaster' | 'users') => {
     setActiveTabState(tab);
+    localStorage.setItem('bukusaku_admin_active_tab', tab);
     onTabChange?.(tab);
   };
   const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 1024 : true);
