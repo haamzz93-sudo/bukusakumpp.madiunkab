@@ -133,6 +133,23 @@ class RagSearchService
                 }
             }
 
+            // 9. Custom RAG Documents (PDF, Perda, SK Bupati, Non-SOP Guidelines) High-Precision Boost
+            if (str_starts_with((string)($page['page'] ?? ''), 'DOKUMEN-')) {
+                $matchedTokens = 0;
+                foreach ($meaningfulTokens as $token) {
+                    if (str_contains($contentLower, $token)) {
+                        $matchedTokens++;
+                    }
+                }
+                if ($matchedTokens >= 2) {
+                    $score += ($matchedTokens * 50);
+                }
+                // If user specifically mentions regulation keywords (perda, perbup, sk bupati, pedoman, insentif, amdal, itsbat, dll)
+                if (preg_match('/perda|perbup|sk bupati|pedoman|keputusan|insentif|amdal|padat karya|ruko|500/u', $cleanQ)) {
+                    $score += 260;
+                }
+            }
+
             if ($score > 0) {
                 $scoredPages[] = [
                     'page' => $page['page'],
@@ -195,10 +212,11 @@ class RagSearchService
                 $portal = 'https://e-sertifikasi.pom.go.id';
             }
 
+            $isCustomDoc = str_starts_with((string)($chunk['page'] ?? ''), 'DOKUMEN-');
             $sourceItems[] = [
-                'name' => "Standar Pelayanan: {$chunk['title']}",
+                'name' => $isCustomDoc ? "Dokumen Regulasi: {$chunk['title']}" : "Standar Pelayanan: {$chunk['title']}",
                 'instansi' => $chunk['agency'],
-                'waktu' => "Halaman {$chunk['page']} (Buku Saku MPP 2026)",
+                'waktu' => $isCustomDoc ? "Dokumen RAG Mandiri (PDF / Regulasi AI)" : "Halaman {$chunk['page']} (Buku Saku MPP 2026)",
                 'portal' => $portal
             ];
         }
