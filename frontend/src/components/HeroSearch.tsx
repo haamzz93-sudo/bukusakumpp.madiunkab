@@ -18,7 +18,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
   const [settings, setSettings] = useState<AppSettings>(getStoredSettings());
   const [bgIndex, setBgIndex] = useState(0);
 
-  // Typewriter State
+  // Typewriter State (Looped every N seconds)
   const [displayedTitle, setDisplayedTitle] = useState('');
   const [displayedSubtitle, setDisplayedSubtitle] = useState('');
   const [isTypingTitle, setIsTypingTitle] = useState(true);
@@ -49,43 +49,70 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
     return () => clearInterval(timer);
   }, [settings.bgMode, settings.bgAutoIntervalSeconds, settings.selectedFixedBg]);
 
-  // Smooth Typewriter Animation with Warm White Glow
+  // Smooth Typewriter Loop: Types letter-by-letter, pauses for 5 seconds, then smoothly deletes and repeats
   const fullTitle = settings.heroTitle || 'Halo, saya Buku Saku.';
   const fullSubtitle = settings.heroSubtitle || 'Mau tanya apa soal perizinan di Kabupaten Madiun?';
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     let titleChar = 0;
     let subChar = 0;
-    setDisplayedTitle('');
-    setDisplayedSubtitle('');
-    setIsTypingTitle(true);
-    setIsTypingDone(false);
+    let isDeleting = false;
+    let isCancelled = false;
 
-    // Speed: 40ms per char for Title
-    const titleTimer = setInterval(() => {
-      titleChar++;
-      if (titleChar <= fullTitle.length) {
-        setDisplayedTitle(fullTitle.slice(0, titleChar));
+    const runTypewriterLoop = () => {
+      if (isCancelled) return;
+
+      if (!isDeleting) {
+        // 1. Typing Phase
+        if (titleChar < fullTitle.length) {
+          titleChar++;
+          setDisplayedTitle(fullTitle.slice(0, titleChar));
+          setIsTypingTitle(true);
+          setIsTypingDone(false);
+          timeoutId = setTimeout(runTypewriterLoop, 40);
+        } else if (subChar < fullSubtitle.length) {
+          setIsTypingTitle(false);
+          subChar++;
+          setDisplayedSubtitle(fullSubtitle.slice(0, subChar));
+          setIsTypingDone(false);
+          timeoutId = setTimeout(runTypewriterLoop, 30);
+        } else {
+          // Both lines are fully typed!
+          setIsTypingDone(true);
+          // Hold the complete text for 5 seconds so users can read comfortably
+          timeoutId = setTimeout(() => {
+            isDeleting = true;
+            runTypewriterLoop();
+          }, 5000);
+        }
       } else {
-        clearInterval(titleTimer);
-        setIsTypingTitle(false);
-        // Short natural pause, then type Subtitle
-        setTimeout(() => {
-          const subTimer = setInterval(() => {
-            subChar++;
-            if (subChar <= fullSubtitle.length) {
-              setDisplayedSubtitle(fullSubtitle.slice(0, subChar));
-            } else {
-              clearInterval(subTimer);
-              setIsTypingDone(true);
-            }
-          }, 32);
-        }, 220);
+        // 2. Smooth Deleting Phase
+        if (subChar > 0) {
+          subChar--;
+          setDisplayedSubtitle(fullSubtitle.slice(0, subChar));
+          setIsTypingDone(false);
+          timeoutId = setTimeout(runTypewriterLoop, 15);
+        } else if (titleChar > 0) {
+          setIsTypingTitle(true);
+          titleChar--;
+          setDisplayedTitle(fullTitle.slice(0, titleChar));
+          setIsTypingDone(false);
+          timeoutId = setTimeout(runTypewriterLoop, 15);
+        } else {
+          // Fully cleared! Pause briefly, then restart typing cycle
+          isDeleting = false;
+          setIsTypingTitle(true);
+          timeoutId = setTimeout(runTypewriterLoop, 450);
+        }
       }
-    }, 42);
+    };
+
+    runTypewriterLoop();
 
     return () => {
-      clearInterval(titleTimer);
+      isCancelled = true;
+      clearTimeout(timeoutId);
     };
   }, [fullTitle, fullSubtitle]);
 
@@ -127,18 +154,12 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
 
       <div className="relative max-w-4xl mx-auto text-center z-10 w-full">
         
-        {/* Modern Pill Badge */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.06] border border-amber-200/25 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.3)] mb-6 transition-all hover:bg-white/[0.1] hover:border-amber-200/40">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
-          </span>
-          <span className="text-[11px] sm:text-xs font-semibold tracking-wider text-amber-100/95 uppercase">
-            {settings.heroBadge}
-          </span>
-        </div>
+        {/* Official Service Notice - Clean typography only, NO CAPSULE, NO AI SLOP */}
+        <p className="text-xs sm:text-sm font-semibold tracking-widest text-emerald-300 uppercase mb-4 drop-shadow-sm">
+          {settings.heroBadge}
+        </p>
 
-        {/* Hero Headline with Animated Typewriter & Warm White Radiance */}
+        {/* Hero Headline with Animated Typewriter (Looping every 5s) & Warm White Radiance */}
         <div className="relative min-h-[120px] sm:min-h-[145px] flex flex-col justify-center items-center mb-5">
           {/* Subtle Ambient Backlight specifically for the text */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,253,245,0.20)_0%,_rgba(254,240,138,0.07)_50%,_transparent_70%)] blur-xl pointer-events-none" />
