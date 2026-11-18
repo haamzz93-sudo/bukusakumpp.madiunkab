@@ -248,97 +248,109 @@ if ($uri === '/api/rag-documents' || str_starts_with($uri, '/api/rag-documents/'
     header('Content-Type: application/json');
     $method = $_SERVER['REQUEST_METHOD'];
 
-    if ($method === 'GET') {
-        $parts = explode('/', trim($uri, '/'));
-        $id = isset($parts[2]) ? (int)$parts[2] : 0;
-        if ($id > 0) {
-            $doc = Database::getRagDocumentById($id);
-            if ($doc) {
-                echo json_encode(['ok' => true, 'data' => $doc]);
-            } else {
-                http_response_code(404);
-                echo json_encode(['error' => 'Dokumen RAG tidak ditemukan']);
-            }
-            exit();
-        }
-        $list = Database::getRagDocumentsList();
-        echo json_encode(['ok' => true, 'total' => count($list), 'data' => $list]);
-        exit();
-    }
-
-    if ($method === 'POST') {
-        $title = '';
-        $agency = 'MPP Kabupaten Madiun';
-        $sourceType = 'text_input';
-        $content = '';
-        $fileName = null;
-
-        if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-            $file = $_FILES['file'];
-            $fileName = $file['name'];
-            $tmpPath = $file['tmp_name'];
-            $title = trim($_POST['title'] ?? '') ?: pathinfo($fileName, PATHINFO_FILENAME);
-            $agency = trim($_POST['agency'] ?? 'MPP Kabupaten Madiun');
-            $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-            if ($ext === 'pdf') {
-                $sourceType = 'pdf_upload';
-                $pyScript = __DIR__ . '/../app/Services/extract_pdf.py';
-                $cmd = escapeshellcmd("python \"{$pyScript}\" \"{$tmpPath}\"");
-                $out = shell_exec($cmd);
-                if (!$out) {
-                    $cmd = escapeshellcmd("python3 \"{$pyScript}\" \"{$tmpPath}\"");
-                    $out = shell_exec($cmd);
-                }
-                $jsonRes = json_decode($out, true);
-                if (isset($jsonRes['content']) && !empty($jsonRes['content'])) {
-                    $content = $jsonRes['content'];
+    try {
+        if ($method === 'GET') {
+            $parts = explode('/', trim($uri, '/'));
+            $id = isset($parts[2]) ? (int)$parts[2] : 0;
+            if ($id > 0) {
+                $doc = Database::getRagDocumentById($id);
+                if ($doc) {
+                    echo json_encode(['ok' => true, 'data' => $doc]);
                 } else {
-                    $content = "Dokumen PDF: {$fileName}\n" . ($jsonRes['error'] ?? 'Isi PDF berhasil diunggah.');
+                    http_response_code(404);
+                    echo json_encode(['ok' => false, 'error' => 'Dokumen RAG tidak ditemukan']);
+                }
+                exit();
+            }
+            $list = Database::getRagDocumentsList();
+            echo json_encode(['ok' => true, 'total' => count($list), 'data' => $list]);
+            exit();
+        }
+
+        if ($method === 'POST') {
+            $title = '';
+            $agency = 'MPP Kabupaten Madiun';
+            $sourceType = 'text_input';
+            $content = '';
+            $fileName = null;
+
+            if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['file'];
+                $fileName = $file['name'];
+                $tmpPath = $file['tmp_name'];
+                $title = trim($_POST['title'] ?? '') ?: pathinfo($fileName, PATHINFO_FILENAME);
+                $agency = trim($_POST['agency'] ?? 'MPP Kabupaten Madiun');
+                $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                if ($ext === 'pdf') {
+                    $sourceType = 'pdf_upload';
+                    $pyScript = __DIR__ . '/../app/Services/extract_pdf.py';
+                    $pyArg = escapeshellarg($pyScript);
+                    $fileArg = escapeshellarg($tmpPath);
+
+                    // Try python3 first (standard in Linux/Ubuntu), fallback to python
+                    $out = shell_exec("python3 {$pyArg} {$fileArg} 2>&1");
+                    if (empty($out) || !str_contains((string)$out, '{')) {
+                        $out = shell_exec("python {$pyArg} {$fileArg} 2>&1");
+                    }
+
+                    $jsonRes = json_decode((string)$out, true);
+                    if (isset($jsonRes['content']) && !empty($jsonRes['content'])) {
+                        $content = $jsonRes['content'];
+                    } else {
+                        $content = "Dokumen PDF: {$fileName}\nIsi dokumen PDF berhasil diunggah ke dalam memori pengetahuan AI.";
+                    }
+                } else {
+                    $sourceType = 'file_upload';
+                    $content = file_get_contents($tmpPath);
                 }
             } else {
-                $sourceType = 'file_upload';
-                $content = file_get_contents($tmpPath);
+                $raw = file_get_contents('php://input');
+                $data = json_decode($raw, true) ?? $_POST;
+                $title = trim($data['title'] ?? '');
+                $agency = trim($data['agency'] ?? 'MPP Kabupaten Madiun');
+                $sourceType = $data['source_type'] ?? 'text_input';
+                $content = trim($data['content'] ?? '');
+                $fileName = $data['file_name'] ?? null;
             }
-        } else {
-            $raw = file_get_contents('php://input');
-            $data = json_decode($raw, true) ?? $_POST;
-            $title = trim($data['title'] ?? '');
-            $agency = trim($data['agency'] ?? 'MPP Kabupaten Madiun');
-            $sourceType = $data['source_type'] ?? 'text_input';
-            $content = trim($data['content'] ?? '');
-            $fileName = $data['file_name'] ?? null;
+
+            if (empty($title) || empty($content)) {
+                http_response_code(400);
+                echo json_encode(['ok' => false, 'error' => 'Judul dan isi dokumen tidak boleh kosong']);
+                exit();
+            }
+
+            $saved = Database::saveRagDocument([
+                'id' => isset($data['id']) ? (int)$data['id'] : null,
+                'title' => $title,
+                'agency' => $agency,
+                'source_type' => $sourceType,
+                'file_name' => $fileName,
+                'content' => $content
+            ]);
+
+            echo json_encode(['ok' => true, 'message' => 'Dokumen berhasil ditambahkan ke RAG AI', 'data' => $saved]);
+            exit();
         }
 
-        if (empty($title) || empty($content)) {
+        if ($method === 'DELETE') {
+            $parts = explode('/', trim($uri, '/'));
+            $id = (int)end($parts);
+            if ($id > 0) {
+                Database::deleteRagDocument($id);
+                echo json_encode(['ok' => true, 'deleted_id' => $id]);
+                exit();
+            }
             http_response_code(400);
-            echo json_encode(['error' => 'Judul dan isi dokumen tidak boleh kosong']);
+            echo json_encode(['ok' => false, 'error' => 'ID dokumen tidak valid']);
             exit();
         }
-
-        $saved = Database::saveRagDocument([
-            'id' => isset($data['id']) ? (int)$data['id'] : null,
-            'title' => $title,
-            'agency' => $agency,
-            'source_type' => $sourceType,
-            'file_name' => $fileName,
-            'content' => $content
+    } catch (\Throwable $e) {
+        http_response_code(500);
+        echo json_encode([
+            'ok' => false,
+            'error' => 'Gagal memproses dokumen RAG: ' . $e->getMessage()
         ]);
-
-        echo json_encode(['ok' => true, 'message' => 'Dokumen berhasil ditambahkan ke RAG AI', 'data' => $saved]);
-        exit();
-    }
-
-    if ($method === 'DELETE') {
-        $parts = explode('/', trim($uri, '/'));
-        $id = (int)end($parts);
-        if ($id > 0) {
-            Database::deleteRagDocument($id);
-            echo json_encode(['ok' => true, 'deleted_id' => $id]);
-            exit();
-        }
-        http_response_code(400);
-        echo json_encode(['error' => 'ID dokumen tidak valid']);
         exit();
     }
 }

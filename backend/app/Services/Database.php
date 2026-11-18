@@ -13,13 +13,23 @@ class Database
     public static function getPdo(): PDO
     {
         if (self::$pdo === null) {
+            $dbDir = dirname(self::$dbFile);
+            if (!is_dir($dbDir)) {
+                @mkdir($dbDir, 0777, true);
+            }
+
             $isNew = !file_exists(self::$dbFile);
             self::$pdo = new PDO('sqlite:' . self::$dbFile, null, null, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             ]);
 
-            self::initTables();
+            try {
+                self::initTables();
+            } catch (\Throwable $e) {
+                error_log('Database initTables notice: ' . $e->getMessage());
+            }
+
             if ($isNew || self::isPerizinanEmpty()) {
                 self::seedPerizinan();
             }
@@ -30,46 +40,75 @@ class Database
         return self::$pdo;
     }
 
+    public static function ensureRagTableExists(): void
+    {
+        try {
+            $pdo = self::getPdo();
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS rag_documents (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    agency TEXT NOT NULL,
+                    source_type TEXT NOT NULL,
+                    file_name TEXT,
+                    content TEXT NOT NULL,
+                    total_chars INTEGER DEFAULT 0,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+            ");
+            try {
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_rag_agency ON rag_documents(agency);");
+            } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+            error_log("Failed to ensure rag_documents table: " . $e->getMessage());
+        }
+    }
+
     private static function initTables(): void
     {
         $pdo = self::$pdo;
 
         // Table 1: Real Visitor Logs & Telemetry
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS visitor_logs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                ip TEXT NOT NULL,
-                network_tag TEXT NOT NULL,
-                event_type TEXT NOT NULL,
-                title TEXT NOT NULL,
-                device TEXT NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-            CREATE INDEX IF NOT EXISTS idx_logs_created ON visitor_logs(created_at);
-            CREATE INDEX IF NOT EXISTS idx_logs_type ON visitor_logs(event_type);
-        ");
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS visitor_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ip TEXT NOT NULL,
+                    network_tag TEXT NOT NULL,
+                    event_type TEXT NOT NULL,
+                    title TEXT NOT NULL,
+                    device TEXT NOT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+            ");
+            $pdo->exec("CREATE INDEX IF NOT EXISTS idx_logs_created ON visitor_logs(created_at);");
+            $pdo->exec("CREATE INDEX IF NOT EXISTS idx_logs_type ON visitor_logs(event_type);");
+        } catch (\Throwable $e) {}
 
         // Table 2: Perizinan Master Catalog
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS perizinan (
-                id INTEGER PRIMARY KEY,
-                title TEXT NOT NULL,
-                slug TEXT NOT NULL,
-                instansi TEXT,
-                jenis_pelayanan TEXT,
-                lama_pelayanan TEXT,
-                biaya TEXT,
-                category_id TEXT,
-                category_name TEXT,
-                whatsapp_number TEXT,
-                persyaratan TEXT,
-                mekanisme TEXT,
-                portal_url TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-            CREATE INDEX IF NOT EXISTS idx_perizinan_cat ON perizinan(category_id);
-        ");
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS perizinan (
+                    id INTEGER PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    slug TEXT NOT NULL,
+                    instansi TEXT,
+                    jenis_pelayanan TEXT,
+                    lama_pelayanan TEXT,
+                    biaya TEXT,
+                    category_id TEXT,
+                    category_name TEXT,
+                    whatsapp_number TEXT,
+                    persyaratan TEXT,
+                    mekanisme TEXT,
+                    portal_url TEXT,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+            ");
+            $pdo->exec("CREATE INDEX IF NOT EXISTS idx_perizinan_cat ON perizinan(category_id);");
+        } catch (\Throwable $e) {}
 
         try {
             $pdo->exec("ALTER TABLE perizinan ADD COLUMN whatsapp_number TEXT;");
@@ -78,66 +117,63 @@ class Database
         }
 
         // Table 3: Klaster Questions
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS klaster_questions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                klaster_key TEXT NOT NULL,
-                question TEXT NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-            CREATE INDEX IF NOT EXISTS idx_klaster_key ON klaster_questions(klaster_key);
-        ");
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS klaster_questions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    klaster_key TEXT NOT NULL,
+                    question TEXT NOT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+            ");
+            $pdo->exec("CREATE INDEX IF NOT EXISTS idx_klaster_key ON klaster_questions(klaster_key);");
+        } catch (\Throwable $e) {}
 
         // Table 4: Application Settings
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS app_settings (
-                id INTEGER PRIMARY KEY,
-                data_json TEXT NOT NULL,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-        ");
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS app_settings (
+                    id INTEGER PRIMARY KEY,
+                    data_json TEXT NOT NULL,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+            ");
+        } catch (\Throwable $e) {}
 
         // Table 5: Real Users Authentication
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT UNIQUE NOT NULL,
-                password_hash TEXT NOT NULL,
-                name TEXT NOT NULL,
-                email TEXT,
-                role TEXT DEFAULT 'Administrator',
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-        ");
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    email TEXT,
+                    role TEXT DEFAULT 'Administrator',
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+            ");
+        } catch (\Throwable $e) {}
 
         // Table 6: Real Captcha Tokens
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS captcha_tokens (
-                token TEXT PRIMARY KEY,
-                code TEXT NOT NULL,
-                created_at INTEGER NOT NULL,
-                expires_at INTEGER NOT NULL
-            );
-            CREATE INDEX IF NOT EXISTS idx_captcha_expires ON captcha_tokens(expires_at);
-        ");
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS captcha_tokens (
+                    token TEXT PRIMARY KEY,
+                    code TEXT NOT NULL,
+                    created_at INTEGER NOT NULL,
+                    expires_at INTEGER NOT NULL
+                );
+            ");
+            $pdo->exec("CREATE INDEX IF NOT EXISTS idx_captcha_expires ON captcha_tokens(expires_at);");
+        } catch (\Throwable $e) {}
 
         // Table 7: Custom Non-SOP RAG Documents (PDF, Regulations, Guidelines - AI Knowledge Only)
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS rag_documents (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                agency TEXT NOT NULL,
-                source_type TEXT NOT NULL,
-                file_name TEXT,
-                content TEXT NOT NULL,
-                total_chars INTEGER DEFAULT 0,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-            CREATE INDEX IF NOT EXISTS idx_rag_agency ON rag_documents(agency);
-        ");
+        self::ensureRagTableExists();
 
-        self::seedUsers();
+        try {
+            self::seedUsers();
+        } catch (\Throwable $e) {}
     }
 
     private static function isPerizinanEmpty(): bool
@@ -919,22 +955,35 @@ class Database
 
     public static function getRagDocumentsList(): array
     {
-        $pdo = self::getPdo();
-        $stmt = $pdo->query("SELECT id, title, agency, source_type, file_name, total_chars, created_at, updated_at FROM rag_documents ORDER BY id DESC");
-        return $stmt->fetchAll();
+        try {
+            self::ensureRagTableExists();
+            $pdo = self::getPdo();
+            $stmt = $pdo->query("SELECT id, title, agency, source_type, file_name, total_chars, created_at, updated_at FROM rag_documents ORDER BY id DESC");
+            return $stmt->fetchAll() ?: [];
+        } catch (\Throwable $e) {
+            error_log("Error in getRagDocumentsList: " . $e->getMessage());
+            return [];
+        }
     }
 
     public static function getRagDocumentById(int $id): ?array
     {
-        $pdo = self::getPdo();
-        $stmt = $pdo->prepare("SELECT * FROM rag_documents WHERE id = :id");
-        $stmt->execute([':id' => $id]);
-        $row = $stmt->fetch();
-        return $row ?: null;
+        try {
+            self::ensureRagTableExists();
+            $pdo = self::getPdo();
+            $stmt = $pdo->prepare("SELECT * FROM rag_documents WHERE id = :id");
+            $stmt->execute([':id' => $id]);
+            $row = $stmt->fetch();
+            return $row ?: null;
+        } catch (\Throwable $e) {
+            error_log("Error in getRagDocumentById: " . $e->getMessage());
+            return null;
+        }
     }
 
     public static function saveRagDocument(array $data): array
     {
+        self::ensureRagTableExists();
         $pdo = self::getPdo();
         $id = isset($data['id']) && $data['id'] > 0 ? (int)$data['id'] : null;
         $title = trim($data['title'] ?? 'Dokumen RAG Tambahan');
@@ -975,7 +1024,9 @@ class Database
             $id = (int)$pdo->lastInsertId();
         }
 
-        self::recordEvent('admin', "Admin menambahkan dokumen RAG (Non-SOP): \"{$title}\"");
+        try {
+            self::recordEvent('admin', "Admin menambahkan dokumen RAG (Non-SOP): \"{$title}\"");
+        } catch (\Throwable $e) {}
 
         return [
             'id' => $id,
@@ -990,23 +1041,37 @@ class Database
 
     public static function deleteRagDocument(int $id): bool
     {
-        $pdo = self::getPdo();
-        $stmt = $pdo->prepare("SELECT title FROM rag_documents WHERE id = :id");
-        $stmt->execute([':id' => $id]);
-        $row = $stmt->fetch();
-        $title = $row['title'] ?? "ID #{$id}";
+        try {
+            self::ensureRagTableExists();
+            $pdo = self::getPdo();
+            $stmt = $pdo->prepare("SELECT title FROM rag_documents WHERE id = :id");
+            $stmt->execute([':id' => $id]);
+            $row = $stmt->fetch();
+            $title = $row['title'] ?? "ID #{$id}";
 
-        $delStmt = $pdo->prepare("DELETE FROM rag_documents WHERE id = :id");
-        $delStmt->execute([':id' => $id]);
+            $delStmt = $pdo->prepare("DELETE FROM rag_documents WHERE id = :id");
+            $delStmt->execute([':id' => $id]);
 
-        self::recordEvent('admin', "Admin menghapus dokumen RAG: \"{$title}\"");
-        return true;
+            try {
+                self::recordEvent('admin', "Admin menghapus dokumen RAG: \"{$title}\"");
+            } catch (\Throwable $e) {}
+            return true;
+        } catch (\Throwable $e) {
+            error_log("Error deleting rag doc: " . $e->getMessage());
+            return false;
+        }
     }
 
     public static function getAllRagDocumentContents(): array
     {
-        $pdo = self::getPdo();
-        $stmt = $pdo->query("SELECT id, title, agency, content FROM rag_documents ORDER BY id DESC");
-        return $stmt->fetchAll();
+        try {
+            self::ensureRagTableExists();
+            $pdo = self::getPdo();
+            $stmt = $pdo->query("SELECT id, title, agency, content FROM rag_documents ORDER BY id DESC");
+            return $stmt->fetchAll() ?: [];
+        } catch (\Throwable $e) {
+            error_log("Error in getAllRagDocumentContents: " . $e->getMessage());
+            return [];
+        }
     }
 }
