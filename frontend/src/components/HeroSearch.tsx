@@ -154,8 +154,8 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
 
       <div className="relative max-w-4xl mx-auto text-center z-10 w-full">
         
-        {/* Official Service Notice - Clean typography only, NO CAPSULE, NO AI SLOP */}
-        <p className="text-xs sm:text-sm font-semibold tracking-widest text-emerald-300 uppercase mb-4 drop-shadow-sm">
+        {/* Official Service Notice - Pure Clean White Typography Only (No Capsule, No AI Slop) */}
+        <p className="text-xs sm:text-sm font-semibold tracking-widest text-white/90 uppercase mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
           {settings.heroBadge}
         </p>
 
@@ -189,26 +189,26 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
         </div>
 
         {/* Clean, Modern Subtitle */}
-        <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-8 font-normal leading-relaxed drop-shadow-sm px-2">
+        <p className="text-slate-200/90 text-sm sm:text-base max-w-2xl mx-auto mb-8 font-normal leading-relaxed drop-shadow-sm px-2">
           {settings.heroDesc}
         </p>
 
-        {/* Search Box - Modern Deep Frosted Glass with Warm Amber Glow */}
+        {/* Search Box - Liquid Glass Aesthetic */}
         <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto mb-5 px-1 sm:px-0">
           <div className="relative group">
             {/* Luminous Glow Halo behind search bar */}
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-amber-300/25 via-emerald-400/20 to-amber-300/25 blur-xl opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-            <div className="relative flex items-center rounded-2xl bg-slate-900/80 backdrop-blur-2xl border border-white/20 p-2 sm:p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-300 focus-within:border-amber-300/80 focus-within:ring-2 focus-within:ring-amber-300/30 focus-within:shadow-[0_20px_60px_rgba(254,243,199,0.18)]">
-              <div className="pl-3.5 pr-2 text-amber-200/90 shrink-0">
-                <Search className="w-5 h-5 drop-shadow-[0_0_8px_rgba(254,243,199,0.5)]" />
+            <div className="relative flex items-center rounded-2xl liquid-glass p-2 sm:p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] transition-all duration-300 focus-within:border-white/60 focus-within:ring-2 focus-within:ring-white/30">
+              <div className="pl-3.5 pr-2 text-white/90 shrink-0">
+                <Search className="w-5 h-5 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
               </div>
               <input
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 placeholder="Tanya Buku Saku... misal: syarat izin buka warung kopi"
-                className="w-full bg-transparent py-2 px-2 text-white placeholder-slate-400/80 focus:outline-none text-sm sm:text-base font-medium"
+                className="w-full bg-transparent py-2 px-2 text-white placeholder-white/60 focus:outline-none text-sm sm:text-base font-medium"
                 disabled={isLoading}
               />
               <button
@@ -223,51 +223,51 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
           </div>
         </form>
 
-        {/* Quick Suggestion Chips - Clean Modern Minimalist Pills */}
+        {/* Quick Suggestion Chips - Liquid Glass Pills */}
         <div className="flex flex-wrap items-center justify-center gap-2 text-xs mb-8 max-w-2xl mx-auto px-2">
-          <span className="font-semibold text-slate-300/90 mr-1">Coba:</span>
+          <span className="font-semibold text-white/80 mr-1">Coba:</span>
           {settings.quickChips.map((chip, idx) => (
             <button
               key={idx}
               onClick={() => handleChipClick(chip)}
-              className="px-3.5 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.14] text-slate-200 hover:text-white border border-white/15 hover:border-amber-200/40 backdrop-blur-md transition-all duration-200 cursor-pointer font-medium active:scale-95 shadow-sm hover:shadow-[0_0_12px_rgba(254,243,199,0.18)]"
+              className="liquid-glass px-4 py-1.5 rounded-full text-white/90 hover:text-white hover:bg-white/25 transition-all duration-200 cursor-pointer font-medium active:scale-95 shadow-sm hover:shadow-[0_0_12px_rgba(255,255,255,0.2)]"
             >
               {chip}
             </button>
           ))}
         </div>
 
-        {/* Trust Verification Note */}
-        <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/25 text-xs text-emerald-200/90 mb-10 shadow-sm backdrop-blur-sm">
+        {/* Trust Verification Note - Liquid Glass Badge */}
+        <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full liquid-glass text-xs text-white/90 mb-10 shadow-sm">
           <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{settings.trustBadge}</span>
         </div>
 
-        {/* 4 Stats Band - Clean, Modern Floating Glass Cards */}
+        {/* 4 Stats Band - Pure Liquid Glass Floating Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto text-center px-1">
-          <div className="p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-amber-200/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(254,243,199,0.08)] group">
+          <div className="p-4 rounded-2xl liquid-glass transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group">
             <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300 group-hover:text-amber-200 transition-colors drop-shadow-[0_0_12px_rgba(252,211,77,0.3)]">
               {settings.stat1Value}
             </div>
-            <div className="text-xs text-slate-300 font-medium mt-1">{settings.stat1Label}</div>
+            <div className="text-xs text-white/80 font-medium mt-1">{settings.stat1Label}</div>
           </div>
-          <div className="p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-emerald-300/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(52,211,153,0.08)] group">
+          <div className="p-4 rounded-2xl liquid-glass transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group">
             <div className="font-display font-extrabold text-2xl sm:text-3xl text-emerald-300 group-hover:text-emerald-200 transition-colors drop-shadow-[0_0_12px_rgba(52,211,153,0.3)]">
               {settings.stat2Value}
             </div>
-            <div className="text-xs text-slate-300 font-medium mt-1">{settings.stat2Label}</div>
+            <div className="text-xs text-white/80 font-medium mt-1">{settings.stat2Label}</div>
           </div>
-          <div className="p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-amber-200/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(254,243,199,0.08)] group">
+          <div className="p-4 rounded-2xl liquid-glass transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group">
             <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300 group-hover:text-amber-200 transition-colors drop-shadow-[0_0_12px_rgba(252,211,77,0.3)]">
               {settings.stat3Value}
             </div>
-            <div className="text-xs text-slate-300 font-medium mt-1">{settings.stat3Label}</div>
+            <div className="text-xs text-white/80 font-medium mt-1">{settings.stat3Label}</div>
           </div>
-          <div className="p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-emerald-300/30 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(52,211,153,0.08)] group">
+          <div className="p-4 rounded-2xl liquid-glass transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group">
             <div className="font-display font-extrabold text-2xl sm:text-3xl text-emerald-300 group-hover:text-emerald-200 transition-colors drop-shadow-[0_0_12px_rgba(52,211,153,0.3)]">
               {settings.stat4Value}
             </div>
-            <div className="text-xs text-slate-300 font-medium mt-1">{settings.stat4Label}</div>
+            <div className="text-xs text-white/80 font-medium mt-1">{settings.stat4Label}</div>
           </div>
         </div>
 
