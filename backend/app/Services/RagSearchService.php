@@ -285,41 +285,54 @@ class RagSearchService
             }
         }
 
-        // Merge official perizinan catalog services into knowledge base
-        $catalogPaths = [
-            __DIR__ . '/../../storage/allPerizinan80.json',
-            __DIR__ . '/../storage/allPerizinan80.json',
-            'D:/Landing Page/Buku Saku/backend/storage/allPerizinan80.json'
-        ];
+        // Merge official perizinan catalog services into knowledge base (from SQLite DB with fallback to JSON)
+        $items = [];
+        try {
+            $items = Database::getPerizinanList();
+        } catch (\Throwable $e) {
+            $items = [];
+        }
 
-        foreach ($catalogPaths as $cPath) {
-            if (file_exists($cPath)) {
-                $rawCatalog = file_get_contents($cPath);
-                $items = json_decode($rawCatalog, true);
-                if (is_array($items)) {
-                    foreach ($items as $item) {
-                        $adm = is_array($item['persyaratan']['administratif'] ?? null) ? implode("\n", $item['persyaratan']['administratif']) : '';
-                        $tek = is_array($item['persyaratan']['teknis'] ?? null) ? implode("\n", $item['persyaratan']['teknis']) : '';
-                        $mek = is_array($item['mekanismeProsedur'] ?? null) ? implode("\n", $item['mekanismeProsedur']) : '';
-                        $keywords = is_array($item['keywords'] ?? null) ? implode(', ', $item['keywords']) : '';
+        if (empty($items)) {
+            $catalogPaths = [
+                __DIR__ . '/../../storage/allPerizinan80.json',
+                __DIR__ . '/../storage/allPerizinan80.json',
+                'D:/Landing Page/Buku Saku/backend/storage/allPerizinan80.json'
+            ];
 
-                        $content = "Standar Pelayanan: {$item['title']}\n"
-                            . "Instansi Pelaksana: {$item['instansi']}\n"
-                            . "Jenis Layanan: {$item['jenisPerizinan']} | Waktu: {$item['waktuPelayanan']} | Biaya: {$item['biaya']}\n"
-                            . "Persyaratan Administratif:\n{$adm}\n"
-                            . "Persyaratan Teknis:\n{$tek}\n"
-                            . "Alur Prosedur & Mekanisme:\n{$mek}\n"
-                            . "Kata Kunci Pencarian: {$keywords}";
-
-                        $this->pages[] = [
-                            'page' => $item['id'] == 101 ? 5 : ($item['id'] ?? 1),
-                            'agency' => $item['instansi'],
-                            'title' => $item['title'],
-                            'content' => $content
-                        ];
+            foreach ($catalogPaths as $cPath) {
+                if (file_exists($cPath)) {
+                    $rawCatalog = file_get_contents($cPath);
+                    $decoded = json_decode($rawCatalog, true);
+                    if (is_array($decoded) && !empty($decoded)) {
+                        $items = $decoded;
+                        break;
                     }
-                    break;
                 }
+            }
+        }
+
+        if (is_array($items) && !empty($items)) {
+            foreach ($items as $item) {
+                $adm = is_array($item['persyaratan']['administratif'] ?? null) ? implode("\n", $item['persyaratan']['administratif']) : '';
+                $tek = is_array($item['persyaratan']['teknis'] ?? null) ? implode("\n", $item['persyaratan']['teknis']) : '';
+                $mek = is_array($item['mekanismeProsedur'] ?? null) ? implode("\n", $item['mekanismeProsedur']) : '';
+                $keywords = is_array($item['keywords'] ?? null) ? implode(', ', $item['keywords']) : '';
+
+                $content = "Standar Pelayanan: {$item['title']}\n"
+                    . "Instansi Pelaksana: {$item['instansi']}\n"
+                    . "Jenis Layanan: {$item['jenisPerizinan']} | Waktu: {$item['waktuPelayanan']} | Biaya: {$item['biaya']}\n"
+                    . "Persyaratan Administratif:\n{$adm}\n"
+                    . "Persyaratan Teknis:\n{$tek}\n"
+                    . "Alur Prosedur & Mekanisme:\n{$mek}\n"
+                    . "Kata Kunci Pencarian: {$keywords}";
+
+                $this->pages[] = [
+                    'page' => $item['id'] == 101 ? 5 : ($item['id'] ?? 1),
+                    'agency' => $item['instansi'],
+                    'title' => $item['title'],
+                    'content' => $content
+                ];
             }
         }
     }

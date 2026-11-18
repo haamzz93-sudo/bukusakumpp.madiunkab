@@ -393,6 +393,7 @@ class Database
         ]);
 
         self::recordEvent('admin', "Admin memperbarui data perizinan: \"{$title}\"");
+        self::syncJsonBackup();
 
         return [
             'id' => $id,
@@ -423,7 +424,21 @@ class Database
         $delStmt->execute([':id' => $id]);
 
         self::recordEvent('admin', "Admin menghapus perizinan: \"{$title}\"");
+        self::syncJsonBackup();
         return true;
+    }
+
+    public static function syncJsonBackup(): void
+    {
+        try {
+            $all = self::getPerizinanList();
+            $path = __DIR__ . '/../../storage/allPerizinan80.json';
+            if (is_array($all) && count($all) > 0) {
+                file_put_contents($path, json_encode($all, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            }
+        } catch (\Throwable $e) {
+            // Ignore backup error
+        }
     }
 
     public static function getKlasterTree(): array
