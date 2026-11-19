@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Volume2, VolumeX, Pause, Play, X, AudioLines, CheckCircle2, MessageSquareText, Search } from 'lucide-react';
+import { Volume2, VolumeX, Pause, Play, X, AudioLines, ArrowUp, ArrowDown, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export interface TourStep {
   id: string;
@@ -8,6 +8,7 @@ export interface TourStep {
   category: string;
   text: string;
   audioSrc: string;
+  arrowPosition?: 'top' | 'bottom';
   isDemoChat?: boolean;
 }
 
@@ -15,67 +16,75 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'step-1',
     targetId: 'tour-brand',
-    title: 'Buku Saku Digital MPP Madiun',
-    category: '1. Sambutan Resmi',
+    title: 'Judul Resmi Buku Saku MPP',
+    category: 'Sambutan Resmi',
     text: 'Halo, selamat datang di Buku Saku Digital Mal Pelayanan Publik Kabupaten Madiun. Saya adalah Voice AI resmi Anda. Mari kita lihat seluruh fitur layanan di web ini secara otomatis.',
-    audioSrc: '/audio/tour_auto_1_intro.mp3'
+    audioSrc: '/audio/tour_auto_1_intro.mp3',
+    arrowPosition: 'bottom'
   },
   {
     id: 'step-2',
     targetId: 'tour-search',
-    title: 'Pencarian & Voice Note ala Spider-Man',
-    category: '2. Input Suara & Teks',
+    title: 'Pencarian Cerdas & Voice Note',
+    category: 'Input Suara & Teks',
     text: 'Pertama, di kolom pencarian ini, Anda bisa menanyakan syarat izin, berkas, atau prosedur, cukup dengan mengetik atau berbicara langsung lewat tombol Voice Note.',
-    audioSrc: '/audio/tour_auto_2_search.mp3'
+    audioSrc: '/audio/tour_auto_2_search.mp3',
+    arrowPosition: 'top'
   },
   {
     id: 'step-3',
     targetId: 'tour-search',
-    title: 'Jawaban Cerdas & Voice Note Balasan',
-    category: '3. Respon AI & Suara',
+    title: 'Simulasi Respon Cepat AI & Suara',
+    category: 'Respon Cerdas',
     text: 'Sistem AI Gemini dan basis regulasi resmi MPP langsung merespons dengan jawaban akurat serta suara balasan resmi, praktis tanpa perlu membaca dokumen tebal.',
     audioSrc: '/audio/tour_auto_3_chatdemo.mp3',
-    isDemoChat: true
+    isDemoChat: true,
+    arrowPosition: 'top'
   },
   {
     id: 'step-4',
     targetId: 'tour-stats',
-    title: '4 Indikator Layanan Resmi MPP',
-    category: '4. Standar Mutu',
+    title: '4 Indikator Mutu Layanan',
+    category: 'Standar Mutu',
     text: 'Kedua, empat indikator ini menjamin lebih dari delapan puluh perizinan resmi, seratus persen gratis tanpa pungli, dapat diakses dua puluh empat jam dengan respon cepat.',
-    audioSrc: '/audio/tour_auto_4_stats.mp3'
+    audioSrc: '/audio/tour_auto_4_stats.mp3',
+    arrowPosition: 'top'
   },
   {
     id: 'step-5',
     targetId: 'katalog-perizinan',
-    title: 'Katalog 80+ Perizinan Lengkap',
-    category: '5. Katalog Izin',
+    title: 'Katalog 80+ Standar Pelayanan',
+    category: 'Katalog Layanan',
     text: 'Ketiga, ini adalah katalog resmi seluruh izin berusaha dan perizinan kependudukan. Dilengkapi filter instansi dan tombol cek detail dokumen persyaratan.',
-    audioSrc: '/audio/tour_auto_5_katalog.mp3'
+    audioSrc: '/audio/tour_auto_5_katalog.mp3',
+    arrowPosition: 'top'
   },
   {
     id: 'step-6',
     targetId: 'telusuri',
-    title: 'Basis Pengetahuan Per Klaster',
-    category: '6. Klaster Layanan',
+    title: 'Klaster Pertanyaan Cepat',
+    category: 'Basis Pengetahuan',
     text: 'Keempat, Anda dapat menjelajahi basis pengetahuan per klaster untuk melihat pertanyaan populer seputar izin usaha, pajak daerah, hingga administrasi kependudukan.',
-    audioSrc: '/audio/tour_auto_6_klaster.mp3'
+    audioSrc: '/audio/tour_auto_6_klaster.mp3',
+    arrowPosition: 'top'
   },
   {
     id: 'step-7',
     targetId: 'kontak',
-    title: 'Helpdesk Langsung & Lokasi Loket',
-    category: '7. Bantuan Langsung',
+    title: 'Helpdesk & Loket Fisik MPP',
+    category: 'Bantuan Langsung',
     text: 'Kelima, jika butuh verifikasi berkas langsung, alamat loket MPP, telepon kantor, dan WhatsApp Helpdesk resmi siap melayani Anda.',
-    audioSrc: '/audio/tour_auto_7_kontak.mp3'
+    audioSrc: '/audio/tour_auto_7_kontak.mp3',
+    arrowPosition: 'bottom'
   },
   {
     id: 'step-8',
     targetId: 'tour-floating-dock',
-    title: 'Tombol Melayang Siaga 24 Jam',
-    category: '8. Akses Cepat',
+    title: 'Aksi Cepat Melayang 24 Jam',
+    category: 'Tombol Siaga',
     text: 'Terakhir, tombol WhatsApp dan Voice Note selalu melayang di kanan bawah untuk kemudahan akses Anda kapan saja. Panduan selesai, selamat menjelajah!',
-    audioSrc: '/audio/tour_auto_8_finish.mp3'
+    audioSrc: '/audio/tour_auto_8_finish.mp3',
+    arrowPosition: 'top'
   }
 ];
 
@@ -89,9 +98,11 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
+  const [displayedSubtitle, setDisplayedSubtitle] = useState('');
   const [spotlightRect, setSpotlightRect] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const typewriterTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Safely clamp step index
   const safeStepIndex = Math.min(Math.max(0, currentStep), TOUR_STEPS.length - 1);
@@ -141,6 +152,34 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
       audio.pause();
     };
   }, [goToNextStep]);
+
+  // Live Typewriter / Running Subtitle Text synchronized with audio
+  useEffect(() => {
+    if (!isOpen || !activeStep) return;
+
+    if (typewriterTimerRef.current) {
+      clearInterval(typewriterTimerRef.current);
+    }
+
+    const fullText = activeStep.text;
+    let charIndex = 0;
+    setDisplayedSubtitle('');
+
+    // Smooth typewriter pace to match natural audio reading
+    const speedMs = 38;
+    typewriterTimerRef.current = setInterval(() => {
+      if (charIndex < fullText.length) {
+        charIndex++;
+        setDisplayedSubtitle(fullText.substring(0, charIndex));
+      } else {
+        if (typewriterTimerRef.current) clearInterval(typewriterTimerRef.current);
+      }
+    }, speedMs);
+
+    return () => {
+      if (typewriterTimerRef.current) clearInterval(typewriterTimerRef.current);
+    };
+  }, [safeStepIndex, isOpen, activeStep]);
 
   // Play audio automatically upon entering a step
   useEffect(() => {
@@ -240,175 +279,142 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
       
       {/* 
         1. True Spotlight Cutout (Box-shadow Masking):
-        The inside of this box is 100% TRANSPARENT and UNBLURRED (crystal clear sharpness).
-        The entire screen outside is dimmed by the 9999px box-shadow.
+        The inside of this box is 100% TRANSPARENT and UNBLURRED (sharp content).
+        The screen outside is dimmed by the 9999px box-shadow.
       */}
       {spotlightRect && (
         <div
-          className="fixed rounded-2xl pointer-events-none transition-all duration-700 ease-out z-20 border-2 border-emerald-400/90 shadow-[0_0_35px_rgba(52,211,153,0.55)]"
+          className="fixed rounded-2xl pointer-events-none transition-all duration-700 ease-out z-20 border-2 border-emerald-400 shadow-[0_0_35px_rgba(52,211,153,0.55)]"
           style={{
             left: Math.max(6, spotlightRect.left - 10),
             top: Math.max(6, spotlightRect.top - 10),
             width: spotlightRect.width + 20,
             height: spotlightRect.height + 20,
-            boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.78)'
+            boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.76)'
           }}
         >
-          {/* Active Feature Badge */}
-          <div className="absolute -top-3 left-4 px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-lg flex items-center gap-1">
-            <AudioLines className="w-3 h-3 stroke-[2.5]" />
-            <span>{activeStep.category}</span>
+          {/* 
+            "Bundar-bundar" (Concentric Pulsing Radar Circles) at the Top-Left Corner
+          */}
+          <div className="absolute -top-3.5 -left-3.5 flex items-center justify-center">
+            <span className="animate-ping absolute inline-flex h-9 w-9 rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="animate-pulse absolute inline-flex h-6 w-6 rounded-full bg-emerald-500/50"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-400 border-2 border-slate-950 shadow-[0_0_12px_#34d399]"></span>
           </div>
+
+          {/* 
+            "Bundar-bundar" at Bottom-Right Corner as well for dynamic balance
+          */}
+          <div className="absolute -bottom-3.5 -right-3.5 flex items-center justify-center">
+            <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-amber-400 opacity-60"></span>
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-amber-400 border-2 border-slate-950 shadow-[0_0_10px_#f59e0b]"></span>
+          </div>
+
+          {/* 
+            "Panah Menunjukkan Fitur" (Animated Bouncing Arrow & Feature Pill)
+          */}
+          {activeStep.arrowPosition === 'top' ? (
+            <div className="absolute -top-11 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-extrabold text-xs shadow-xl border border-white/60 whitespace-nowrap">
+                <span>{activeStep.title}</span>
+                <ArrowDown className="w-3.5 h-3.5 stroke-[3]" />
+              </div>
+            </div>
+          ) : (
+            <div className="absolute -bottom-11 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-extrabold text-xs shadow-xl border border-white/60 whitespace-nowrap">
+                <ArrowUp className="w-3.5 h-3.5 stroke-[3]" />
+                <span>{activeStep.title}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Minimal Live Response Preview Tag (Unobtrusive) */}
+          {activeStep.isDemoChat && (
+            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 w-[90%] max-w-md p-3 rounded-2xl bg-slate-900/98 border border-emerald-400/60 shadow-2xl backdrop-blur-2xl text-white pointer-events-auto animate-in fade-in zoom-in-95 duration-300 z-40">
+              <div className="flex items-center justify-between mb-1.5 text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Respon Standar DPMPTSP Madiun
+                </span>
+                <span className="text-white/50">Simulasi AI</span>
+              </div>
+              <p className="text-xs text-slate-200 leading-snug mb-2 font-normal">
+                "Syarat izin warung kopi (risiko rendah): cukup KTP & NPWP, NIB terbit instan gratis via portal OSS."
+              </p>
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 text-[10px] font-semibold">
+                <AudioLines className="w-3 h-3 animate-pulse" />
+                <span>Suara Gadis AI Berbicara Resmi...</span>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Fallback dark overlay if spotlight element isn't found */}
+      {/* Fallback dark overlay if target element isn't found */}
       {!spotlightRect && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-20 pointer-events-none" />
       )}
 
       {/* 
-        2. Automated Bottom VoiceAI Guidance HUD:
-        Single unified flex column anchored at bottom.
-        On Step 3, the demo chat preview sits neatly atop the HUD within the same container,
-        guaranteeing ZERO overlap and 100% responsiveness on any screen height!
+        2. Cinema Subtitle Bar (Subtitle Berjalan Otomatis di Bawah Layar):
+        Ultra-sleek, minimalist capsule strip.
+        Leaves 95% of the screen completely unobstructed!
       */}
-      <div className="fixed inset-x-0 bottom-3 sm:bottom-5 z-40 flex flex-col items-center px-3 sm:px-4 pointer-events-auto">
-        <div className="w-full max-w-lg space-y-2 sm:space-y-2.5">
+      <div className="fixed bottom-5 sm:bottom-7 inset-x-0 mx-auto w-fit max-w-[94vw] sm:max-w-3xl z-50 pointer-events-auto px-2">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-slate-950/92 border border-emerald-400/50 shadow-[0_12px_40px_rgba(0,0,0,0.85)] shadow-emerald-950/50 backdrop-blur-2xl text-white transition-all duration-300">
           
-          {/* Step 3: Interactive Demo Chat Preview Card */}
-          {activeStep.isDemoChat && (
-            <div className="rounded-2xl bg-slate-900/98 border border-emerald-400/60 p-3 sm:p-3.5 shadow-2xl shadow-emerald-950/60 text-white backdrop-blur-xl animate-in slide-in-from-bottom-2 duration-300">
-              <div className="flex items-center gap-1.5 mb-2 pb-1.5 border-b border-white/10">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wide">
-                  Simulasi Respon Resmi Buku Saku
-                </span>
-              </div>
-
-              {/* Simulated User Question */}
-              <div className="flex items-end justify-end mb-2">
-                <div className="max-w-[90%] rounded-xl rounded-br-none bg-emerald-600 px-3 py-1.5 text-xs text-white font-medium shadow-sm">
-                  "Bagaimana syarat dan cara buat NIB OSS warung kopi?"
-                </div>
-              </div>
-
-              {/* Simulated AI Answer with Audio Player */}
-              <div className="rounded-xl rounded-tl-none bg-slate-800/90 border border-white/10 p-2.5 text-xs text-slate-200">
-                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-emerald-400 mb-1">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>Standar Pelayanan DPMPTSP · OSS RBA</span>
-                </div>
-                <p className="leading-relaxed mb-2 text-xs">
-                  Untuk warung kopi (risiko rendah), izin NIB terbit otomatis gratis 100% via OSS cukup dengan KTP & NPWP.
-                </p>
-                {/* Audio Cassette Bar */}
-                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-950/80 border border-emerald-500/30">
-                  <div className="p-0.5 rounded-full bg-emerald-500 text-slate-950">
-                    <AudioLines className="w-3 h-3 animate-pulse" />
-                  </div>
-                  <span className="text-[10px] font-bold text-emerald-300">Suara Gadis AI Berbicara...</span>
-                </div>
-              </div>
+          {/* Step Pill & Pulsing Audio Icon */}
+          <div className="flex items-center gap-1.5 shrink-0 pl-0.5">
+            <div className="p-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              <AudioLines className="w-3.5 h-3.5 animate-pulse stroke-[2.5]" />
             </div>
-          )}
-
-          {/* Main VoiceAI Tour Guidance HUD */}
-          <div className="rounded-2xl sm:rounded-3xl bg-slate-900/95 border border-emerald-500/40 p-3 sm:p-4 shadow-2xl shadow-emerald-950/60 backdrop-blur-2xl text-white">
-            
-            {/* Top Bar: Voice AI Badge, Auto Timeline, Close */}
-            <div className="flex items-center justify-between gap-3 mb-2">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  <AudioLines className="w-4 h-4 animate-pulse stroke-[2.5]" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
-                      VoiceAI Buku Saku
-                    </span>
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-semibold border border-emerald-500/30">
-                      Tur Otomatis
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-white/50 block font-medium">
-                    {activeStep.category} · Berjalan Tanpa Klik
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                {/* Step indicator */}
-                <span className="text-xs font-mono font-bold text-slate-300 px-2 py-0.5 rounded-full bg-white/10 border border-white/15">
-                  {safeStepIndex + 1} / {TOUR_STEPS.length}
-                </span>
-
-                {/* Close / Skip button */}
-                <button
-                  onClick={handleSkip}
-                  className="p-1.5 rounded-xl hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer"
-                  title="Lewati panduan suara & kembali"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Real-time Voice Audio Timeline Bar */}
-            <div className="relative w-full h-1 bg-slate-800 rounded-full overflow-hidden mb-2.5">
-              <div
-                className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-300 transition-all duration-150 rounded-full shadow-[0_0_8px_#34d399]"
-                style={{ width: `${audioProgress}%` }}
-              />
-            </div>
-
-            {/* Step Title & Narration */}
-            <div className="mb-3">
-              <h4 className="font-display font-bold text-xs sm:text-sm text-white mb-0.5">
-                {activeStep.title}
-              </h4>
-              <p className="text-[11px] sm:text-xs text-slate-300 leading-relaxed font-normal bg-slate-950/50 p-2 rounded-xl border border-white/10">
-                "{activeStep.text}"
-              </p>
-            </div>
-
-            {/* Simple Control Toolbar (Pause/Play, Mute, Selesai) */}
-            <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-white/10 text-xs">
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={togglePlay}
-                  className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold flex items-center gap-1 border border-white/15 transition-all cursor-pointer active:scale-95 text-xs"
-                  title={isPlaying ? 'Jeda Suara' : 'Lanjutkan Suara'}
-                >
-                  {isPlaying ? <Pause className="w-3 h-3 text-emerald-400" /> : <Play className="w-3 h-3 text-emerald-400 fill-emerald-400" />}
-                  <span>{isPlaying ? 'Jeda' : 'Lanjut'}</span>
-                </button>
-
-                <button
-                  onClick={toggleMute}
-                  className="p-1 rounded-lg hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer"
-                  title={isMuted ? 'Nyalakan Suara' : 'Bisukan Suara'}
-                >
-                  {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-400 hidden sm:inline">
-                  Otomatis berpindah saat suara selesai
-                </span>
-                <button
-                  onClick={handleSkip}
-                  className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 font-semibold transition-all cursor-pointer text-xs"
-                >
-                  Lewati
-                </button>
-              </div>
-            </div>
-
+            <span className="font-mono text-xs font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/30 px-2 py-0.5 rounded-full whitespace-nowrap">
+              {safeStepIndex + 1}/{TOUR_STEPS.length}
+            </span>
           </div>
+
+          {/* Running Subtitle Text (Karaoke / Typewriter Live Sync) */}
+          <div className="flex-1 min-w-0 pr-2">
+            <p className="text-xs sm:text-sm text-slate-100 font-medium tracking-wide leading-snug line-clamp-2 drop-shadow-sm">
+              "{displayedSubtitle}"
+              {displayedSubtitle.length < activeStep.text.length && (
+                <span className="inline-block w-1.5 h-3 ml-1 bg-emerald-400 animate-pulse align-middle" />
+              )}
+            </p>
+          </div>
+
+          {/* Mini Playback Controls: Pause/Play & Mute */}
+          <div className="flex items-center gap-1.5 shrink-0 border-l border-white/15 pl-2 sm:pl-3">
+            <button
+              onClick={togglePlay}
+              className="p-1.5 rounded-full hover:bg-white/15 text-white/80 hover:text-white transition-colors cursor-pointer"
+              title={isPlaying ? 'Jeda Suara' : 'Lanjutkan Suara'}
+            >
+              {isPlaying ? <Pause className="w-3.5 h-3.5 text-emerald-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />}
+            </button>
+
+            <button
+              onClick={toggleMute}
+              className="p-1.5 rounded-full hover:bg-white/15 text-white/80 hover:text-white transition-colors cursor-pointer"
+              title={isMuted ? 'Nyalakan Suara' : 'Bisukan Suara'}
+            >
+              {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
+            </button>
+
+            {/* Skip Tour Button */}
+            <button
+              onClick={handleSkip}
+              className="ml-1 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white text-[11px] font-semibold border border-white/15 transition-all cursor-pointer whitespace-nowrap"
+              title="Lewati panduan suara"
+            >
+              Lewati
+            </button>
+          </div>
+
         </div>
       </div>
+
     </div>
   );
 };
