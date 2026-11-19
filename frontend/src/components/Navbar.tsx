@@ -17,7 +17,8 @@ import {
   HeartHandshake,
   FileCheck,
   Menu,
-  X
+  X,
+  AudioLines
 } from 'lucide-react';
 import { KategoriPerizinan } from '../types/perizinan';
 import { getStoredKlaster, subscribeKlaster } from '../services/klasterStore';
@@ -35,6 +36,7 @@ interface NavbarProps {
   onAdminPanelClick?: () => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  onStartTour?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -48,7 +50,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   isAdminLoggedIn = false,
   onAdminPanelClick,
   isDarkMode,
-  toggleDarkMode
+  toggleDarkMode,
+  onStartTour
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -246,6 +249,18 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Actions on Right: Theme Toggle & Login Button (100% Responsive, Zero Offset) */}
         <div className="relative z-10 flex items-center gap-1.5 sm:gap-2 shrink-0">
           
+          {/* Interactive VoiceAI Tour Button */}
+          {onStartTour && (
+            <button
+              onClick={onStartTour}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer"
+              title="Putar Panduan Suara Interaktif (VoiceAI Tour)"
+            >
+              <AudioLines className="w-3.5 h-3.5 text-emerald-400 animate-pulse shrink-0" />
+              <span className="hidden sm:inline">Panduan Suara</span>
+            </button>
+          )}
+
           {/* Theme Toggle */}
           <button
             onClick={toggleDarkMode}
@@ -295,6 +310,19 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Drawer Dropdown Menu for < lg */}
       {mobileMenuOpen && (
         <div className="pointer-events-auto lg:hidden max-w-4xl mx-auto mt-2 p-3 rounded-2xl liquid-glass-dark border border-white/25 shadow-2xl text-white space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
+          {onStartTour && (
+            <button
+              onClick={() => {
+                onStartTour();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full text-left px-3 py-2.5 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 flex items-center gap-2.5 text-sm font-semibold border border-emerald-400/40"
+            >
+              <AudioLines className="w-4 h-4 text-emerald-400 animate-pulse shrink-0" />
+              <span>Putar Panduan Suara AI</span>
+            </button>
+          )}
+
           <button
             onClick={() => {
               onHomeClick();

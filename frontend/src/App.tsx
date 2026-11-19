@@ -11,6 +11,8 @@ import { PerizinanDetailModal } from './components/PerizinanDetailModal';
 import { CloudflareMadiunVerification } from './components/CloudflareMadiunVerification';
 import { WhatsAppIcon } from './components/WhatsAppIcon';
 import { VoiceNoteRecorder } from './components/VoiceNoteRecorder';
+import { VoiceAiWelcomeTour } from './components/VoiceAiWelcomeTour';
+import { AudioLines, Play, X } from 'lucide-react';
 import { ChatMessage, Perizinan, KategoriPerizinan } from './types/perizinan';
 import { askHybridAi, sendVoiceNoteAi } from './services/hybridAiService';
 import { getStoredSettings, syncSettingsFromBackend, subscribeSettings } from './services/settingsStore';
@@ -48,6 +50,18 @@ export const App: React.FC = () => {
   // Perizinan Detail Modal State
   const [selectedPerizinan, setSelectedPerizinan] = useState<Perizinan | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+  // Voice AI Interactive Welcome Tour States
+  const [isTourOpen, setIsTourOpen] = useState(false);
+  const [hasDismissedTourPrompt, setHasDismissedTourPrompt] = useState<boolean>(() => {
+    return localStorage.getItem('bukusaku_tour_prompt_dismissed') === 'true' || localStorage.getItem('bukusaku_tour_completed') === 'true';
+  });
+
+  const startWelcomeTour = () => {
+    setIsTourOpen(true);
+    setHasDismissedTourPrompt(true);
+    localStorage.setItem('bukusaku_tour_prompt_dismissed', 'true');
+  };
 
   // Ref to prevent duplicate queries on direct URL mount
   const executedQueryRef = useRef<string>('');
@@ -512,6 +526,7 @@ export const App: React.FC = () => {
             onAdminPanelClick={() => navigateTo({ name: 'admin', tab: 'dashboard' })}
             isDarkMode={isDarkMode}
             toggleDarkMode={toggleDarkMode}
+            onStartTour={startWelcomeTour}
           />
 
           {/* Main Dynamic View */}
@@ -559,7 +574,7 @@ export const App: React.FC = () => {
           <ContactFooter />
 
           {/* Floating Action Dock: Voice Note AI & Official WhatsApp */}
-          <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
+          <div id="tour-floating-dock" className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
             {/* Quick Floating Voice Note Button */}
             <VoiceNoteRecorder
               onSendVoice={(blob, sec) => handleVoiceSearch(blob, sec, false)}
@@ -579,6 +594,54 @@ export const App: React.FC = () => {
               <WhatsAppIcon size={30} className="text-white drop-shadow-sm" />
             </a>
           </div>
+
+          {/* Interactive Voice AI Welcome Tour Toast (Initial Visit Invitation) */}
+          {!hasDismissedTourPrompt && !isTourOpen && viewMode === 'home' && (
+            <div className="fixed bottom-24 right-6 z-40 max-w-sm rounded-2xl p-4 bg-slate-900/95 border border-emerald-500/40 shadow-2xl backdrop-blur-2xl text-white animate-in slide-in-from-bottom-5">
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    <AudioLines className="w-4 h-4 animate-pulse" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-emerald-300 block">VoiceAI Buku Saku</span>
+                    <span className="text-[10px] text-white/50 font-medium">Panduan Suara Resmi</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setHasDismissedTourPrompt(true);
+                    localStorage.setItem('bukusaku_tour_prompt_dismissed', 'true');
+                  }}
+                  className="p-1 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-colors cursor-pointer"
+                  title="Tutup ajakan"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-xs text-slate-300 mb-3.5 leading-relaxed">
+                Ingin mendengarkan sambutan suara & panduan interaktif fitur Buku Saku MPP?
+              </p>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={startWelcomeTour}
+                  className="flex-1 py-2 px-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-950/40 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <Play className="w-3.5 h-3.5 fill-slate-950" />
+                  <span>Putar Panduan Suara</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setHasDismissedTourPrompt(true);
+                    localStorage.setItem('bukusaku_tour_prompt_dismissed', 'true');
+                  }}
+                  className="py-2 px-3 rounded-xl bg-white/10 hover:bg-white/15 text-white/80 text-xs font-medium cursor-pointer"
+                >
+                  Nanti
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
 
@@ -607,6 +670,12 @@ export const App: React.FC = () => {
         }}
         autoCompleteSeconds={2.4}
         rayId="85b5bd7e1ab024e1"
+      />
+
+      {/* Voice AI Welcome Tour with Three.js & Spotlight Focus */}
+      <VoiceAiWelcomeTour
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
       />
 
     </div>

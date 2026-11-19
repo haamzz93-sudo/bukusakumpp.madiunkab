@@ -154,7 +154,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, onVoiceSearch,
       <div className="absolute -left-20 -top-20 w-96 h-96 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
       <div className="absolute right-[-10%] top-[15%] w-[500px] h-[500px] rounded-full bg-amber-400/10 blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-4xl mx-auto text-center z-10 w-full">
+      <div id="tour-brand" className="relative max-w-4xl mx-auto text-center z-10 w-full">
         
         {/* Official Service Notice - Pure Clean White Typography Only (No Capsule, No AI Slop) */}
         <p className="text-xs sm:text-sm font-semibold tracking-widest text-white/90 uppercase mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
@@ -196,7 +196,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, onVoiceSearch,
         </p>
 
         {/* Search Box - Liquid Glass Aesthetic */}
-        <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto mb-5 px-1 sm:px-0">
+        <form id="tour-search" onSubmit={handleSubmit} className="relative max-w-2xl mx-auto mb-5 px-1 sm:px-0">
           <div className="relative group">
             {/* Luminous Glow Halo behind search bar */}
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-amber-300/25 via-emerald-400/20 to-amber-300/25 blur-xl opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -254,7 +254,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, onVoiceSearch,
         </div>
 
         {/* 4 Stats Band - Pure Liquid Glass Floating Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto text-center px-1">
+        <div id="tour-stats" className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto text-center px-1">
           <div className="p-4 rounded-2xl liquid-glass transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group">
             <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300 group-hover:text-amber-200 transition-colors drop-shadow-[0_0_12px_rgba(252,211,77,0.3)]">
               {settings.stat1Value}
