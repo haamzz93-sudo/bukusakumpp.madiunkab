@@ -282,14 +282,20 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
     const checkAndScroll = () => {
       const el = document.getElementById(activeStep.targetId);
       if (el) {
-        const navOffset = 90;
-        const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
-        const scrollToY = Math.max(0, elementTop - navOffset);
-        window.scrollTo({ top: scrollToY, behavior: 'smooth' });
+        const computedStyle = window.getComputedStyle(el);
+        if (computedStyle.position === 'fixed') {
+          // If element is fixed (like the floating dock), scroll smoothly to the bottom of the page
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        } else {
+          const navOffset = 90;
+          const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
+          const scrollToY = Math.max(0, elementTop - navOffset);
+          window.scrollTo({ top: scrollToY, behavior: 'smooth' });
+        }
 
         setTimeout(() => {
           measureElement();
-        }, 180);
+        }, 200);
       } else if (attempts < 20) {
         attempts++;
         setTimeout(checkAndScroll, 100);
@@ -356,70 +362,83 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
         The inside of this box is 100% TRANSPARENT and UNBLURRED (sharp content).
         The screen outside is dimmed by the 9999px box-shadow.
       */}
-      {spotlightRect && (
-        <div
-          className="fixed rounded-2xl pointer-events-none transition-all duration-700 ease-out z-20 border-2 border-emerald-400 shadow-[0_0_35px_rgba(52,211,153,0.55)]"
-          style={{
-            left: Math.max(6, spotlightRect.left - 10),
-            top: Math.max(6, spotlightRect.top - 10),
-            width: spotlightRect.width + 20,
-            height: spotlightRect.height + 20,
-            boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.78)'
-          }}
-        >
-          {/* 
-            "Bundar-bundar" (Concentric Pulsing Radar Circles) at the Top-Left Corner
-          */}
-          <div className="absolute -top-3.5 -left-3.5 flex items-center justify-center">
-            <span className="animate-ping absolute inline-flex h-9 w-9 rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="animate-pulse absolute inline-flex h-6 w-6 rounded-full bg-emerald-500/50"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-400 border-2 border-slate-950 shadow-[0_0_12px_#34d399]"></span>
-          </div>
+      {spotlightRect && (() => {
+        const winWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+        const winHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+        const isRightSide = spotlightRect.left + spotlightRect.width / 2 > winWidth / 2;
 
-          {/* 
-            "Bundar-bundar" at Bottom-Right Corner
-          */}
-          <div className="absolute -bottom-3.5 -right-3.5 flex items-center justify-center">
-            <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-amber-400 opacity-60"></span>
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-amber-400 border-2 border-slate-950 shadow-[0_0_10px_#f59e0b]"></span>
-          </div>
+        const padX = 10;
+        const padY = 10;
+        const rawLeft = spotlightRect.left - padX;
+        const rawTop = spotlightRect.top - padY;
+        const rawWidth = spotlightRect.width + padX * 2;
+        const rawHeight = spotlightRect.height + padY * 2;
 
-          {/* 
-            "Panah Menunjukkan Fitur" (Animated Bouncing Arrow & Feature Pill)
-          */}
-          {activeStep.arrowPosition === 'top' ? (
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
-              <div 
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-slate-950 font-black text-xs whitespace-nowrap"
-                style={{
-                  backgroundColor: '#10b981',
-                  color: '#020617',
-                  border: '2px solid #ffffff',
-                  boxShadow: '0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(16,185,129,0.7)'
-                }}
-              >
-                <span>{activeStep.title}</span>
-                <ArrowDown className="w-3.5 h-3.5 stroke-[3]" />
-              </div>
+        // Clamp securely inside viewport with margins to prevent horizontal overflow & taskbar clipping
+        const left = Math.max(8, Math.min(rawLeft, winWidth - rawWidth - 12));
+        const top = Math.max(8, Math.min(rawTop, winHeight - rawHeight - 12));
+        const width = Math.min(rawWidth, winWidth - left - 12);
+        const height = Math.min(rawHeight, winHeight - top - 12);
+
+        return (
+          <div
+            className="fixed rounded-2xl pointer-events-none transition-all duration-700 ease-out z-20 border-2 border-emerald-400 shadow-[0_0_35px_rgba(52,211,153,0.55)]"
+            style={{
+              left,
+              top,
+              width,
+              height,
+              boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.78)'
+            }}
+          >
+            {/* Concentric Pulsing Radar Circles at Top-Left */}
+            <div className="absolute -top-3.5 -left-3.5 flex items-center justify-center">
+              <span className="animate-ping absolute inline-flex h-9 w-9 rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="animate-pulse absolute inline-flex h-6 w-6 rounded-full bg-emerald-500/50"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-400 border-2 border-slate-950 shadow-[0_0_12px_#34d399]"></span>
             </div>
-          ) : (
-            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
-              <div 
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-slate-950 font-black text-xs whitespace-nowrap"
-                style={{
-                  backgroundColor: '#10b981',
-                  color: '#020617',
-                  border: '2px solid #ffffff',
-                  boxShadow: '0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(16,185,129,0.7)'
-                }}
-              >
-                <ArrowUp className="w-3.5 h-3.5 stroke-[3]" />
-                <span>{activeStep.title}</span>
-              </div>
+
+            {/* Concentric Pulsing Radar Circles at Bottom-Right */}
+            <div className="absolute -bottom-2 -right-2 flex items-center justify-center">
+              <span className="animate-ping absolute inline-flex h-7 w-7 rounded-full bg-amber-400 opacity-60"></span>
+              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-amber-400 border-2 border-slate-950 shadow-[0_0_10px_#f59e0b]"></span>
             </div>
-          )}
-        </div>
-      )}
+
+            {/* Feature Pointer Arrow & Pill - Smart Alignment to avoid screen boundary clipping */}
+            {activeStep.arrowPosition === 'top' ? (
+              <div className={`absolute -top-12 ${isRightSide ? 'right-0' : 'left-1/2 -translate-x-1/2'} flex flex-col items-center animate-bounce z-30`}>
+                <div 
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-full text-slate-950 font-black text-xs whitespace-nowrap"
+                  style={{
+                    backgroundColor: '#10b981',
+                    color: '#020617',
+                    border: '2px solid #ffffff',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(16,185,129,0.7)'
+                  }}
+                >
+                  <span>{activeStep.title}</span>
+                  <ArrowDown className="w-3.5 h-3.5 stroke-[3]" />
+                </div>
+              </div>
+            ) : (
+              <div className={`absolute -bottom-12 ${isRightSide ? 'right-0' : 'left-1/2 -translate-x-1/2'} flex flex-col items-center animate-bounce z-30`}>
+                <div 
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-full text-slate-950 font-black text-xs whitespace-nowrap"
+                  style={{
+                    backgroundColor: '#10b981',
+                    color: '#020617',
+                    border: '2px solid #ffffff',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(16,185,129,0.7)'
+                  }}
+                >
+                  <ArrowUp className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>{activeStep.title}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })()}
 
       {/* 
         2. Cinema Subtitle Bar (Subtitle Berjalan Otomatis di Bawah Layar):
