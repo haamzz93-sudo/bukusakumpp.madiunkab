@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Sparkles, User, RotateCcw } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Sparkles, User } from 'lucide-react';
 import { getApiBaseUrl } from '../services/apiConfig';
 
 interface VoiceNotePlayerProps {
@@ -63,10 +63,19 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
     audio.addEventListener('ended', onEnded);
     audio.addEventListener('error', onError);
 
+    // Auto-play when audio is ready
     if (autoPlay && resolvedUrl && !hasAudioError) {
-      audio.play().then(() => setIsPlaying(true)).catch(() => {
-        // Autoplay may be restricted by browser policy before user interaction
-      });
+      const timer = setTimeout(() => {
+        audio.play().then(() => {
+          setIsPlaying(true);
+        }).catch(() => {
+          // Fallback to Web Speech if audio element autoplay is blocked
+          if (fallbackText && 'speechSynthesis' in window) {
+            playWebSpeechFallback();
+          }
+        });
+      }, 300);
+      return () => clearTimeout(timer);
     }
 
     return () => {
@@ -90,7 +99,7 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
       audio.play().then(() => {
         setIsPlaying(true);
       }).catch(() => {
-        // Fallback to Web Speech API if audio file fails to stream
+        // Fallback to Web Speech API if audio file fails
         if (fallbackText && 'speechSynthesis' in window) {
           playWebSpeechFallback();
         }
@@ -101,7 +110,7 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
   const playWebSpeechFallback = () => {
     window.speechSynthesis.cancel();
     const cleanText = fallbackText?.replace(/[*#_\[\]\(\)]/g, ' ') || '';
-    const utterance = new SpeechSynthesisUtterance(cleanText);
+    const utterance = new SpeechSynthesisUtterance(cleanText.substring(0, 400));
     utterance.lang = 'id-ID';
     utterance.rate = playbackRate;
     utterance.onend = () => setIsPlaying(false);
@@ -145,8 +154,8 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
 
   // Soundwave frequency bars (32 bars)
   const waveHeights = [
-    25, 45, 60, 30, 75, 90, 40, 65, 80, 50, 95, 70, 45, 85, 60, 35,
-    55, 75, 40, 90, 65, 30, 85, 70, 50, 80, 45, 60, 75, 40, 55, 30
+    25, 45, 65, 35, 80, 95, 45, 70, 85, 55, 95, 75, 50, 90, 65, 40,
+    60, 80, 45, 95, 70, 35, 85, 75, 55, 85, 50, 65, 80, 45, 60, 35
   ];
 
   const progressRatio = totalDuration > 0 ? Math.min(1, currentTime / totalDuration) : 0;
@@ -155,37 +164,33 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
   const isAssistant = sender === 'assistant';
 
   return (
-    <div className={`relative rounded-2xl liquid-glass p-3.5 sm:p-4 my-2.5 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.12)] border ${
-      isAssistant 
-        ? 'border-emerald-500/30 bg-gradient-to-r from-emerald-950/30 via-slate-900/40 to-teal-950/30' 
-        : 'border-white/20 bg-gradient-to-r from-slate-900/40 to-slate-800/40'
-    }`}>
+    <div className="relative rounded-2xl p-4 my-3 transition-all duration-300 shadow-[0_12px_36px_rgba(0,0,0,0.35)] border border-emerald-500/35 bg-slate-900/95 dark:bg-slate-950/95 text-white backdrop-blur-2xl">
       {resolvedUrl && (
         <audio ref={audioRef} src={resolvedUrl} preload="metadata" />
       )}
 
-      {/* Header Info: Speaker Badge & Spider-Man / Karen HUD indicator */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
+      {/* Header Info: Speaker Badge & VoiceAI Buku Saku Badge */}
+      <div className="flex items-center justify-between mb-3.5">
+        <div className="flex items-center gap-2.5">
           {isAssistant ? (
-            <div className="relative flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-400 text-white shadow-[0_0_12px_rgba(16,185,129,0.5)]">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 font-bold shadow-[0_0_16px_rgba(16,185,129,0.55)]">
+              <Sparkles className="w-4 h-4 fill-current" />
               {isPlaying && (
-                <span className="absolute -inset-1 rounded-full border border-emerald-400/60 animate-ping pointer-events-none" />
+                <span className="absolute -inset-1 rounded-full border border-emerald-400/70 animate-ping pointer-events-none" />
               )}
             </div>
           ) : (
-            <div className="flex items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white/90 border border-white/20">
-              <User className="w-3.5 h-3.5" />
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/15 text-white border border-white/25">
+              <User className="w-4 h-4" />
             </div>
           )}
 
           <div>
-            <div className="text-xs font-semibold text-white/95 flex items-center gap-1.5">
-              <span>{isAssistant ? 'Buku Saku AI (Suara Resmi MPP)' : 'Pesan Suara Anda'}</span>
+            <div className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+              <span>{isAssistant ? 'Buku Saku AI (VoiceAI Resmi MPP)' : 'Pesan Suara Anda'}</span>
               {isAssistant && (
-                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-                  Gadis Neural
+                <span className="text-[10px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_10px_rgba(52,211,153,0.3)]">
+                  VoiceAI Buku Saku
                 </span>
               )}
             </div>
@@ -197,7 +202,7 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
           <button
             onClick={toggleSpeed}
             type="button"
-            className="text-[11px] font-bold px-2 py-0.5 rounded-lg liquid-glass text-white/90 hover:text-white transition-all cursor-pointer hover:bg-white/20"
+            className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer active:scale-95"
             title="Kecepatan putar"
           >
             {playbackRate}x
@@ -205,25 +210,21 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
           <button
             onClick={toggleMute}
             type="button"
-            className="p-1 rounded-lg liquid-glass text-white/80 hover:text-white transition-all cursor-pointer"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer active:scale-95"
             title={isMuted ? 'Bunyikan' : 'Senyapkan'}
           >
-            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+            {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
           </button>
         </div>
       </div>
 
       {/* Main Waveform Player Controls */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 sm:gap-4">
         {/* Play/Pause Button */}
         <button
           onClick={togglePlay}
           type="button"
-          className={`shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 cursor-pointer shadow-lg ${
-            isAssistant
-              ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 hover:from-emerald-400 hover:to-teal-300 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
-              : 'bg-white/20 hover:bg-white/30 text-white border border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.2)]'
-          }`}
+          className="shrink-0 w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400 text-slate-950 hover:from-emerald-300 hover:to-teal-300 shadow-[0_0_24px_rgba(52,211,153,0.5)] transition-all duration-200 active:scale-95 cursor-pointer"
           title={isPlaying ? 'Jeda' : 'Putar Suara'}
         >
           {isPlaying ? (
@@ -236,7 +237,7 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
         {/* Waveform Visualization Bars */}
         <div 
           onClick={handleSeek}
-          className="flex-1 flex items-center gap-[2.5px] sm:gap-[3px] h-9 cursor-pointer group py-1"
+          className="flex-1 flex items-center gap-[2.5px] sm:gap-[3.5px] h-10 cursor-pointer group py-1"
           title="Klik untuk melompat durasi"
         >
           {waveHeights.map((h, i) => {
@@ -247,13 +248,11 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
                 className="flex-1 rounded-full transition-all duration-150"
                 style={{
                   height: `${h}%`,
-                  backgroundColor: isPlayed 
-                    ? (isAssistant ? '#34d399' : '#ffffff') 
-                    : 'rgba(255, 255, 255, 0.22)',
+                  backgroundColor: isPlayed ? '#34d399' : 'rgba(255, 255, 255, 0.22)',
                   boxShadow: isPlayed && isPlaying && i === activeBarIndex
-                    ? (isAssistant ? '0 0 10px #34d399' : '0 0 8px #ffffff')
+                    ? '0 0 12px #34d399'
                     : 'none',
-                  transform: isPlaying && isPlayed ? 'scaleY(1.08)' : 'scaleY(1)'
+                  transform: isPlaying && isPlayed ? 'scaleY(1.12)' : 'scaleY(1)'
                 }}
               />
             );
@@ -261,7 +260,7 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
         </div>
 
         {/* Time Stamp */}
-        <div className="text-[11px] font-mono text-white/80 shrink-0 font-medium select-none min-w-[55px] text-right">
+        <div className="text-xs font-mono text-emerald-300 font-bold shrink-0 select-none min-w-[55px] text-right drop-shadow-sm">
           {isPlaying ? formatSeconds(currentTime) : formatSeconds(totalDuration || currentTime)}
         </div>
       </div>

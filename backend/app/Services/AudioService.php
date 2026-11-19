@@ -130,11 +130,15 @@ class AudioService
             $pythonCmd = 'python';
         }
 
+        // Use temporary file to safely pass text without shell argument truncation/escaping bugs
+        $tempTextFile = tempnam(sys_get_temp_dir(), 'tts_');
+        file_put_contents($tempTextFile, $text);
+
         $cmd = sprintf(
-            '%s %s --text %s --output %s --voice %s 2>&1',
+            '%s %s --text-file %s --output %s --voice %s 2>&1',
             $pythonCmd,
             escapeshellarg($scriptPath),
-            escapeshellarg($text),
+            escapeshellarg($tempTextFile),
             escapeshellarg($filePath),
             escapeshellarg($voice)
         );
@@ -147,6 +151,8 @@ class AudioService
         } else {
             $output = '';
         }
+
+        @unlink($tempTextFile);
 
         if (file_exists($filePath) && filesize($filePath) > 500) {
             return "/api/audio/{$filename}";

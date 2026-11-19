@@ -250,6 +250,19 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
 
   const latestAssistantMessage = [...messages].reverse().find(m => m.role === 'assistant');
 
+  // Auto-generate VoiceAI speech for the latest assistant answer if not pre-generated
+  React.useEffect(() => {
+    if (
+      latestAssistantMessage &&
+      !latestAssistantMessage.audioUrl &&
+      !localAudioUrls[latestAssistantMessage.id] &&
+      !loadingSpeech[latestAssistantMessage.id] &&
+      latestAssistantMessage.text
+    ) {
+      handleGenerateSpeech(latestAssistantMessage.id, latestAssistantMessage.text);
+    }
+  }, [latestAssistantMessage?.id, latestAssistantMessage?.text]);
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200 pt-24 sm:pt-28 pb-12 px-4 relative">
       {/* Seamless Top Liquid Glass Backdrop for Navbar */}
@@ -366,7 +379,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                       audioUrl={audioToPlay}
                       fallbackText={msg.text}
                       sender="assistant"
-                      autoPlay={false}
+                      autoPlay={msg.id === latestAssistantMessage?.id}
                     />
                   ) : (
                     <div className="py-1">
@@ -374,17 +387,17 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                         onClick={() => handleGenerateSpeech(msg.id, msg.text)}
                         disabled={loadingSpeech[msg.id]}
                         type="button"
-                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl liquid-glass text-xs font-semibold text-emerald-800 dark:text-emerald-300 hover:text-emerald-950 dark:hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md border border-emerald-500/20 active:scale-95"
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 text-white text-xs font-semibold hover:bg-slate-800 transition-all cursor-pointer shadow-sm hover:shadow-md border border-emerald-500/30 active:scale-95"
                       >
                         {loadingSpeech[msg.id] ? (
                           <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-500" />
-                            <span>Menyiapkan audio suara Gadis AI...</span>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-400" />
+                            <span>Menyiapkan VoiceAI Buku Saku...</span>
                           </>
                         ) : (
                           <>
-                            <Volume2 className="w-3.5 h-3.5 text-emerald-500" />
-                            <span>Dengarkan Voice Note Resmi (Suara Gadis AI)</span>
+                            <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Putar VoiceAI Buku Saku</span>
                           </>
                         )}
                       </button>

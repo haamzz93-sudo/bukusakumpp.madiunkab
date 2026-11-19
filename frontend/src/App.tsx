@@ -370,16 +370,19 @@ export const App: React.FC = () => {
 
   // User Actions mapped to clean SaaS URLs
   const handleSearch = (query: string, isFollowup: boolean = false) => {
+    executedQueryRef.current = query;
     if (isFollowup) {
       navigateTo({ name: 'tanya', query }, { replace: true, scroll: false });
       executeQuery(query, true);
     } else {
-      navigateTo({ name: 'tanya', query });
+      navigateTo({ name: 'tanya', query }, { scroll: false });
       executeQuery(query, false);
     }
   };
 
   const handleVoiceSearch = (audioBlob: Blob, durationSeconds: number, isFollowup: boolean = false) => {
+    executedQueryRef.current = '🎤 Pesan Suara';
+    navigateTo({ name: 'tanya', query: '🎤 Pesan Suara' }, { scroll: false });
     executeVoiceQuery(audioBlob, durationSeconds, isFollowup);
   };
 

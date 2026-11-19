@@ -25,28 +25,42 @@ def clean_markdown_for_speech(text: str) -> str:
     # 7. Normalize whitespace
     text = re.sub(r'\s+', ' ', text).strip()
     
-    # Keep it comfortable for audio (max ~900 characters for instant speech)
-    if len(text) > 900:
-        # Cut at the last sentence period within 900 chars
-        cutoff = text[:900].rfind('.')
-        if cutoff > 400:
+    # Keep it comfortable for audio (max ~750 characters for fast responsive speech)
+    if len(text) > 750:
+        cutoff = text[:750].rfind('.')
+        if cutoff > 350:
             text = text[:cutoff + 1] + " Informasi lengkap dokumen tertera pada teks panduan di layar."
         else:
-            text = text[:900] + "... Informasi lengkap tertera pada teks panduan di layar."
+            text = text[:750] + "... Informasi lengkap tertera pada teks panduan di layar."
             
     return text
 
 async def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--text', required=True, help='Text to convert to speech')
+    parser.add_argument('--text', default=None, help='Text to convert to speech')
+    parser.add_argument('--text-file', default=None, help='Path to file containing text')
     parser.add_argument('--output', required=True, help='Output MP3 file path')
     parser.add_argument('--voice', default='id-ID-GadisNeural', help='Edge TTS Voice')
     parser.add_argument('--rate', default='+0%', help='Speech rate')
     args = parser.parse_args()
 
-    clean_text = clean_markdown_for_speech(args.text)
+    raw_text = ''
+    if args.text_file and os.path.exists(args.text_file):
+        try:
+            with open(args.text_file, 'r', encoding='utf-8') as f:
+                raw_text = f.read()
+        except Exception as e:
+            print(json.dumps({'ok': False, 'error': f'Gagal membaca text-file: {e}'}))
+            return
+    elif args.text:
+        raw_text = args.text
+    else:
+        print(json.dumps({'ok': False, 'error': 'Teks tidak diberikan'}))
+        return
+
+    clean_text = clean_markdown_for_speech(raw_text)
     if not clean_text:
-        print(json.dumps({'ok': False, 'error': 'Teks kosong'}))
+        print(json.dumps({'ok': False, 'error': 'Teks bersih kosong'}))
         return
 
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)

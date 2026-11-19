@@ -47,7 +47,7 @@ Silakan sampaikan pertanyaan Anda seputar perizinan usaha (OSS), BPHTB, PBB-P2, 
   for (const endpoint of endpoints) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 40000); // 40s timeout for live LLM inference
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout for live LLM + TTS inference
 
       const apiRes = await fetch(endpoint, {
         method: 'POST',
@@ -57,7 +57,6 @@ Silakan sampaikan pertanyaan Anda seputar perizinan usaha (OSS), BPHTB, PBB-P2, 
         },
         body: JSON.stringify({
           q: query,
-          withAudio: true,
           history: conversationHistory.slice(-4).map(m => ({ role: m.role, text: m.text }))
         }),
         signal: controller.signal
