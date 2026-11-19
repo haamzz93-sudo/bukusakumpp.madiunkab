@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Volume2, VolumeX, Pause, Play, X, AudioLines, ArrowUp, ArrowDown } from 'lucide-react';
+import { Volume2, VolumeX, Pause, Play, AudioLines, ArrowUp, ArrowDown } from 'lucide-react';
 
 export interface TourStep {
   id: string;
@@ -52,7 +52,7 @@ const TOUR_STEPS: TourStep[] = [
   },
   {
     id: 'step-5',
-    targetId: 'katalog-perizinan',
+    targetId: 'tour-katalog-box',
     title: 'Katalog 80+ Standar Pelayanan',
     category: 'Katalog Layanan',
     text: 'Ketiga, ini adalah katalog resmi seluruh izin berusaha dan perizinan kependudukan. Dilengkapi filter instansi dan tombol cek detail dokumen persyaratan.',
@@ -61,7 +61,7 @@ const TOUR_STEPS: TourStep[] = [
   },
   {
     id: 'step-6',
-    targetId: 'telusuri',
+    targetId: 'tour-klaster-box',
     title: 'Basis Pengetahuan Per Klaster',
     category: 'Basis Pengetahuan',
     text: 'Keempat, Anda dapat menjelajahi basis pengetahuan per klaster untuk melihat pertanyaan populer seputar izin usaha, pajak daerah, hingga administrasi kependudukan.',
@@ -70,12 +70,12 @@ const TOUR_STEPS: TourStep[] = [
   },
   {
     id: 'step-7',
-    targetId: 'kontak',
+    targetId: 'tour-contact-card',
     title: 'Helpdesk & Loket Fisik MPP',
     category: 'Bantuan Langsung',
     text: 'Kelima, jika membutuhkan konsultasi atau verifikasi berkas langsung, alamat gedung MPP, telepon kantor, dan WhatsApp Helpdesk resmi siap membantu Anda.',
     audioSrc: '/audio/tour_auto_7_kontak.mp3',
-    arrowPosition: 'bottom'
+    arrowPosition: 'top'
   },
   {
     id: 'step-8',
@@ -126,7 +126,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
       }
       setTimeout(() => {
         setCurrentStep(2);
-      }, 500);
+      }, 400);
     } else if (currentStep === 2) {
       // Step 3 Finished -> Return to Landing page for Step 4 (stats), 5 (katalog), 6, 7, 8
       if (onBackToHome) {
@@ -137,7 +137,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
       }
       setTimeout(() => {
         setCurrentStep(3);
-      }, 500);
+      }, 400);
     } else if (currentStep < TOUR_STEPS.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
@@ -164,7 +164,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
       // Automatic smooth transition to next step
       setTimeout(() => {
         goToNextStep();
-      }, 800);
+      }, 700);
     };
 
     audio.addEventListener('ended', handleEnded);
@@ -192,7 +192,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
         } else {
           if (searchInputTimerRef.current) clearInterval(searchInputTimerRef.current);
         }
-      }, 75);
+      }, 70);
     }
 
     return () => {
@@ -248,49 +248,71 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
         playPromise
           .then(() => setIsPlaying(true))
           .catch((err) => {
-            console.log('Autoplay prevented waiting for interaction:', err);
+            console.log('Autoplay waiting for interaction:', err);
             setIsPlaying(false);
           });
       }
     }
   }, [safeStepIndex, isOpen, isMuted]);
 
-  // Smooth scroll and calculate spotlight cutout coordinates
-  const updateSpotlight = useCallback(() => {
-    if (!isOpen || !activeStep) return;
-
+  // Measure element in DOM
+  const measureElement = useCallback(() => {
+    if (!isOpen || !activeStep) return false;
     const el = document.getElementById(activeStep.targetId);
     if (el) {
-      // Calculate top position with 90px offset so navbar and header are clear
-      const navOffset = 90;
-      const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
-      const scrollToY = Math.max(0, elementTop - navOffset);
-      window.scrollTo({ top: scrollToY, behavior: 'smooth' });
-
-      // Measure after smooth scroll starts
-      setTimeout(() => {
-        const rect = el.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
         setSpotlightRect({
           left: rect.left,
           top: rect.top,
           width: rect.width,
           height: rect.height
         });
-      }, 300);
-    } else {
-      setSpotlightRect(null);
+        return true;
+      }
     }
-  }, [activeStep, isOpen]);
+    return false;
+  }, [isOpen, activeStep]);
+
+  // Smooth scroll and calculate spotlight cutout coordinates with retry for view transitions
+  const updateSpotlight = useCallback(() => {
+    if (!isOpen || !activeStep) return;
+
+    let attempts = 0;
+    const checkAndScroll = () => {
+      const el = document.getElementById(activeStep.targetId);
+      if (el) {
+        const navOffset = 90;
+        const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
+        const scrollToY = Math.max(0, elementTop - navOffset);
+        window.scrollTo({ top: scrollToY, behavior: 'smooth' });
+
+        setTimeout(() => {
+          measureElement();
+        }, 180);
+      } else if (attempts < 20) {
+        attempts++;
+        setTimeout(checkAndScroll, 100);
+      } else {
+        setSpotlightRect(null);
+      }
+    };
+
+    checkAndScroll();
+  }, [activeStep, isOpen, measureElement]);
 
   useEffect(() => {
     updateSpotlight();
-    window.addEventListener('resize', updateSpotlight);
-    window.addEventListener('scroll', updateSpotlight, { passive: true });
-    return () => {
-      window.removeEventListener('resize', updateSpotlight);
-      window.removeEventListener('scroll', updateSpotlight);
+    const handleScrollResize = () => {
+      measureElement();
     };
-  }, [updateSpotlight]);
+    window.addEventListener('resize', handleScrollResize);
+    window.addEventListener('scroll', handleScrollResize, { passive: true });
+    return () => {
+      window.removeEventListener('resize', handleScrollResize);
+      window.removeEventListener('scroll', handleScrollResize);
+    };
+  }, [updateSpotlight, measureElement]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -366,15 +388,31 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
             "Panah Menunjukkan Fitur" (Animated Bouncing Arrow & Feature Pill)
           */}
           {activeStep.arrowPosition === 'top' ? (
-            <div className="absolute -top-11 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500 text-slate-950 font-black text-xs shadow-xl border border-white/60 whitespace-nowrap">
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
+              <div 
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-slate-950 font-black text-xs whitespace-nowrap"
+                style={{
+                  backgroundColor: '#10b981',
+                  color: '#020617',
+                  border: '2px solid #ffffff',
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(16,185,129,0.7)'
+                }}
+              >
                 <span>{activeStep.title}</span>
                 <ArrowDown className="w-3.5 h-3.5 stroke-[3]" />
               </div>
             </div>
           ) : (
-            <div className="absolute -bottom-11 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500 text-slate-950 font-black text-xs shadow-xl border border-white/60 whitespace-nowrap">
+            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
+              <div 
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-slate-950 font-black text-xs whitespace-nowrap"
+                style={{
+                  backgroundColor: '#10b981',
+                  color: '#020617',
+                  border: '2px solid #ffffff',
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(16,185,129,0.7)'
+                }}
+              >
                 <ArrowUp className="w-3.5 h-3.5 stroke-[3]" />
                 <span>{activeStep.title}</span>
               </div>
@@ -383,25 +421,36 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
         </div>
       )}
 
-      {/* Fallback dark overlay if target element isn't found */}
-      {!spotlightRect && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-20 pointer-events-none" />
-      )}
-
       {/* 
         2. Cinema Subtitle Bar (Subtitle Berjalan Otomatis di Bawah Layar):
-        High-Contrast Dark Glass (Anti-Menyaru pada mode terang maupun gelap).
+        Solid Opaque Obsidian Dark Slate (#020617) with Emerald Border (#10b981)
+        Guaranteed 100% OPAQUE - ANTI-MENYARU on both Light Mode (White background) and Dark Mode.
         Menampilkan teks lengkap tanpa terpotong '...' sedikitpun!
       */}
       <div className="fixed bottom-5 sm:bottom-7 inset-x-0 mx-auto w-fit max-w-[94vw] sm:max-w-3xl z-50 pointer-events-auto px-2">
-        <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 rounded-full bg-slate-950/98 border-2 border-emerald-400/80 shadow-[0_16px_50px_rgba(0,0,0,0.95)] shadow-emerald-950/70 text-white transition-all duration-300">
+        <div 
+          className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 rounded-full text-white transition-all duration-300"
+          style={{
+            backgroundColor: '#020617',
+            color: '#ffffff',
+            border: '2px solid #10b981',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.95), 0 0 25px rgba(16, 185, 129, 0.45)'
+          }}
+        >
           
           {/* Step Pill & Pulsing Audio Icon */}
           <div className="flex items-center gap-2 shrink-0">
-            <div className="p-1.5 rounded-full bg-emerald-500 text-slate-950 shadow-[0_0_10px_#34d399]">
+            <div className="p-1.5 rounded-full bg-emerald-500 text-slate-950 shadow-[0_0_12px_#10b981]">
               <AudioLines className="w-3.5 h-3.5 animate-pulse stroke-[3]" />
             </div>
-            <span className="font-mono text-xs font-black text-emerald-300 bg-emerald-950 border border-emerald-500/50 px-2.5 py-0.5 rounded-full whitespace-nowrap">
+            <span 
+              className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full whitespace-nowrap"
+              style={{
+                backgroundColor: '#064e3b',
+                color: '#6ee7b7',
+                border: '1px solid #10b981'
+              }}
+            >
               {safeStepIndex + 1}/{TOUR_STEPS.length}
             </span>
           </div>

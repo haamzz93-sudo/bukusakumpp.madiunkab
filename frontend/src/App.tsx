@@ -66,6 +66,9 @@ export const App: React.FC = () => {
 
   // Real Tour Walkthrough Search Simulator
   const handleSimulateTourSearch = (query: string) => {
+    executedQueryRef.current = query;
+    navigateTo({ name: 'tanya', query }, { scroll: false });
+
     const userMsg: ChatMessage = {
       id: `tour-user-${Date.now()}`,
       role: 'user',
@@ -89,6 +92,7 @@ export const App: React.FC = () => {
     setMessages([userMsg, botMsg]);
     setCurrentQuery(query);
     setViewMode('chat');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Ref to prevent duplicate queries on direct URL mount

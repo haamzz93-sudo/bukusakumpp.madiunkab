@@ -49,7 +49,7 @@ export const ContactFooter: React.FC = () => {
         </div>
 
         {/* Contact Loket MPP */}
-        <div className="md:col-span-4 space-y-3">
+        <div id="tour-contact-card" className="md:col-span-4 space-y-3">
           <h4 className="font-display font-bold text-sm text-white uppercase tracking-wider">
             Hubungi Loket MPP
           </h4>

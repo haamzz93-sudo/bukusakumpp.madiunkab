@@ -83,7 +83,7 @@ export const KatalogPerizinanSection: React.FC<KatalogPerizinanSectionProps> = (
         </div>
 
         {/* Search Bar & Category Filter */}
-        <div className="liquid-glass-sidebar rounded-2xl p-4 shadow-xl border border-emerald-500/20 space-y-4">
+        <div id="tour-katalog-box" className="liquid-glass-sidebar rounded-2xl p-4 shadow-xl border border-emerald-500/20 space-y-4">
           <div className="relative">
             <input
               type="text"

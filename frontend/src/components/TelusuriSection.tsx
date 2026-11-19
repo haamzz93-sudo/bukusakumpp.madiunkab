@@ -79,7 +79,7 @@ export const TelusuriSection: React.FC<TelusuriSectionProps> = ({
         </div>
 
         {/* Category Horizontal Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+        <div id="tour-klaster-box" className="flex flex-wrap items-center justify-center gap-2 mb-8">
           {klasterList.map((cat) => {
             const isActive = cat.key === activeKey;
             return (
