@@ -326,8 +326,9 @@ export const App: React.FC = () => {
   // Initial visit Cloudflare Verification Splash & Telemetry
   useEffect(() => {
     trackVisitorEvent('visit', 'Warga membuka portal Buku Saku MPP');
-    const isVerified = sessionStorage.getItem('bukusaku_initial_cf_verified');
-    if (!isVerified) {
+    const isVerified = localStorage.getItem('bukusaku_initial_cf_verified');
+    const loggedIn = localStorage.getItem('bukusaku_admin_logged') === 'true';
+    if (!isVerified && !loggedIn) {
       setIsCloudflareOpen(true);
     }
   }, []);
@@ -429,17 +430,20 @@ export const App: React.FC = () => {
     navigateTo({ name: 'kontak' });
   };
 
-  // Login handler with Cloudflare Verification Splash
-  const handleLoginSuccess = (_username: string) => {
+  // Login handler with Permanent Session (Never logs out automatically)
+  const handleLoginSuccess = (userName: string) => {
     setIsAdminLoggedIn(true);
     localStorage.setItem('bukusaku_admin_logged', 'true');
-    setPendingAdminRedirect(true);
-    setIsCloudflareOpen(true);
+    localStorage.setItem('bukusaku_admin_user_name', userName);
+    localStorage.setItem('bukusaku_initial_cf_verified', 'true');
+    setViewMode('admin');
+    setAdminTab('dashboard');
+    navigateTo({ name: 'admin', tab: 'dashboard' });
   };
 
   const handleCloudflareVerified = () => {
     setIsCloudflareOpen(false);
-    sessionStorage.setItem('bukusaku_initial_cf_verified', 'true');
+    localStorage.setItem('bukusaku_initial_cf_verified', 'true');
     if (pendingAdminRedirect) {
       setPendingAdminRedirect(false);
       setViewMode('admin');
@@ -451,6 +455,8 @@ export const App: React.FC = () => {
   const handleLogout = () => {
     setIsAdminLoggedIn(false);
     localStorage.removeItem('bukusaku_admin_logged');
+    localStorage.removeItem('bukusaku_admin_user_name');
+    localStorage.removeItem('bukusaku_admin_active_tab');
     setViewMode('home');
     navigateTo({ name: 'home' });
   };
