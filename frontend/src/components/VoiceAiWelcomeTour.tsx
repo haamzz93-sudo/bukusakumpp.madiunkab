@@ -151,29 +151,42 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
     }
   }, [currentStep, onSimulateSearch, onBackToHome, onTypeSimulatedQuery, onClose]);
 
-  // Audio lifecycle handler
+  const goToNextStepRef = useRef(goToNextStep);
   useEffect(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio();
-    }
+    goToNextStepRef.current = goToNextStep;
+  });
 
-    const audio = audioRef.current;
+  // Single robust audio lifecycle on mount - Never torn down or paused by step transitions!
+  useEffect(() => {
+    const audio = new Audio();
+    audioRef.current = audio;
 
-    const handleEnded = () => {
+    audio.onended = () => {
       setIsPlaying(false);
-      // Automatic smooth transition to next step
       setTimeout(() => {
-        goToNextStep();
-      }, 700);
+        goToNextStepRef.current();
+      }, 600);
     };
 
-    audio.addEventListener('ended', handleEnded);
+    audio.onplay = () => setIsPlaying(true);
+    audio.onpause = () => setIsPlaying(false);
+    audio.onerror = (e) => {
+      console.warn('Audio error in tour:', e);
+      setIsPlaying(false);
+      setTimeout(() => {
+        goToNextStepRef.current();
+      }, 3500);
+    };
 
     return () => {
-      audio.removeEventListener('ended', handleEnded);
+      audio.onended = null;
+      audio.onplay = null;
+      audio.onpause = null;
+      audio.onerror = null;
       audio.pause();
+      audio.src = '';
     };
-  }, [goToNextStep]);
+  }, []);
 
   // Real Typing in Step 2 into the real HeroSearch Bar
   useEffect(() => {
