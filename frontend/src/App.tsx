@@ -11,7 +11,7 @@ import { PerizinanDetailModal } from './components/PerizinanDetailModal';
 import { CloudflareMadiunVerification } from './components/CloudflareMadiunVerification';
 import { WhatsAppIcon } from './components/WhatsAppIcon';
 import { ChatMessage, Perizinan, KategoriPerizinan } from './types/perizinan';
-import { askHybridAi } from './services/hybridAiService';
+import { askHybridAi, sendVoiceNoteAi } from './services/hybridAiService';
 import { getStoredSettings, syncSettingsFromBackend, subscribeSettings } from './services/settingsStore';
 import { getStoredPerizinan, syncPerizinanFromDatabase } from './services/perizinanStore';
 import { syncKlasterFromDatabase } from './services/klasterStore';
@@ -88,7 +88,9 @@ export const App: React.FC = () => {
         layer: result.layer,
         sourceItems: result.source_items,
         relatedQuestions: result.related,
-        needsHuman: result.needs_human
+        needsHuman: result.needs_human,
+        isAudio: Boolean(result.audio_url),
+        audioUrl: result.audio_url
       };
 
       if (isFollowup) {
@@ -113,6 +115,81 @@ export const App: React.FC = () => {
       setIsLoading(false);
     }
   }, [messages, appSettings.whatsappNumber]);
+
+  // Spider-Man Style Voice Note Query Handler (Audio in -> Transcribe -> RAG -> Neural Audio Out)
+  const executeVoiceQuery = useCallback(async (audioBlob: Blob, durationSeconds: number, isFollowup: boolean = false) => {
+    const audioUrl = URL.createObjectURL(audioBlob);
+    trackVisitorEvent('voice_note_ai', `Warga bersuara (${durationSeconds}s)`);
+    setCurrentQuery('🎤 Memproses pesan suara...');
+    setViewMode('chat');
+    setIsLoading(true);
+
+    const userMsgId = `user-voice-${Date.now()}`;
+    const userVoiceMsg: ChatMessage = {
+      id: userMsgId,
+      role: 'user',
+      text: '🎤 Pesan Suara (Voice Note)',
+      timestamp: Date.now(),
+      isAudio: true,
+      audioUrl: audioUrl,
+      audioDuration: durationSeconds
+    };
+
+    if (isFollowup) {
+      setMessages(prev => [...prev, userVoiceMsg]);
+    } else {
+      setMessages([userVoiceMsg]);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+      const result = await sendVoiceNoteAi(audioBlob);
+
+      const transcribedQuery = result.transcription || 'Pesan Suara';
+      setCurrentQuery(transcribedQuery);
+
+      const updatedUserMsg: ChatMessage = {
+        ...userVoiceMsg,
+        text: `🎤 "${transcribedQuery}"`,
+        transcription: transcribedQuery
+      };
+
+      const botVoiceMsg: ChatMessage = {
+        id: `bot-voice-${Date.now()}`,
+        role: 'assistant',
+        text: result.answer,
+        timestamp: Date.now(),
+        via: result.via,
+        layer: result.layer,
+        sourceItems: result.source_items,
+        relatedQuestions: result.related,
+        needsHuman: result.needs_human,
+        isAudio: Boolean(result.audio_url),
+        audioUrl: result.audio_url
+      };
+
+      if (isFollowup) {
+        setMessages(prev => [...prev.map(m => m.id === userMsgId ? updatedUserMsg : m), botVoiceMsg]);
+      } else {
+        setMessages([updatedUserMsg, botVoiceMsg]);
+      }
+    } catch (err) {
+      const fallbackMsg: ChatMessage = {
+        id: `bot-err-${Date.now()}`,
+        role: 'assistant',
+        text: `Mohon maaf, pesan suara tidak dapat diproses. Silakan ulangi dengan berbicara lebih dekat ke mikrofon atau hubungi loket MPP di ${appSettings.whatsappNumber}.`,
+        timestamp: Date.now(),
+        needsHuman: true
+      };
+      if (isFollowup) {
+        setMessages(prev => [...prev, fallbackMsg]);
+      } else {
+        setMessages([userVoiceMsg, fallbackMsg]);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [appSettings.whatsappNumber]);
 
   // Route Dispatcher: updates UI state according to clean SaaS URL
   const handleRouteUpdate = useCallback((route: AppRoute) => {
@@ -302,6 +379,10 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleVoiceSearch = (audioBlob: Blob, durationSeconds: number, isFollowup: boolean = false) => {
+    executeVoiceQuery(audioBlob, durationSeconds, isFollowup);
+  };
+
   const handleSelectPerizinan = (item: Perizinan) => {
     setSelectedPerizinan(item);
     setIsDetailModalOpen(true);
@@ -431,13 +512,18 @@ export const App: React.FC = () => {
                 currentQuery={currentQuery}
                 isLoading={isLoading}
                 onSendFollowup={(q) => handleSearch(q, true)}
+                onSendVoiceFollowup={handleVoiceSearch}
                 onBackToHome={handleBackToHome}
               />
             ) : (
               <>
                 {/* Hero Search Section (Home) */}
                 <div className="reveal-on-scroll">
-                  <HeroSearch onSearch={(q) => handleSearch(q, false)} isLoading={isLoading} />
+                  <HeroSearch 
+                    onSearch={(q) => handleSearch(q, false)} 
+                    onVoiceSearch={handleVoiceSearch}
+                    isLoading={isLoading} 
+                  />
                 </div>
 
                 {/* Full 80+ Perizinan Catalog (Matching official website) */}

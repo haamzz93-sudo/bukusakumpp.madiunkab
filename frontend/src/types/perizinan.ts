@@ -52,6 +52,10 @@ export interface ChatMessage {
   needsHuman?: boolean;
   vote?: 'up' | 'down';
   rawHtml?: string;
+  isAudio?: boolean;
+  audioUrl?: string;
+  audioDuration?: number;
+  transcription?: string;
 }
 
 export interface RAGResponse {
@@ -65,5 +69,7 @@ export interface RAGResponse {
   source_items: SourceItem[];
   related: string[];
   needs_human: boolean;
+  audio_url?: string;
+  transcription?: string;
   error?: string;
 }

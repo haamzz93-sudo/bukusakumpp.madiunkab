@@ -18,17 +18,22 @@ import {
   AlertCircle,
   Cpu,
   Type,
-  CheckCircle2
+  CheckCircle2,
+  Volume2,
+  Loader2
 } from 'lucide-react';
 import { ChatMessage } from '../types/perizinan';
-import { WA_NUM_MPP, TELP_MPP } from '../services/hybridAiService';
+import { WA_NUM_MPP, TELP_MPP, fetchTtsAudio } from '../services/hybridAiService';
 import { WhatsAppIcon } from './WhatsAppIcon';
+import { VoiceNotePlayer } from './VoiceNotePlayer';
+import { VoiceNoteRecorder } from './VoiceNoteRecorder';
 
 interface ChatThreadProps {
   messages: ChatMessage[];
   currentQuery: string;
   isLoading: boolean;
   onSendFollowup: (query: string, isFollowup?: boolean) => void;
+  onSendVoiceFollowup?: (audioBlob: Blob, durationSeconds: number, isFollowup?: boolean) => void;
   onBackToHome: () => void;
 }
 
@@ -188,6 +193,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   currentQuery,
   isLoading,
   onSendFollowup,
+  onSendVoiceFollowup,
   onBackToHome
 }) => {
   const [useTimesNewRoman, setUseTimesNewRoman] = useState(true);
@@ -196,11 +202,26 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [openSources, setOpenSources] = useState<{ [key: string]: boolean }>({});
   const [votes, setVotes] = useState<{ [key: string]: 'up' | 'down' }>({});
+  const [localAudioUrls, setLocalAudioUrls] = useState<Record<string, string>>({});
+  const [loadingSpeech, setLoadingSpeech] = useState<Record<string, boolean>>({});
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleGenerateSpeech = async (msgId: string, text: string) => {
+    if (localAudioUrls[msgId] || loadingSpeech[msgId]) return;
+    setLoadingSpeech(prev => ({ ...prev, [msgId]: true }));
+    try {
+      const url = await fetchTtsAudio(text);
+      if (url) {
+        setLocalAudioUrls(prev => ({ ...prev, [msgId]: url }));
+      }
+    } finally {
+      setLoadingSpeech(prev => ({ ...prev, [msgId]: false }));
+    }
   };
 
   const toggleSource = (msgId: string) => {
@@ -248,22 +269,32 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
 
             {/* Active Query Banner */}
             <div className="flex-1 max-w-xl sm:mx-4">
-              <form onSubmit={handleHeaderSearchSubmit} className="relative flex items-center">
-                <input
-                  type="text"
-                  value={headerSearchText}
-                  onChange={(e) => setHeaderSearchText(e.target.value)}
-                  placeholder="Tanyakan hal lain seputar perizinan..."
-                  className="w-full py-2 pl-9 pr-24 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-emerald-500/25 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-emerald-600 dark:focus:border-mpp-bright shadow-sm"
+              <form onSubmit={handleHeaderSearchSubmit} className="relative flex items-center gap-1.5">
+                <div className="relative flex-1 flex items-center">
+                  <input
+                    type="text"
+                    value={headerSearchText}
+                    onChange={(e) => setHeaderSearchText(e.target.value)}
+                    placeholder="Tanyakan hal lain atau kirim Voice Note..."
+                    className="w-full py-2 pl-9 pr-20 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-emerald-500/25 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-emerald-600 dark:focus:border-mpp-bright shadow-sm"
+                  />
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3" />
+                  <button
+                    type="submit"
+                    disabled={!headerSearchText.trim() || isLoading}
+                    className="absolute right-1.5 px-3 py-1 bg-mpp-bright hover:bg-mpp-yellow text-slate-950 font-bold text-xs rounded-lg shadow-sm transition-transform active:scale-95 disabled:opacity-50 cursor-pointer"
+                  >
+                    Tanya
+                  </button>
+                </div>
+                <VoiceNoteRecorder
+                  onSendVoice={(blob, sec) => {
+                    if (onSendVoiceFollowup) {
+                      onSendVoiceFollowup(blob, sec, false);
+                    }
+                  }}
+                  disabled={isLoading}
                 />
-                <Search className="w-4 h-4 text-slate-400 absolute left-3" />
-                <button
-                  type="submit"
-                  disabled={!headerSearchText.trim() || isLoading}
-                  className="absolute right-1.5 px-3 py-1 bg-mpp-bright hover:bg-mpp-yellow text-slate-950 font-bold text-xs rounded-lg shadow-sm transition-transform active:scale-95 disabled:opacity-50 cursor-pointer"
-                >
-                  Tanya
-                </button>
               </form>
             </div>
           </div>
@@ -288,11 +319,26 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                 return (
                   <div key={msg.id} className="flex justify-end">
                     <div className="max-w-2xl bg-madiun-forest text-white px-5 py-3.5 rounded-2xl rounded-tr-sm shadow-md font-medium text-sm leading-relaxed">
-                      {msg.text}
+                      {msg.isAudio && msg.audioUrl ? (
+                        <div className="space-y-2">
+                          <VoiceNotePlayer
+                            audioUrl={msg.audioUrl}
+                            sender="user"
+                            duration={msg.audioDuration}
+                          />
+                          {msg.text && (
+                            <p className="text-xs text-white/90 italic pl-1">{msg.text}</p>
+                          )}
+                        </div>
+                      ) : (
+                        msg.text
+                      )}
                     </div>
                   </div>
                 );
               }
+
+              const audioToPlay = msg.audioUrl || localAudioUrls[msg.id];
 
               return (
                 <div key={msg.id} className="liquid-glass-sidebar rounded-2xl p-6 space-y-4">
@@ -313,6 +359,37 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                       </span>
                     </div>
                   </div>
+
+                  {/* Spider-Man / Karen AI Voice Note Player */}
+                  {audioToPlay ? (
+                    <VoiceNotePlayer
+                      audioUrl={audioToPlay}
+                      fallbackText={msg.text}
+                      sender="assistant"
+                      autoPlay={false}
+                    />
+                  ) : (
+                    <div className="py-1">
+                      <button
+                        onClick={() => handleGenerateSpeech(msg.id, msg.text)}
+                        disabled={loadingSpeech[msg.id]}
+                        type="button"
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl liquid-glass text-xs font-semibold text-emerald-800 dark:text-emerald-300 hover:text-emerald-950 dark:hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md border border-emerald-500/20 active:scale-95"
+                      >
+                        {loadingSpeech[msg.id] ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-500" />
+                            <span>Menyiapkan audio suara Gadis AI...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="w-3.5 h-3.5 text-emerald-500" />
+                            <span>Dengarkan Voice Note Resmi (Suara Gadis AI)</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
 
                   {/* Clean Formatted Message Content (Zero Raw Asterisks, Times New Roman Typo) */}
                   <div className="pt-1">
@@ -438,11 +515,19 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
             {/* Follow-up input form */}
             <form onSubmit={handleBottomSubmit} className="pt-4">
               <div className="flex items-center gap-2">
+                <VoiceNoteRecorder
+                  onSendVoice={(blob, sec) => {
+                    if (onSendVoiceFollowup) {
+                      onSendVoiceFollowup(blob, sec, true);
+                    }
+                  }}
+                  disabled={isLoading}
+                />
                 <input
                   type="text"
                   value={bottomFollowupText}
                   onChange={(e) => setBottomFollowupText(e.target.value)}
-                  placeholder="Ketik pertanyaan lanjutan Anda di sini..."
+                  placeholder="Ketik pertanyaan lanjutan atau kirim Voice Note..."
                   className="flex-1 py-3 px-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-emerald-500/25 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-emerald-600 dark:focus:border-mpp-bright shadow-xs"
                   disabled={isLoading}
                 />

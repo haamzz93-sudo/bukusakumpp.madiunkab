@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Services\GuardrailService;
 use App\Services\RagSearchService;
+use App\Services\AudioService;
 
 class ChatController
 {
@@ -31,6 +32,7 @@ class ChatController
         $raw = file_get_contents('php://input');
         $data = json_decode($raw, true) ?? [];
         $query = trim($data['q'] ?? $data['query'] ?? '');
+        $withAudio = !empty($data['withAudio']);
 
         if (empty($query)) {
             http_response_code(422);
@@ -44,18 +46,30 @@ class ChatController
         // Layer 0: Guardrail Check
         $modelInquiry = $this->guardrail->checkModelInquiry($query);
         if ($modelInquiry) {
+            if ($withAudio && !empty($modelInquiry['answer'])) {
+                $audioService = new AudioService();
+                $modelInquiry['audio_url'] = $audioService->generateTts($modelInquiry['answer']);
+            }
             echo json_encode($modelInquiry);
             return;
         }
 
         $outDomain = $this->guardrail->checkOutOfDomain($query);
         if ($outDomain) {
+            if ($withAudio && !empty($outDomain['answer'])) {
+                $audioService = new AudioService();
+                $outDomain['audio_url'] = $audioService->generateTts($outDomain['answer']);
+            }
             echo json_encode($outDomain);
             return;
         }
 
         // Layer 1 & 2: RAG & Catalog Search
         $response = $this->rag->search($query);
+        if ($withAudio && !empty($response['answer'])) {
+            $audioService = new AudioService();
+            $response['audio_url'] = $audioService->generateTts($response['answer']);
+        }
         echo json_encode($response);
     }
 }

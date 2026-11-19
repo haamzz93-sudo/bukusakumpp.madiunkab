@@ -55,6 +55,7 @@ use App\Http\Controllers\Api\ChatController;
 use App\Services\GuardrailService;
 use App\Services\RagSearchService;
 use App\Services\Database;
+use App\Services\AudioService;
 
 // Load environment variables from .env
 $envFile = __DIR__ . '/../.env';
@@ -241,6 +242,136 @@ if ($uri === '/api/chat' || $uri === '/tanya/chat') {
     $rag = new RagSearchService();
     $controller = new ChatController($guardrail, $rag);
     $controller->chat();
+    exit();
+}
+
+// 1.1 SERVE GENERATED AUDIO (Streaming Voice Note MP3)
+if (str_starts_with($uri, '/api/audio/')) {
+    $filename = basename($uri);
+    $filepath = __DIR__ . '/../storage/audio/' . $filename;
+    if (file_exists($filepath) && is_file($filepath)) {
+        header('Content-Type: audio/mpeg');
+        header('Content-Length: ' . filesize($filepath));
+        header('Accept-Ranges: bytes');
+        header('Cache-Control: public, max-age=86400');
+        readfile($filepath);
+        exit();
+    }
+    http_response_code(404);
+    header('Content-Type: application/json');
+    echo json_encode(['ok' => false, 'error' => 'Berkas suara tidak ditemukan']);
+    exit();
+}
+
+// 1.2 TEXT-TO-SPEECH (TTS) ON DEMAND
+if ($uri === '/api/tts' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json; charset=utf-8');
+    $raw = file_get_contents('php://input');
+    $data = json_decode($raw, true) ?? [];
+    $text = trim($data['text'] ?? '');
+    $voice = trim($data['voice'] ?? 'id-ID-GadisNeural');
+
+    if (empty($text)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'error' => 'Teks wajib diisi']);
+        exit();
+    }
+
+    $audioService = new AudioService();
+    $audioUrl = $audioService->generateTts($text, $voice);
+    if ($audioUrl) {
+        echo json_encode([
+            'ok' => true,
+            'audioUrl' => $audioUrl,
+            'voice' => $voice
+        ]);
+        exit();
+    }
+
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'Gagal menghasilkan berkas suara']);
+    exit();
+}
+
+// 1.3 VOICE NOTE CHAT (STT Speech In -> AI Thinking -> TTS Voice Out)
+if ($uri === '/api/voice-chat' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json; charset=utf-8');
+    
+    $audioBytes = null;
+    $mimeType = 'audio/webm';
+
+    // 1. Multipart form-data audio upload
+    if (!empty($_FILES['audio']['tmp_name']) && is_uploaded_file($_FILES['audio']['tmp_name'])) {
+        $audioBytes = file_get_contents($_FILES['audio']['tmp_name']);
+        $mimeType = $_FILES['audio']['type'] ?? 'audio/webm';
+    } else {
+        // 2. Base64 payload in JSON
+        $raw = file_get_contents('php://input');
+        $data = json_decode($raw, true) ?? [];
+        if (!empty($data['audio'])) {
+            $base64 = $data['audio'];
+            if (str_contains($base64, ',')) {
+                $parts = explode(',', $base64, 2);
+                if (preg_match('/data:([^;]+);base64/', $parts[0], $m)) {
+                    $mimeType = $m[1];
+                }
+                $base64 = $parts[1];
+            }
+            $audioBytes = base64_decode($base64);
+        }
+    }
+
+    if (empty($audioBytes)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'error' => 'Rekaman suara tidak ditemukan atau kosong']);
+        exit();
+    }
+
+    $audioService = new AudioService();
+    $transcription = $audioService->transcribeAudio($audioBytes, $mimeType);
+
+    if (empty($transcription)) {
+        http_response_code(422);
+        echo json_encode([
+            'ok' => false,
+            'error' => 'Suara tidak terdeteksi dengan jelas. Silakan ulangi dengan berbicara lebih dekat ke mikrofon.'
+        ]);
+        exit();
+    }
+
+    // Record voice query event
+    Database::recordEvent('voice_note_ai', 'Warga bersuara: "' . mb_substr($transcription, 0, 70) . '"');
+
+    $guardrail = new GuardrailService();
+    $modelInquiry = $guardrail->checkModelInquiry($transcription);
+    if ($modelInquiry) {
+        $modelInquiry['transcription'] = $transcription;
+        $audioUrl = $audioService->generateTts($modelInquiry['answer'] ?? '');
+        $modelInquiry['audio_url'] = $audioUrl;
+        echo json_encode($modelInquiry);
+        exit();
+    }
+
+    $outDomain = $guardrail->checkOutOfDomain($transcription);
+    if ($outDomain) {
+        $outDomain['transcription'] = $transcription;
+        $audioUrl = $audioService->generateTts($outDomain['answer'] ?? '');
+        $outDomain['audio_url'] = $audioUrl;
+        echo json_encode($outDomain);
+        exit();
+    }
+
+    // Process RAG search using transcribed text
+    $rag = new RagSearchService();
+    $ragResponse = $rag->search($transcription);
+    $ragResponse['transcription'] = $transcription;
+
+    // Generate output speech (id-ID-GadisNeural)
+    if (!empty($ragResponse['answer'])) {
+        $ragResponse['audio_url'] = $audioService->generateTts($ragResponse['answer']);
+    }
+
+    echo json_encode($ragResponse);
     exit();
 }
 

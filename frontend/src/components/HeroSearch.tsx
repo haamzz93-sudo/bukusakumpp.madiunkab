@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Search, ArrowRight, ShieldCheck } from 'lucide-react';
 import { getStoredSettings, subscribeSettings, AppSettings } from '../services/settingsStore';
+import { VoiceNoteRecorder } from './VoiceNoteRecorder';
 
 interface HeroSearchProps {
   onSearch: (query: string) => void;
+  onVoiceSearch?: (audioBlob: Blob, durationSeconds: number) => void;
   isLoading: boolean;
 }
 
@@ -13,7 +15,7 @@ const BG_IMAGES = [
   '/images/backgrounds/bg_topographic_mesh.jpg'
 ];
 
-export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) => {
+export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, onVoiceSearch, isLoading }) => {
   const [inputVal, setInputVal] = useState('');
   const [settings, setSettings] = useState<AppSettings>(getStoredSettings());
   const [bgIndex, setBgIndex] = useState(0);
@@ -207,10 +209,18 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, isLoading }) =
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                placeholder="Tanya Buku Saku... misal: syarat izin buka warung kopi"
+                placeholder="Tanya Buku Saku... atau bicara lewat Voice Note"
                 className="w-full bg-transparent py-2 px-2 text-white placeholder-white/60 focus:outline-none text-sm sm:text-base font-medium"
                 disabled={isLoading}
               />
+              {onVoiceSearch && (
+                <div className="shrink-0 pr-1.5">
+                  <VoiceNoteRecorder
+                    onSendVoice={(blob, sec) => onVoiceSearch(blob, sec)}
+                    disabled={isLoading}
+                  />
+                </div>
+              )}
               <button
                 type="submit"
                 disabled={isLoading || !inputVal.trim()}
