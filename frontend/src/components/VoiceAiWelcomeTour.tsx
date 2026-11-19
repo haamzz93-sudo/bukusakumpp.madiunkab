@@ -268,6 +268,9 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
     }
   }, [safeStepIndex, isOpen, isMuted]);
 
+  const isScrollingRef = useRef(false);
+  const scrollEndTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   // Measure element in DOM
   const measureElement = useCallback(() => {
     if (!isOpen || !activeStep) return false;
@@ -295,6 +298,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
     const checkAndScroll = () => {
       const el = document.getElementById(activeStep.targetId);
       if (el) {
+        isScrollingRef.current = true;
         const computedStyle = window.getComputedStyle(el);
         if (computedStyle.position === 'fixed') {
           // If element is fixed (like the floating dock), scroll smoothly to the bottom of the page
@@ -306,9 +310,12 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
           window.scrollTo({ top: scrollToY, behavior: 'smooth' });
         }
 
-        setTimeout(() => {
+        // Wait for smooth scroll to settle before measuring to prevent render jitter
+        if (scrollEndTimeoutRef.current) clearTimeout(scrollEndTimeoutRef.current);
+        scrollEndTimeoutRef.current = setTimeout(() => {
           measureElement();
-        }, 200);
+          isScrollingRef.current = false;
+        }, 320);
       } else if (attempts < 20) {
         attempts++;
         setTimeout(checkAndScroll, 100);
@@ -322,12 +329,22 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
 
   useEffect(() => {
     updateSpotlight();
+
+    let rafId: number | null = null;
     const handleScrollResize = () => {
-      measureElement();
+      // Ignore micro-events while smooth programmatic scroll is animating
+      if (isScrollingRef.current) return;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        measureElement();
+      });
     };
+
     window.addEventListener('resize', handleScrollResize);
     window.addEventListener('scroll', handleScrollResize, { passive: true });
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (scrollEndTimeoutRef.current) clearTimeout(scrollEndTimeoutRef.current);
       window.removeEventListener('resize', handleScrollResize);
       window.removeEventListener('scroll', handleScrollResize);
     };
@@ -395,13 +412,16 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
 
         return (
           <div
-            className="fixed rounded-2xl pointer-events-none transition-all duration-700 ease-out z-20 border-2 border-emerald-400 shadow-[0_0_35px_rgba(52,211,153,0.55)]"
+            className="fixed rounded-2xl pointer-events-none z-20 border-2 border-emerald-400 shadow-[0_0_35px_rgba(52,211,153,0.55)]"
             style={{
               left,
               top,
               width,
               height,
-              boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.78)'
+              boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.78)',
+              transition: 'left 0.45s cubic-bezier(0.16, 1, 0.3, 1), top 0.45s cubic-bezier(0.16, 1, 0.3, 1), width 0.45s cubic-bezier(0.16, 1, 0.3, 1), height 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
+              willChange: 'left, top, width, height',
+              transform: 'translateZ(0)'
             }}
           >
             {/* Concentric Pulsing Radar Circles at Top-Left */}

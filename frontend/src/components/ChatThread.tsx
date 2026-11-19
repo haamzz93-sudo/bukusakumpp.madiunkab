@@ -254,6 +254,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   React.useEffect(() => {
     if (
       latestAssistantMessage &&
+      !latestAssistantMessage.id.startsWith('tour-') &&
       !latestAssistantMessage.audioUrl &&
       !localAudioUrls[latestAssistantMessage.id] &&
       !loadingSpeech[latestAssistantMessage.id] &&
@@ -379,7 +380,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                       audioUrl={audioToPlay}
                       fallbackText={msg.text}
                       sender="assistant"
-                      autoPlay={msg.id === latestAssistantMessage?.id}
+                      autoPlay={!msg.id.startsWith('tour-') && msg.id === latestAssistantMessage?.id}
                     />
                   ) : (
                     <div className="py-1">
