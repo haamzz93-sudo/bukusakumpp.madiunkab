@@ -169,7 +169,7 @@ export async function sendVoiceNoteAi(audioBlob: Blob): Promise<RAGResponse> {
 /**
  * Request on-demand TTS audio synthesis from backend /api/tts
  */
-export async function fetchTtsAudio(text: string, voice = 'id-ID-GadisNeural'): Promise<string | null> {
+export async function fetchTtsAudio(text: string, voice = 'id-ID-ArdiNeural'): Promise<string | null> {
   const baseUrl = getApiBaseUrl();
   const endpoints = baseUrl ? [`${baseUrl}/api/tts`, '/api/tts'] : ['/api/tts'];
 

@@ -354,7 +354,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
               const audioToPlay = msg.audioUrl || localAudioUrls[msg.id];
 
               return (
-                <div key={msg.id} className="liquid-glass-sidebar rounded-2xl p-6 space-y-4">
+                <div id="tour-chat-result" key={msg.id} className="liquid-glass-sidebar rounded-2xl p-6 space-y-4">
                   
                   {/* Assistant Identity Tag & Typography Controls */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">

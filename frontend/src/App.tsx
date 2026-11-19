@@ -53,6 +53,7 @@ export const App: React.FC = () => {
 
   // Voice AI Interactive Welcome Tour States
   const [isTourOpen, setIsTourOpen] = useState(false);
+  const [simulatedTourQuery, setSimulatedTourQuery] = useState('');
   const [hasDismissedTourPrompt, setHasDismissedTourPrompt] = useState<boolean>(() => {
     return localStorage.getItem('bukusaku_tour_prompt_dismissed') === 'true' || localStorage.getItem('bukusaku_tour_completed') === 'true';
   });
@@ -61,6 +62,33 @@ export const App: React.FC = () => {
     setIsTourOpen(true);
     setHasDismissedTourPrompt(true);
     localStorage.setItem('bukusaku_tour_prompt_dismissed', 'true');
+  };
+
+  // Real Tour Walkthrough Search Simulator
+  const handleSimulateTourSearch = (query: string) => {
+    const userMsg: ChatMessage = {
+      id: `tour-user-${Date.now()}`,
+      role: 'user',
+      text: query,
+      timestamp: Date.now()
+    };
+    const botMsg: ChatMessage = {
+      id: `tour-bot-${Date.now()}`,
+      role: 'assistant',
+      text: 'Berdasarkan standar pelayanan resmi DPMPTSP Kabupaten Madiun (SOP OSS-RBA):\n\n1. Untuk usaha warung kopi (KBLI 56303 / risiko rendah), perizinan berusaha diterbitkan otomatis berupa Nomor Induk Berusaha (NIB).\n2. Persyaratan Utama: KTP pemohon, NPWP, dan titik koordinat lokasi usaha.\n3. Biaya: Rp 0 (100% Gratis Tanpa Pungli).\n4. Jangka Waktu: Terbit instan (10 menit) melalui portal OSS terintegrasi loket MPP.',
+      audioUrl: '/audio/tour_auto_3_chatdemo.mp3',
+      timestamp: Date.now(),
+      via: 'gemini-llm-rag',
+      sourceItems: [
+        {
+          name: 'Standar Pelayanan Penerbitan NIB Usaha Mikro dan Kecil Risiko Rendah',
+          instansi: 'DPMPTSP Kab. Madiun'
+        }
+      ]
+    };
+    setMessages([userMsg, botMsg]);
+    setCurrentQuery(query);
+    setViewMode('chat');
   };
 
   // Ref to prevent duplicate queries on direct URL mount
@@ -548,6 +576,7 @@ export const App: React.FC = () => {
                     onSearch={(q) => handleSearch(q, false)} 
                     onVoiceSearch={handleVoiceSearch}
                     isLoading={isLoading} 
+                    simulatedQuery={simulatedTourQuery}
                   />
                 </div>
 
@@ -672,10 +701,13 @@ export const App: React.FC = () => {
         rayId="85b5bd7e1ab024e1"
       />
 
-      {/* Voice AI Welcome Tour with Three.js & Spotlight Focus */}
+      {/* Voice AI Welcome Tour with Cinema Subtitle & Live Real Search Walkthrough */}
       <VoiceAiWelcomeTour
         isOpen={isTourOpen}
         onClose={() => setIsTourOpen(false)}
+        onTypeSimulatedQuery={setSimulatedTourQuery}
+        onSimulateSearch={handleSimulateTourSearch}
+        onBackToHome={handleBackToHome}
       />
 
     </div>

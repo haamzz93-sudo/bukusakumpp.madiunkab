@@ -40,7 +40,7 @@ async def main():
     parser.add_argument('--text', default=None, help='Text to convert to speech')
     parser.add_argument('--text-file', default=None, help='Path to file containing text')
     parser.add_argument('--output', required=True, help='Output MP3 file path')
-    parser.add_argument('--voice', default='id-ID-GadisNeural', help='Edge TTS Voice')
+    parser.add_argument('--voice', default='id-ID-ArdiNeural', help='Edge TTS Voice')
     parser.add_argument('--rate', default='+0%', help='Speech rate')
     args = parser.parse_args()
 

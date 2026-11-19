@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Volume2, VolumeX, Pause, Play, X, AudioLines, ArrowUp, ArrowDown, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Volume2, VolumeX, Pause, Play, X, AudioLines, ArrowUp, ArrowDown } from 'lucide-react';
 
 export interface TourStep {
   id: string;
@@ -9,7 +9,7 @@ export interface TourStep {
   text: string;
   audioSrc: string;
   arrowPosition?: 'top' | 'bottom';
-  isDemoChat?: boolean;
+  isRealSearchTrigger?: boolean;
 }
 
 const TOUR_STEPS: TourStep[] = [
@@ -18,35 +18,35 @@ const TOUR_STEPS: TourStep[] = [
     targetId: 'tour-brand',
     title: 'Judul Resmi Buku Saku MPP',
     category: 'Sambutan Resmi',
-    text: 'Halo, selamat datang di Buku Saku Digital Mal Pelayanan Publik Kabupaten Madiun. Saya adalah Voice AI resmi Anda. Mari kita lihat seluruh fitur layanan di web ini secara otomatis.',
+    text: 'Halo, selamat datang di Buku Saku Digital Mal Pelayanan Publik Kabupaten Madiun. Saya adalah asisten suara resmi Anda. Mari kita lihat seluruh fitur layanan di web ini secara otomatis.',
     audioSrc: '/audio/tour_auto_1_intro.mp3',
     arrowPosition: 'bottom'
   },
   {
     id: 'step-2',
     targetId: 'tour-search',
-    title: 'Pencarian Cerdas & Voice Note',
+    title: 'Pencarian Cerdas & Pesan Suara',
     category: 'Input Suara & Teks',
-    text: 'Pertama, di kolom pencarian ini, Anda bisa menanyakan syarat izin, berkas, atau prosedur, cukup dengan mengetik atau berbicara langsung lewat tombol Voice Note.',
+    text: 'Pertama, pada kolom pencarian ini, Anda dapat menanyakan persyaratan izin atau alur layanan cukup dengan mengetik atau berbicara langsung lewat tombol pesan suara.',
     audioSrc: '/audio/tour_auto_2_search.mp3',
-    arrowPosition: 'top'
+    arrowPosition: 'top',
+    isRealSearchTrigger: true
   },
   {
     id: 'step-3',
-    targetId: 'tour-search',
-    title: 'Simulasi Respon Cepat AI & Suara',
-    category: 'Respon Cerdas',
-    text: 'Sistem AI Gemini dan basis regulasi resmi MPP langsung merespons dengan jawaban akurat serta suara balasan resmi, praktis tanpa perlu membaca dokumen tebal.',
+    targetId: 'tour-chat-result',
+    title: 'Hasil Jawaban Resmi & Pemutar Suara',
+    category: 'Jawaban Cerdas RAG',
+    text: 'Berikut adalah contoh hasil jawaban resmi. Sistem langsung menyajikan rangkuman standar pelayanan yang akurat, lengkap dengan pemutar pesan suara resmi MPP.',
     audioSrc: '/audio/tour_auto_3_chatdemo.mp3',
-    isDemoChat: true,
     arrowPosition: 'top'
   },
   {
     id: 'step-4',
     targetId: 'tour-stats',
-    title: '4 Indikator Mutu Layanan',
+    title: '4 Indikator Mutu Layanan Resmi',
     category: 'Standar Mutu',
-    text: 'Kedua, empat indikator ini menjamin lebih dari delapan puluh perizinan resmi, seratus persen gratis tanpa pungli, dapat diakses dua puluh empat jam dengan respon cepat.',
+    text: 'Kedua, empat indikator ini menjamin lebih dari delapan puluh layanan resmi, seratus persen gratis tanpa perantara, dapat diakses dua puluh empat jam dengan respon cepat.',
     audioSrc: '/audio/tour_auto_4_stats.mp3',
     arrowPosition: 'top'
   },
@@ -62,7 +62,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'step-6',
     targetId: 'telusuri',
-    title: 'Klaster Pertanyaan Cepat',
+    title: 'Basis Pengetahuan Per Klaster',
     category: 'Basis Pengetahuan',
     text: 'Keempat, Anda dapat menjelajahi basis pengetahuan per klaster untuk melihat pertanyaan populer seputar izin usaha, pajak daerah, hingga administrasi kependudukan.',
     audioSrc: '/audio/tour_auto_6_klaster.mp3',
@@ -73,16 +73,16 @@ const TOUR_STEPS: TourStep[] = [
     targetId: 'kontak',
     title: 'Helpdesk & Loket Fisik MPP',
     category: 'Bantuan Langsung',
-    text: 'Kelima, jika butuh verifikasi berkas langsung, alamat loket MPP, telepon kantor, dan WhatsApp Helpdesk resmi siap melayani Anda.',
+    text: 'Kelima, jika membutuhkan konsultasi atau verifikasi berkas langsung, alamat gedung MPP, telepon kantor, dan WhatsApp Helpdesk resmi siap membantu Anda.',
     audioSrc: '/audio/tour_auto_7_kontak.mp3',
     arrowPosition: 'bottom'
   },
   {
     id: 'step-8',
     targetId: 'tour-floating-dock',
-    title: 'Aksi Cepat Melayang 24 Jam',
+    title: 'Tombol Melayang Siaga 24 Jam',
     category: 'Tombol Siaga',
-    text: 'Terakhir, tombol WhatsApp dan Voice Note selalu melayang di kanan bawah untuk kemudahan akses Anda kapan saja. Panduan selesai, selamat menjelajah!',
+    text: 'Terakhir, tombol WhatsApp dan tombol pesan suara selalu melayang di kanan bawah untuk kemudahan akses Anda. Panduan selesai, selamat memanfaatkan layanan kami!',
     audioSrc: '/audio/tour_auto_8_finish.mp3',
     arrowPosition: 'top'
   }
@@ -91,34 +91,65 @@ const TOUR_STEPS: TourStep[] = [
 interface VoiceAiWelcomeTourProps {
   isOpen: boolean;
   onClose: () => void;
+  onTypeSimulatedQuery?: (text: string) => void;
+  onSimulateSearch?: (query: string) => void;
+  onBackToHome?: () => void;
 }
 
-export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, onClose }) => {
+export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ 
+  isOpen, 
+  onClose,
+  onTypeSimulatedQuery,
+  onSimulateSearch,
+  onBackToHome
+}) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [audioProgress, setAudioProgress] = useState(0);
   const [displayedSubtitle, setDisplayedSubtitle] = useState('');
   const [spotlightRect, setSpotlightRect] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const typewriterTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const searchInputTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Safely clamp step index
   const safeStepIndex = Math.min(Math.max(0, currentStep), TOUR_STEPS.length - 1);
   const activeStep = TOUR_STEPS[safeStepIndex];
 
-  // Auto-advance helper
+  // Auto-advance helper with real state routing
   const goToNextStep = useCallback(() => {
-    if (currentStep < TOUR_STEPS.length - 1) {
+    if (currentStep === 1) {
+      // Step 2 Finished -> Execute real search to enter real Chat page for Step 3
+      if (onSimulateSearch) {
+        onSimulateSearch('syarat izin buka warung kopi');
+      }
+      setTimeout(() => {
+        setCurrentStep(2);
+      }, 500);
+    } else if (currentStep === 2) {
+      // Step 3 Finished -> Return to Landing page for Step 4 (stats), 5 (katalog), 6, 7, 8
+      if (onBackToHome) {
+        onBackToHome();
+      }
+      if (onTypeSimulatedQuery) {
+        onTypeSimulatedQuery('');
+      }
+      setTimeout(() => {
+        setCurrentStep(3);
+      }, 500);
+    } else if (currentStep < TOUR_STEPS.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
       // Tour Finished: Scroll back to top and close
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (onTypeSimulatedQuery) {
+        onTypeSimulatedQuery('');
+      }
       localStorage.setItem('bukusaku_tour_completed', 'true');
       onClose();
     }
-  }, [currentStep, onClose]);
+  }, [currentStep, onSimulateSearch, onBackToHome, onTypeSimulatedQuery, onClose]);
 
   // Audio lifecycle handler
   useEffect(() => {
@@ -128,32 +159,48 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
 
     const audio = audioRef.current;
 
-    const handleTimeUpdate = () => {
-      if (audio.duration && !isNaN(audio.duration)) {
-        setAudioProgress((audio.currentTime / audio.duration) * 100);
-      }
-    };
-
     const handleEnded = () => {
       setIsPlaying(false);
-      setAudioProgress(100);
-      // Automatic smooth transition to next step (Zero clicks needed)
+      // Automatic smooth transition to next step
       setTimeout(() => {
         goToNextStep();
-      }, 700);
+      }, 800);
     };
 
-    audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('ended', handleEnded);
 
     return () => {
-      audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('ended', handleEnded);
       audio.pause();
     };
   }, [goToNextStep]);
 
-  // Live Typewriter / Running Subtitle Text synchronized with audio
+  // Real Typing in Step 2 into the real HeroSearch Bar
+  useEffect(() => {
+    if (!isOpen) return;
+
+    if (safeStepIndex === 1 && onTypeSimulatedQuery) {
+      const sampleText = 'syarat izin buka warung kopi';
+      let charIdx = 0;
+      onTypeSimulatedQuery('');
+
+      if (searchInputTimerRef.current) clearInterval(searchInputTimerRef.current);
+      searchInputTimerRef.current = setInterval(() => {
+        if (charIdx < sampleText.length) {
+          charIdx++;
+          onTypeSimulatedQuery(sampleText.substring(0, charIdx));
+        } else {
+          if (searchInputTimerRef.current) clearInterval(searchInputTimerRef.current);
+        }
+      }, 75);
+    }
+
+    return () => {
+      if (searchInputTimerRef.current) clearInterval(searchInputTimerRef.current);
+    };
+  }, [safeStepIndex, isOpen, onTypeSimulatedQuery]);
+
+  // Live Typewriter Subtitle Text synchronized with audio
   useEffect(() => {
     if (!isOpen || !activeStep) return;
 
@@ -165,8 +212,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
     let charIndex = 0;
     setDisplayedSubtitle('');
 
-    // Smooth typewriter pace to match natural audio reading
-    const speedMs = 38;
+    const speedMs = 35;
     typewriterTimerRef.current = setInterval(() => {
       if (charIndex < fullText.length) {
         charIndex++;
@@ -215,8 +261,8 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
 
     const el = document.getElementById(activeStep.targetId);
     if (el) {
-      // Calculate top position with 85px offset so navbar and header are clear
-      const navOffset = 85;
+      // Calculate top position with 90px offset so navbar and header are clear
+      const navOffset = 90;
       const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
       const scrollToY = Math.max(0, elementTop - navOffset);
       window.scrollTo({ top: scrollToY, behavior: 'smooth' });
@@ -230,7 +276,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
           width: rect.width,
           height: rect.height
         });
-      }, 250);
+      }, 300);
     } else {
       setSpotlightRect(null);
     }
@@ -267,6 +313,12 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
     if (audioRef.current) {
       audioRef.current.pause();
     }
+    if (onBackToHome) {
+      onBackToHome();
+    }
+    if (onTypeSimulatedQuery) {
+      onTypeSimulatedQuery('');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
     localStorage.setItem('bukusaku_tour_completed', 'true');
     onClose();
@@ -290,7 +342,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
             top: Math.max(6, spotlightRect.top - 10),
             width: spotlightRect.width + 20,
             height: spotlightRect.height + 20,
-            boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.76)'
+            boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.78)'
           }}
         >
           {/* 
@@ -303,7 +355,7 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
           </div>
 
           {/* 
-            "Bundar-bundar" at Bottom-Right Corner as well for dynamic balance
+            "Bundar-bundar" at Bottom-Right Corner
           */}
           <div className="absolute -bottom-3.5 -right-3.5 flex items-center justify-center">
             <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-amber-400 opacity-60"></span>
@@ -315,36 +367,16 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
           */}
           {activeStep.arrowPosition === 'top' ? (
             <div className="absolute -top-11 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-extrabold text-xs shadow-xl border border-white/60 whitespace-nowrap">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500 text-slate-950 font-black text-xs shadow-xl border border-white/60 whitespace-nowrap">
                 <span>{activeStep.title}</span>
                 <ArrowDown className="w-3.5 h-3.5 stroke-[3]" />
               </div>
             </div>
           ) : (
             <div className="absolute -bottom-11 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-30">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-extrabold text-xs shadow-xl border border-white/60 whitespace-nowrap">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500 text-slate-950 font-black text-xs shadow-xl border border-white/60 whitespace-nowrap">
                 <ArrowUp className="w-3.5 h-3.5 stroke-[3]" />
                 <span>{activeStep.title}</span>
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: Minimal Live Response Preview Tag (Unobtrusive) */}
-          {activeStep.isDemoChat && (
-            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 w-[90%] max-w-md p-3 rounded-2xl bg-slate-900/98 border border-emerald-400/60 shadow-2xl backdrop-blur-2xl text-white pointer-events-auto animate-in fade-in zoom-in-95 duration-300 z-40">
-              <div className="flex items-center justify-between mb-1.5 text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
-                <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  Respon Standar DPMPTSP Madiun
-                </span>
-                <span className="text-white/50">Simulasi AI</span>
-              </div>
-              <p className="text-xs text-slate-200 leading-snug mb-2 font-normal">
-                "Syarat izin warung kopi (risiko rendah): cukup KTP & NPWP, NIB terbit instan gratis via portal OSS."
-              </p>
-              <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 text-[10px] font-semibold">
-                <AudioLines className="w-3 h-3 animate-pulse" />
-                <span>Suara Gadis AI Berbicara Resmi...</span>
               </div>
             </div>
           )}
@@ -358,54 +390,54 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
 
       {/* 
         2. Cinema Subtitle Bar (Subtitle Berjalan Otomatis di Bawah Layar):
-        Ultra-sleek, minimalist capsule strip.
-        Leaves 95% of the screen completely unobstructed!
+        High-Contrast Dark Glass (Anti-Menyaru pada mode terang maupun gelap).
+        Menampilkan teks lengkap tanpa terpotong '...' sedikitpun!
       */}
       <div className="fixed bottom-5 sm:bottom-7 inset-x-0 mx-auto w-fit max-w-[94vw] sm:max-w-3xl z-50 pointer-events-auto px-2">
-        <div className="flex items-center gap-2.5 sm:gap-3.5 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-slate-950/92 border border-emerald-400/50 shadow-[0_12px_40px_rgba(0,0,0,0.85)] shadow-emerald-950/50 backdrop-blur-2xl text-white transition-all duration-300">
+        <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 rounded-full bg-slate-950/98 border-2 border-emerald-400/80 shadow-[0_16px_50px_rgba(0,0,0,0.95)] shadow-emerald-950/70 text-white transition-all duration-300">
           
           {/* Step Pill & Pulsing Audio Icon */}
-          <div className="flex items-center gap-1.5 shrink-0 pl-0.5">
-            <div className="p-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              <AudioLines className="w-3.5 h-3.5 animate-pulse stroke-[2.5]" />
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="p-1.5 rounded-full bg-emerald-500 text-slate-950 shadow-[0_0_10px_#34d399]">
+              <AudioLines className="w-3.5 h-3.5 animate-pulse stroke-[3]" />
             </div>
-            <span className="font-mono text-xs font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/30 px-2 py-0.5 rounded-full whitespace-nowrap">
+            <span className="font-mono text-xs font-black text-emerald-300 bg-emerald-950 border border-emerald-500/50 px-2.5 py-0.5 rounded-full whitespace-nowrap">
               {safeStepIndex + 1}/{TOUR_STEPS.length}
             </span>
           </div>
 
-          {/* Running Subtitle Text (Karaoke / Typewriter Live Sync) */}
-          <div className="flex-1 min-w-0 pr-2">
-            <p className="text-xs sm:text-sm text-slate-100 font-medium tracking-wide leading-snug line-clamp-2 drop-shadow-sm">
+          {/* Running Subtitle Text (Karaoke / Typewriter Live Sync) - FULL TEXT WITHOUT '...' */}
+          <div className="flex-1 min-w-0 pr-1">
+            <p className="text-xs sm:text-sm text-white font-semibold tracking-wide leading-relaxed drop-shadow">
               "{displayedSubtitle}"
               {displayedSubtitle.length < activeStep.text.length && (
-                <span className="inline-block w-1.5 h-3 ml-1 bg-emerald-400 animate-pulse align-middle" />
+                <span className="inline-block w-1.5 h-3.5 ml-1 bg-emerald-400 animate-pulse align-middle" />
               )}
             </p>
           </div>
 
           {/* Mini Playback Controls: Pause/Play & Mute */}
-          <div className="flex items-center gap-1.5 shrink-0 border-l border-white/15 pl-2 sm:pl-3">
+          <div className="flex items-center gap-2 shrink-0 border-l border-white/20 pl-2 sm:pl-3">
             <button
               onClick={togglePlay}
-              className="p-1.5 rounded-full hover:bg-white/15 text-white/80 hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-emerald-400 transition-colors cursor-pointer"
               title={isPlaying ? 'Jeda Suara' : 'Lanjutkan Suara'}
             >
-              {isPlaying ? <Pause className="w-3.5 h-3.5 text-emerald-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />}
+              {isPlaying ? <Pause className="w-4 h-4 text-emerald-400" /> : <Play className="w-4 h-4 text-emerald-400 fill-emerald-400" />}
             </button>
 
             <button
               onClick={toggleMute}
-              className="p-1.5 rounded-full hover:bg-white/15 text-white/80 hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
               title={isMuted ? 'Nyalakan Suara' : 'Bisukan Suara'}
             >
-              {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
+              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
             </button>
 
             {/* Skip Tour Button */}
             <button
               onClick={handleSkip}
-              className="ml-1 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white text-[11px] font-semibold border border-white/15 transition-all cursor-pointer whitespace-nowrap"
+              className="ml-0.5 px-3 py-1 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-300 hover:text-white text-xs font-bold border border-emerald-400/40 transition-all cursor-pointer whitespace-nowrap active:scale-95"
               title="Lewati panduan suara"
             >
               Lewati

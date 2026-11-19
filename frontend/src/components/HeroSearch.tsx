@@ -7,6 +7,7 @@ interface HeroSearchProps {
   onSearch: (query: string) => void;
   onVoiceSearch?: (audioBlob: Blob, durationSeconds: number) => void;
   isLoading: boolean;
+  simulatedQuery?: string;
 }
 
 const BG_IMAGES = [
@@ -15,8 +16,20 @@ const BG_IMAGES = [
   '/images/backgrounds/bg_topographic_mesh.jpg'
 ];
 
-export const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, onVoiceSearch, isLoading }) => {
+export const HeroSearch: React.FC<HeroSearchProps> = ({ 
+  onSearch, 
+  onVoiceSearch, 
+  isLoading,
+  simulatedQuery
+}) => {
   const [inputVal, setInputVal] = useState('');
+
+  // Sync simulated query from interactive tour if provided
+  useEffect(() => {
+    if (simulatedQuery !== undefined) {
+      setInputVal(simulatedQuery);
+    }
+  }, [simulatedQuery]);
   const [settings, setSettings] = useState<AppSettings>(getStoredSettings());
   const [bgIndex, setBgIndex] = useState(0);
 

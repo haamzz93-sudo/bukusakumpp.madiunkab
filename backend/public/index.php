@@ -269,7 +269,7 @@ if ($uri === '/api/tts' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $raw = file_get_contents('php://input');
     $data = json_decode($raw, true) ?? [];
     $text = trim($data['text'] ?? '');
-    $voice = trim($data['voice'] ?? 'id-ID-GadisNeural');
+    $voice = trim($data['voice'] ?? 'id-ID-ArdiNeural');
 
     if (empty($text)) {
         http_response_code(400);
@@ -366,7 +366,7 @@ if ($uri === '/api/voice-chat' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $ragResponse = $rag->search($transcription);
     $ragResponse['transcription'] = $transcription;
 
-    // Generate output speech (id-ID-GadisNeural)
+    // Generate output speech (id-ID-ArdiNeural)
     if (!empty($ragResponse['answer'])) {
         $ragResponse['audio_url'] = $audioService->generateTts($ragResponse['answer']);
     }
