@@ -106,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div 
         className={`pointer-events-auto relative mx-auto p-[1.5px] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isScrolled 
-            ? 'max-w-4xl rounded-full shadow-2xl shadow-emerald-950/40 scale-[0.98]'
+            ? 'max-w-5xl xl:max-w-6xl rounded-full shadow-2xl shadow-emerald-950/40 scale-[0.98]'
             : 'max-w-7xl rounded-2xl sm:rounded-3xl shadow-xl shadow-emerald-950/25 scale-100'
         }`}
       >
@@ -122,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div 
           className={`relative z-10 w-full rounded-[inherit] flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] liquid-glass-dark text-white ${
             isScrolled 
-              ? 'px-4 sm:px-5 py-2' 
+              ? 'px-4 sm:px-6 lg:px-7 py-2' 
               : 'px-4 sm:px-6 py-2.5 sm:py-3.5'
           }`}
         >
@@ -247,17 +247,17 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Actions on Right: Theme Toggle & Login Button (100% Responsive, Zero Offset) */}
-        <div className="relative z-10 flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="relative z-10 flex items-center gap-1 sm:gap-2 shrink-0 pr-1 sm:pr-2">
           
           {/* Interactive VoiceAI Tour Button */}
           {onStartTour && (
             <button
               onClick={onStartTour}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer shrink-0"
               title="Putar Panduan Suara Interaktif (VoiceAI Tour)"
             >
               <AudioLines className="w-3.5 h-3.5 text-emerald-400 animate-pulse shrink-0" />
-              <span className="hidden sm:inline">Panduan Suara</span>
+              <span className="hidden xl:inline">Panduan Suara</span>
             </button>
           )}
 
@@ -279,16 +279,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="Buka Panel Admin Buku Saku"
             >
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
-              <span className="leading-none">Panel Admin</span>
+              <span className="leading-none whitespace-nowrap">Panel Admin</span>
             </button>
           ) : (
             <button
               onClick={onLoginClick}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white font-semibold text-xs sm:text-xs tracking-wide border border-white/25 transition-all shadow-sm shrink-0 whitespace-nowrap active:scale-95"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white font-semibold text-xs tracking-wide border border-white/25 transition-all shadow-sm shrink-0 whitespace-nowrap active:scale-95"
               title="Login Admin Buku Saku"
             >
               <LogIn className="w-3.5 h-3.5 text-mpp-bright shrink-0" />
-              <span className="leading-none">Login</span>
+              <span className="leading-none whitespace-nowrap">Login</span>
             </button>
           )}
 

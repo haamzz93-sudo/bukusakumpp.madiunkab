@@ -176,8 +176,11 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
 
     const el = document.getElementById(activeStep.targetId);
     if (el) {
-      // Smoothly scroll the highlighted element into view
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Calculate top position with 85px offset so navbar and header are clear
+      const navOffset = 85;
+      const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
+      const scrollToY = Math.max(0, elementTop - navOffset);
+      window.scrollTo({ top: scrollToY, behavior: 'smooth' });
 
       // Measure after smooth scroll starts
       setTimeout(() => {
@@ -265,148 +268,145 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({ isOpen, 
       )}
 
       {/* 
-        2. Interactive Demonstration Pop-Up Card for Step 3 (Chat & Voice Response Result Preview):
-        Shows what the user actually receives after speaking/typing.
+        2. Automated Bottom VoiceAI Guidance HUD:
+        Single unified flex column anchored at bottom.
+        On Step 3, the demo chat preview sits neatly atop the HUD within the same container,
+        guaranteeing ZERO overlap and 100% responsiveness on any screen height!
       */}
-      {activeStep.isDemoChat && (
-        <div className="fixed inset-x-0 top-1/4 z-40 flex justify-center px-4 pointer-events-none animate-in fade-in zoom-in-95 duration-500">
-          <div className="w-full max-w-lg rounded-2xl bg-slate-900/98 border border-emerald-400/60 p-4 sm:p-5 shadow-2xl shadow-emerald-950/60 text-white backdrop-blur-xl pointer-events-auto">
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-xs font-bold text-emerald-300">Simulasi Respon Resmi Buku Saku</span>
-            </div>
-
-            {/* Simulated User Question */}
-            <div className="flex items-end justify-end gap-2 mb-3">
-              <div className="max-w-[85%] rounded-2xl rounded-br-none bg-emerald-600 px-3.5 py-2 text-xs sm:text-sm text-white font-medium shadow-md">
-                "Bagaimana syarat dan cara buat NIB OSS warung kopi?"
-              </div>
-            </div>
-
-            {/* Simulated AI Answer with Audio Player */}
-            <div className="flex items-start gap-2">
-              <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 mt-1">
-                <AudioLines className="w-4 h-4" />
-              </div>
-              <div className="flex-1 rounded-2xl rounded-tl-none bg-slate-800/90 border border-white/10 p-3 text-xs sm:text-sm text-slate-200">
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 mb-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Standar Pelayanan DPMPTSP · OSS RBA</span>
-                </div>
-                <p className="leading-relaxed mb-2.5">
-                  Untuk warung kopi (risiko rendah), izin NIB terbit otomatis gratis 100% dalam hitungan menit cukup dengan KTP dan NPWP melalui portal OSS.
-                </p>
-
-                {/* Simulated Audio Cassette Bar */}
-                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-950/80 border border-emerald-500/30">
-                  <div className="p-1 rounded-full bg-emerald-500 text-slate-950">
-                    <AudioLines className="w-3.5 h-3.5 animate-pulse" />
-                  </div>
-                  <span className="text-[11px] font-bold text-emerald-300">Suara Gadis AI Berbicara...</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 
-        3. Automated Bottom VoiceAI Guidance HUD:
-        Fully automated progress timeline, playback toggle, and status.
-      */}
-      <div className="fixed inset-x-0 bottom-4 sm:bottom-6 z-40 flex justify-center px-4 pointer-events-auto">
-        <div className="w-full max-w-xl rounded-2xl sm:rounded-3xl bg-slate-900/95 border border-emerald-500/40 p-4 sm:p-5 shadow-2xl shadow-emerald-950/60 backdrop-blur-2xl text-white transition-all duration-300">
+      <div className="fixed inset-x-0 bottom-3 sm:bottom-5 z-40 flex flex-col items-center px-3 sm:px-4 pointer-events-auto">
+        <div className="w-full max-w-lg space-y-2 sm:space-y-2.5">
           
-          {/* Top Bar: Voice AI Badge, Auto Timeline, Close */}
-          <div className="flex items-center justify-between gap-3 mb-2.5">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <AudioLines className="w-4 h-4 animate-pulse stroke-[2.5]" />
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
-                    VoiceAI Buku Saku
-                  </span>
-                  <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-semibold border border-emerald-500/30">
-                    Tur Otomatis
-                  </span>
-                </div>
-                <span className="text-[10px] text-white/50 block font-medium">
-                  {activeStep.category} · Berjalan Tanpa Klik
+          {/* Step 3: Interactive Demo Chat Preview Card */}
+          {activeStep.isDemoChat && (
+            <div className="rounded-2xl bg-slate-900/98 border border-emerald-400/60 p-3 sm:p-3.5 shadow-2xl shadow-emerald-950/60 text-white backdrop-blur-xl animate-in slide-in-from-bottom-2 duration-300">
+              <div className="flex items-center gap-1.5 mb-2 pb-1.5 border-b border-white/10">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wide">
+                  Simulasi Respon Resmi Buku Saku
                 </span>
               </div>
+
+              {/* Simulated User Question */}
+              <div className="flex items-end justify-end mb-2">
+                <div className="max-w-[90%] rounded-xl rounded-br-none bg-emerald-600 px-3 py-1.5 text-xs text-white font-medium shadow-sm">
+                  "Bagaimana syarat dan cara buat NIB OSS warung kopi?"
+                </div>
+              </div>
+
+              {/* Simulated AI Answer with Audio Player */}
+              <div className="rounded-xl rounded-tl-none bg-slate-800/90 border border-white/10 p-2.5 text-xs text-slate-200">
+                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-emerald-400 mb-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Standar Pelayanan DPMPTSP · OSS RBA</span>
+                </div>
+                <p className="leading-relaxed mb-2 text-xs">
+                  Untuk warung kopi (risiko rendah), izin NIB terbit otomatis gratis 100% via OSS cukup dengan KTP & NPWP.
+                </p>
+                {/* Audio Cassette Bar */}
+                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-950/80 border border-emerald-500/30">
+                  <div className="p-0.5 rounded-full bg-emerald-500 text-slate-950">
+                    <AudioLines className="w-3 h-3 animate-pulse" />
+                  </div>
+                  <span className="text-[10px] font-bold text-emerald-300">Suara Gadis AI Berbicara...</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Main VoiceAI Tour Guidance HUD */}
+          <div className="rounded-2xl sm:rounded-3xl bg-slate-900/95 border border-emerald-500/40 p-3 sm:p-4 shadow-2xl shadow-emerald-950/60 backdrop-blur-2xl text-white">
+            
+            {/* Top Bar: Voice AI Badge, Auto Timeline, Close */}
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <AudioLines className="w-4 h-4 animate-pulse stroke-[2.5]" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                      VoiceAI Buku Saku
+                    </span>
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-semibold border border-emerald-500/30">
+                      Tur Otomatis
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-white/50 block font-medium">
+                    {activeStep.category} · Berjalan Tanpa Klik
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {/* Step indicator */}
+                <span className="text-xs font-mono font-bold text-slate-300 px-2 py-0.5 rounded-full bg-white/10 border border-white/15">
+                  {safeStepIndex + 1} / {TOUR_STEPS.length}
+                </span>
+
+                {/* Close / Skip button */}
+                <button
+                  onClick={handleSkip}
+                  className="p-1.5 rounded-xl hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer"
+                  title="Lewati panduan suara & kembali"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              {/* Step indicator */}
-              <span className="text-xs font-mono font-bold text-slate-300 px-2.5 py-1 rounded-full bg-white/10 border border-white/15">
-                {safeStepIndex + 1} / {TOUR_STEPS.length}
-              </span>
-
-              {/* Close / Skip button */}
-              <button
-                onClick={handleSkip}
-                className="p-1.5 rounded-xl hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer"
-                title="Lewati panduan suara & kembali"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Real-time Voice Audio Timeline Bar */}
-          <div className="relative w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-3.5">
-            <div
-              className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-300 transition-all duration-150 rounded-full shadow-[0_0_8px_#34d399]"
-              style={{ width: `${audioProgress}%` }}
-            />
-          </div>
-
-          {/* Step Title & Narration */}
-          <div className="mb-4">
-            <h4 className="font-display font-bold text-sm sm:text-base text-white mb-1">
-              {activeStep.title}
-            </h4>
-            <p className="text-xs text-slate-300 leading-relaxed font-normal bg-slate-950/50 p-2.5 rounded-xl border border-white/10">
-              "{activeStep.text}"
-            </p>
-          </div>
-
-          {/* Simple Control Toolbar (Pause/Play, Mute, Selesai) */}
-          <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/10 text-xs">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={togglePlay}
-                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold flex items-center gap-1.5 border border-white/15 transition-all cursor-pointer active:scale-95"
-                title={isPlaying ? 'Jeda Suara' : 'Lanjutkan Suara'}
-              >
-                {isPlaying ? <Pause className="w-3.5 h-3.5 text-emerald-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />}
-                <span>{isPlaying ? 'Jeda' : 'Lanjut'}</span>
-              </button>
-
-              <button
-                onClick={toggleMute}
-                className="p-1.5 rounded-xl hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer"
-                title={isMuted ? 'Nyalakan Suara' : 'Bisukan Suara'}
-              >
-                {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
-              </button>
+            {/* Real-time Voice Audio Timeline Bar */}
+            <div className="relative w-full h-1 bg-slate-800 rounded-full overflow-hidden mb-2.5">
+              <div
+                className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-300 transition-all duration-150 rounded-full shadow-[0_0_8px_#34d399]"
+                style={{ width: `${audioProgress}%` }}
+              />
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] text-slate-400 hidden sm:inline">
-                Otomatis berpindah saat suara selesai
-              </span>
-              <button
-                onClick={handleSkip}
-                className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 font-semibold transition-all cursor-pointer"
-              >
-                Lewati & Eksplorasi
-              </button>
+            {/* Step Title & Narration */}
+            <div className="mb-3">
+              <h4 className="font-display font-bold text-xs sm:text-sm text-white mb-0.5">
+                {activeStep.title}
+              </h4>
+              <p className="text-[11px] sm:text-xs text-slate-300 leading-relaxed font-normal bg-slate-950/50 p-2 rounded-xl border border-white/10">
+                "{activeStep.text}"
+              </p>
             </div>
-          </div>
 
+            {/* Simple Control Toolbar (Pause/Play, Mute, Selesai) */}
+            <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-white/10 text-xs">
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={togglePlay}
+                  className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold flex items-center gap-1 border border-white/15 transition-all cursor-pointer active:scale-95 text-xs"
+                  title={isPlaying ? 'Jeda Suara' : 'Lanjutkan Suara'}
+                >
+                  {isPlaying ? <Pause className="w-3 h-3 text-emerald-400" /> : <Play className="w-3 h-3 text-emerald-400 fill-emerald-400" />}
+                  <span>{isPlaying ? 'Jeda' : 'Lanjut'}</span>
+                </button>
+
+                <button
+                  onClick={toggleMute}
+                  className="p-1 rounded-lg hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer"
+                  title={isMuted ? 'Nyalakan Suara' : 'Bisukan Suara'}
+                >
+                  {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] text-slate-400 hidden sm:inline">
+                  Otomatis berpindah saat suara selesai
+                </span>
+                <button
+                  onClick={handleSkip}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 font-semibold transition-all cursor-pointer text-xs"
+                >
+                  Lewati
+                </button>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
