@@ -477,11 +477,12 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
         2. Cinema Subtitle Bar (Subtitle Berjalan Otomatis di Bawah Layar):
         Solid Opaque Obsidian Dark Slate (#020617) with Emerald Border (#10b981)
         Guaranteed 100% OPAQUE - ANTI-MENYARU on both Light Mode (White background) and Dark Mode.
-        Menampilkan teks lengkap tanpa terpotong '...' sedikitpun!
+        Responsive: Rounded card on mobile (< sm), sleek pill on desktop (sm+).
+        Never covers the screen or squishes text into a vertical egg!
       */}
-      <div className="fixed bottom-5 sm:bottom-7 inset-x-0 mx-auto w-fit max-w-[94vw] sm:max-w-3xl z-50 pointer-events-auto px-2">
+      <div className={`fixed ${safeStepIndex === 7 ? 'top-20 sm:top-auto sm:bottom-7' : 'bottom-4 sm:bottom-7'} inset-x-3 sm:inset-x-0 mx-auto w-auto sm:w-fit max-w-[96vw] sm:max-w-3xl z-50 pointer-events-auto`}>
         <div 
-          className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 rounded-full text-white transition-all duration-300"
+          className="rounded-2xl sm:rounded-full px-4 sm:px-6 py-3 text-white transition-all duration-300"
           style={{
             backgroundColor: '#020617',
             color: '#ffffff',
@@ -490,59 +491,122 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
           }}
         >
           
-          {/* Step Pill & Pulsing Audio Icon */}
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="p-1.5 rounded-full bg-emerald-500 text-slate-950 shadow-[0_0_12px_#10b981]">
-              <AudioLines className="w-3.5 h-3.5 animate-pulse stroke-[3]" />
+          {/* DESKTOP LAYOUT (sm+): 1-Line Sleek Cinema Bar */}
+          <div className="hidden sm:flex items-center gap-3 sm:gap-4">
+            {/* Step Pill & Pulsing Audio Icon */}
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="p-1.5 rounded-full bg-emerald-500 text-slate-950 shadow-[0_0_12px_#10b981]">
+                <AudioLines className="w-3.5 h-3.5 animate-pulse stroke-[3]" />
+              </div>
+              <span 
+                className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full whitespace-nowrap"
+                style={{
+                  backgroundColor: '#064e3b',
+                  color: '#6ee7b7',
+                  border: '1px solid #10b981'
+                }}
+              >
+                {safeStepIndex + 1}/{TOUR_STEPS.length}
+              </span>
             </div>
-            <span 
-              className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full whitespace-nowrap"
-              style={{
-                backgroundColor: '#064e3b',
-                color: '#6ee7b7',
-                border: '1px solid #10b981'
-              }}
-            >
-              {safeStepIndex + 1}/{TOUR_STEPS.length}
-            </span>
+
+            {/* Running Subtitle Text (Karaoke / Typewriter Live Sync) */}
+            <div className="flex-1 min-w-0 pr-1">
+              <p className="text-xs sm:text-sm text-white font-semibold tracking-wide leading-relaxed drop-shadow">
+                "{displayedSubtitle}"
+                {displayedSubtitle.length < activeStep.text.length && (
+                  <span className="inline-block w-1.5 h-3.5 ml-1 bg-emerald-400 animate-pulse align-middle" />
+                )}
+              </p>
+            </div>
+
+            {/* Mini Playback Controls: Pause/Play & Mute */}
+            <div className="flex items-center gap-2 shrink-0 border-l border-white/20 pl-2 sm:pl-3">
+              <button
+                onClick={togglePlay}
+                className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-emerald-400 transition-colors cursor-pointer"
+                title={isPlaying ? 'Jeda Suara' : 'Lanjutkan Suara'}
+              >
+                {isPlaying ? <Pause className="w-4 h-4 text-emerald-400" /> : <Play className="w-4 h-4 text-emerald-400 fill-emerald-400" />}
+              </button>
+
+              <button
+                onClick={toggleMute}
+                className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
+                title={isMuted ? 'Nyalakan Suara' : 'Bisukan Suara'}
+              >
+                {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+              </button>
+
+              {/* Skip Tour Button */}
+              <button
+                onClick={handleSkip}
+                className="ml-0.5 px-3 py-1 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-300 hover:text-white text-xs font-bold border border-emerald-400/40 transition-all cursor-pointer whitespace-nowrap active:scale-95"
+                title="Lewati panduan suara"
+              >
+                Lewati
+              </button>
+            </div>
           </div>
 
-          {/* Running Subtitle Text (Karaoke / Typewriter Live Sync) - FULL TEXT WITHOUT '...' */}
-          <div className="flex-1 min-w-0 pr-1">
-            <p className="text-xs sm:text-sm text-white font-semibold tracking-wide leading-relaxed drop-shadow">
+          {/* MOBILE LAYOUT (< sm): Clean 2-Row Native Mobile Card */}
+          <div className="flex flex-col gap-2 sm:hidden">
+            {/* Row 1: Header with Step, Category, and Controls */}
+            <div className="flex items-center justify-between gap-2 border-b border-white/15 pb-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="p-1 rounded-full bg-emerald-500 text-slate-950 shrink-0">
+                  <AudioLines className="w-3 h-3 animate-pulse stroke-[3]" />
+                </div>
+                <span 
+                  className="font-mono text-[11px] font-black px-2 py-0.5 rounded-full shrink-0"
+                  style={{
+                    backgroundColor: '#064e3b',
+                    color: '#6ee7b7',
+                    border: '1px solid #10b981'
+                  }}
+                >
+                  {safeStepIndex + 1}/{TOUR_STEPS.length}
+                </span>
+                <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider truncate">
+                  {activeStep.category}
+                </span>
+              </div>
+
+              {/* Mobile Playback Controls */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  onClick={togglePlay}
+                  className="p-1 rounded-full bg-white/10 text-emerald-400"
+                  title={isPlaying ? 'Jeda Suara' : 'Lanjutkan Suara'}
+                >
+                  {isPlaying ? <Pause className="w-3.5 h-3.5 text-emerald-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />}
+                </button>
+
+                <button
+                  onClick={toggleMute}
+                  className="p-1 rounded-full bg-white/10 text-white/80"
+                  title={isMuted ? 'Nyalakan Suara' : 'Bisukan Suara'}
+                >
+                  {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
+                </button>
+
+                <button
+                  onClick={handleSkip}
+                  className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-400/40"
+                  title="Lewati panduan suara"
+                >
+                  Lewati
+                </button>
+              </div>
+            </div>
+
+            {/* Row 2: Full-Width Subtitle Text (Natural 2-3 lines, zero vertical squish!) */}
+            <p className="text-xs text-white/95 font-medium leading-relaxed drop-shadow">
               "{displayedSubtitle}"
               {displayedSubtitle.length < activeStep.text.length && (
                 <span className="inline-block w-1.5 h-3.5 ml-1 bg-emerald-400 animate-pulse align-middle" />
               )}
             </p>
-          </div>
-
-          {/* Mini Playback Controls: Pause/Play & Mute */}
-          <div className="flex items-center gap-2 shrink-0 border-l border-white/20 pl-2 sm:pl-3">
-            <button
-              onClick={togglePlay}
-              className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-emerald-400 transition-colors cursor-pointer"
-              title={isPlaying ? 'Jeda Suara' : 'Lanjutkan Suara'}
-            >
-              {isPlaying ? <Pause className="w-4 h-4 text-emerald-400" /> : <Play className="w-4 h-4 text-emerald-400 fill-emerald-400" />}
-            </button>
-
-            <button
-              onClick={toggleMute}
-              className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
-              title={isMuted ? 'Nyalakan Suara' : 'Bisukan Suara'}
-            >
-              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
-            </button>
-
-            {/* Skip Tour Button */}
-            <button
-              onClick={handleSkip}
-              className="ml-0.5 px-3 py-1 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-300 hover:text-white text-xs font-bold border border-emerald-400/40 transition-all cursor-pointer whitespace-nowrap active:scale-95"
-              title="Lewati panduan suara"
-            >
-              Lewati
-            </button>
           </div>
 
         </div>

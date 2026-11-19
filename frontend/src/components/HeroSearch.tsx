@@ -179,7 +179,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
           {/* Subtle Ambient Backlight specifically for the text */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,253,245,0.20)_0%,_rgba(254,240,138,0.07)_50%,_transparent_70%)] blur-xl pointer-events-none" />
 
-          <h1 className="relative font-display font-black text-3xl sm:text-5xl lg:text-[3.25rem] tracking-tight leading-[1.2] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+          <h1 className="relative font-display font-black text-2xl sm:text-4xl lg:text-[3.25rem] tracking-tight leading-[1.2] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
             {/* Line 1: Halo, saya Buku Saku. */}
             <span className="text-white drop-shadow-[0_0_28px_rgba(255,253,245,0.85)] drop-shadow-[0_0_55px_rgba(254,243,199,0.45)]">
               {displayedTitle}

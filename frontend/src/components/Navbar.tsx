@@ -271,11 +271,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {isDarkMode ? <Sun className="w-4 h-4 text-mpp-bright" /> : <Moon className="w-4 h-4" />}
           </button>
 
-          {/* Login or Admin Dashboard Button */}
+          {/* Login or Admin Dashboard Button (On mobile, fully accessible inside Hamburger drawer) */}
           {isAdminLoggedIn ? (
             <button
               onClick={onAdminPanelClick}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-emerald-500/80 hover:bg-emerald-500 active:bg-emerald-600 text-white font-semibold text-xs tracking-wide border border-emerald-300/40 transition-all shadow-sm shrink-0 whitespace-nowrap active:scale-95"
+              className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-emerald-500/80 hover:bg-emerald-500 active:bg-emerald-600 text-white font-semibold text-xs tracking-wide border border-emerald-300/40 transition-all shadow-sm shrink-0 whitespace-nowrap active:scale-95"
               title="Buka Panel Admin Buku Saku"
             >
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
@@ -284,7 +284,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           ) : (
             <button
               onClick={onLoginClick}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white font-semibold text-xs tracking-wide border border-white/25 transition-all shadow-sm shrink-0 whitespace-nowrap active:scale-95"
+              className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white font-semibold text-xs tracking-wide border border-white/25 transition-all shadow-sm shrink-0 whitespace-nowrap active:scale-95"
               title="Login Admin Buku Saku"
             >
               <LogIn className="w-3.5 h-3.5 text-mpp-bright shrink-0" />
