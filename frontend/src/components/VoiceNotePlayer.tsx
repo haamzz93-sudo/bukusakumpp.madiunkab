@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Sparkles, User } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Mic } from 'lucide-react';
 import { getApiBaseUrl } from '../services/apiConfig';
 
 interface VoiceNotePlayerProps {
@@ -173,15 +173,23 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
       <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-2.5">
           {isAssistant ? (
-            <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 font-bold shadow-[0_0_16px_rgba(16,185,129,0.55)]">
-              <Sparkles className="w-4 h-4 fill-current" />
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-400 text-slate-950 font-bold shadow-[0_0_16px_rgba(16,185,129,0.55)]">
+              {/* Clean non-slop Civic Audio Lines Icon */}
+              <svg className="w-4 h-4 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 10v4" />
+                <path d="M6 7v10" />
+                <path d="M10 4v16" />
+                <path d="M14 7v10" />
+                <path d="M18 10v4" />
+                <path d="M22 10v4" />
+              </svg>
               {isPlaying && (
                 <span className="absolute -inset-1 rounded-full border border-emerald-400/70 animate-ping pointer-events-none" />
               )}
             </div>
           ) : (
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/15 text-white border border-white/25">
-              <User className="w-4 h-4" />
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/15 text-emerald-300 border border-white/25">
+              <Mic className="w-4 h-4" />
             </div>
           )}
 

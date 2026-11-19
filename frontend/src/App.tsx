@@ -10,6 +10,7 @@ import { AdminLoginModal } from './components/AdminLoginModal';
 import { PerizinanDetailModal } from './components/PerizinanDetailModal';
 import { CloudflareMadiunVerification } from './components/CloudflareMadiunVerification';
 import { WhatsAppIcon } from './components/WhatsAppIcon';
+import { VoiceNoteRecorder } from './components/VoiceNoteRecorder';
 import { ChatMessage, Perizinan, KategoriPerizinan } from './types/perizinan';
 import { askHybridAi, sendVoiceNoteAi } from './services/hybridAiService';
 import { getStoredSettings, syncSettingsFromBackend, subscribeSettings } from './services/settingsStore';
@@ -120,7 +121,7 @@ export const App: React.FC = () => {
   const executeVoiceQuery = useCallback(async (audioBlob: Blob, durationSeconds: number, isFollowup: boolean = false) => {
     const audioUrl = URL.createObjectURL(audioBlob);
     trackVisitorEvent('voice_note_ai', `Warga bersuara (${durationSeconds}s)`);
-    setCurrentQuery('🎤 Memproses pesan suara...');
+    setCurrentQuery('Memproses pesan suara...');
     setViewMode('chat');
     setIsLoading(true);
 
@@ -128,7 +129,7 @@ export const App: React.FC = () => {
     const userVoiceMsg: ChatMessage = {
       id: userMsgId,
       role: 'user',
-      text: '🎤 Pesan Suara (Voice Note)',
+      text: 'Pesan Suara Anda',
       timestamp: Date.now(),
       isAudio: true,
       audioUrl: audioUrl,
@@ -150,7 +151,7 @@ export const App: React.FC = () => {
 
       const updatedUserMsg: ChatMessage = {
         ...userVoiceMsg,
-        text: `🎤 "${transcribedQuery}"`,
+        text: `"${transcribedQuery}"`,
         transcription: transcribedQuery
       };
 
@@ -381,8 +382,8 @@ export const App: React.FC = () => {
   };
 
   const handleVoiceSearch = (audioBlob: Blob, durationSeconds: number, isFollowup: boolean = false) => {
-    executedQueryRef.current = '🎤 Pesan Suara';
-    navigateTo({ name: 'tanya', query: '🎤 Pesan Suara' }, { scroll: false });
+    executedQueryRef.current = 'Pesan Suara';
+    navigateTo({ name: 'tanya', query: 'Pesan Suara' }, { scroll: false });
     executeVoiceQuery(audioBlob, durationSeconds, isFollowup);
   };
 
@@ -551,17 +552,27 @@ export const App: React.FC = () => {
           {/* Footer */}
           <ContactFooter />
 
-          {/* Floating WhatsApp Helpdesk Button (Official WhatsApp Icon & Styling) */}
-          <a
-            href={`https://wa.me/${formattedWaNumber}?text=${encodeURIComponent('Halo Mal Pelayanan Publik (MPP) Kabupaten Madiun, saya butuh informasi perizinan.')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center group border border-white/50 shadow-emerald-950/40 cursor-pointer"
-            title={`Chat WhatsApp Helpdesk MPP Madiun (${appSettings.whatsappNumber})`}
-            aria-label="Chat WhatsApp Helpdesk MPP Madiun"
-          >
-            <WhatsAppIcon size={32} className="text-white drop-shadow-sm" />
-          </a>
+          {/* Floating Action Dock: Voice Note AI & Official WhatsApp */}
+          <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
+            {/* Quick Floating Voice Note Button */}
+            <VoiceNoteRecorder
+              onSendVoice={(blob, sec) => handleVoiceSearch(blob, sec, false)}
+              disabled={isLoading}
+              floating
+            />
+
+            {/* Official WhatsApp Helpdesk Button */}
+            <a
+              href={`https://wa.me/${formattedWaNumber}?text=${encodeURIComponent('Halo Mal Pelayanan Publik (MPP) Kabupaten Madiun, saya butuh informasi perizinan.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center group border border-white/50 shadow-emerald-950/40 cursor-pointer"
+              title={`Chat WhatsApp Helpdesk MPP Madiun (${appSettings.whatsappNumber})`}
+              aria-label="Chat WhatsApp Helpdesk MPP Madiun"
+            >
+              <WhatsAppIcon size={30} className="text-white drop-shadow-sm" />
+            </a>
+          </div>
         </>
       )}
 

@@ -1,14 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, Square, Trash2, Send, AlertCircle, Loader2 } from 'lucide-react';
+import { Mic, Trash2, Send, AlertCircle } from 'lucide-react';
 
 interface VoiceNoteRecorderProps {
   onSendVoice: (audioBlob: Blob, durationSeconds: number) => void;
   disabled?: boolean;
+  floating?: boolean;
 }
 
 export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
   onSendVoice,
-  disabled = false
+  disabled = false,
+  floating = false
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
@@ -60,7 +62,7 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
       });
       streamRef.current = stream;
 
-      // Realtime Volume Analysis for Spider-Man HUD soundwave reactivity
+      // Realtime Volume Analysis for live HUD soundwave reactivity
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       const audioContext = new AudioCtx();
       audioContextRef.current = audioContext;
@@ -114,7 +116,6 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
       timerRef.current = setInterval(() => {
         setRecordingSeconds((prev) => {
           if (prev >= 60) {
-            // Auto stop at 60s
             stopAndSend();
             return 60;
           }
@@ -173,12 +174,12 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
     return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
-  // If currently recording, show the rich Liquid Glass Recording HUD
+  // If currently recording, render HUD
   if (isRecording) {
-    return (
-      <div className="flex items-center gap-2 sm:gap-3 w-full animate-in fade-in zoom-in-95 duration-200">
+    const recordingHud = (
+      <div className={`flex items-center gap-2 sm:gap-3 ${floating ? 'fixed bottom-6 right-20 sm:right-24 z-50 p-2.5 rounded-2xl bg-slate-900/95 border border-red-500/40 shadow-2xl backdrop-blur-2xl animate-in slide-in-from-bottom-3' : 'w-full animate-in fade-in zoom-in-95 duration-200'}`}>
         {/* Recording Status & Waveform Indicator */}
-        <div className="flex-1 flex items-center justify-between px-3 sm:px-4 py-2 rounded-xl liquid-glass border border-red-500/30 bg-red-950/20 shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+        <div className="flex-1 flex items-center justify-between gap-3 px-3 sm:px-4 py-2 rounded-xl liquid-glass border border-red-500/30 bg-red-950/20 shadow-[0_0_20px_rgba(239,68,68,0.2)]">
           <div className="flex items-center gap-2">
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
@@ -189,7 +190,7 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
             </span>
           </div>
 
-          {/* Dynamic Sound Wave Pulse (Spider-Man HUD reactivity) */}
+          {/* Dynamic Sound Wave Pulse */}
           <div className="flex items-center gap-1 h-5 px-2">
             {[0.4, 0.8, 1.2, 0.7, 1.4, 0.9, 0.5].map((multiplier, idx) => {
               const height = Math.max(18, Math.min(100, volumeLevel * multiplier));
@@ -233,9 +234,49 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
         </button>
       </div>
     );
+
+    return recordingHud;
   }
 
-  // Idle state: Sleek Liquid Glass Microphone Button
+  // Idle state: Floating Button variant
+  if (floating) {
+    return (
+      <div className="relative group">
+        {permissionError && (
+          <div className="absolute bottom-full mb-3 right-0 w-64 p-3 rounded-xl bg-red-950/95 border border-red-500/40 text-red-200 text-xs shadow-2xl backdrop-blur-md z-50 flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p>{permissionError}</p>
+              <button
+                onClick={() => setPermissionError(null)}
+                className="text-[10px] text-red-300 underline mt-1 cursor-pointer"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button
+          onClick={startRecording}
+          disabled={disabled}
+          type="button"
+          className="p-3.5 rounded-full bg-slate-900/95 hover:bg-slate-800 text-emerald-400 border border-emerald-400/50 shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-emerald-950/50 disabled:opacity-50"
+          title="Bicara dengan VoiceAI Buku Saku"
+          aria-label="Bicara dengan VoiceAI Buku Saku"
+        >
+          <Mic className="w-7 h-7 drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+        </button>
+
+        {/* Floating Tooltip */}
+        <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-slate-900/95 text-white text-xs font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-emerald-500/30 shadow-xl backdrop-blur-md">
+          VoiceAI Buku Saku
+        </div>
+      </div>
+    );
+  }
+
+  // Idle state: Inline Bar variant
   return (
     <div className="relative">
       {permissionError && (
@@ -258,7 +299,7 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
         disabled={disabled}
         type="button"
         className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl liquid-glass hover:bg-white/20 text-white/90 hover:text-white border border-white/25 hover:border-emerald-400/50 transition-all duration-300 cursor-pointer active:scale-95 shadow-md hover:shadow-[0_0_16px_rgba(16,185,129,0.3)] disabled:opacity-50 disabled:cursor-not-allowed group"
-        title="Bicara dengan Voice Note (AI Spider-Man Style)"
+        title="Bicara dengan Voice Note (VoiceAI Buku Saku)"
       >
         <Mic className="w-5 h-5 text-emerald-300 group-hover:scale-110 transition-transform duration-200 drop-shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
       </button>
