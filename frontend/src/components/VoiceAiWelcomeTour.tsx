@@ -82,7 +82,7 @@ const TOUR_STEPS: TourStep[] = [
     targetId: 'tour-floating-dock',
     title: 'Tombol Melayang Siaga 24 Jam',
     category: 'Tombol Siaga',
-    text: 'Terakhir, tombol WhatsApp dan tombol pesan suara selalu melayang di kanan bawah untuk kemudahan akses Anda. Panduan selesai, selamat memanfaatkan layanan kami!',
+    text: 'Terakhir, tombol WhatsApp dan tombol pesan suara selalu melayang di kanan bawah untuk kemudahan akses Anda. Panduan selesai, selamat memanfaatkan layanan kami! Terima kasih.',
     audioSrc: '/audio/tour_auto_8_finish.mp3',
     arrowPosition: 'top'
   }
