@@ -17,18 +17,23 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
-  const [voiceMode, setVoiceMode] = useState<'asli' | 'voicebox' | 'ai'>('asli');
+  const [voiceMode, setVoiceMode] = useState<'asli' | 'voicebox' | 'elevenlabs' | 'ai'>('voicebox');
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Active audio URL based on selected mode
   // 'asli' -> audio asli dari video D-ID avatar bupati
-  // 'voicebox' -> audio kloning suara Bupati Madiun via Voicebox (RTX 3050 CUDA lokal)
+  // 'voicebox' -> audio kloning suara Bupati Madiun via Voicebox Open Source (RTX 3050 CUDA lokal dari rekaman wawancara asli)
+  // 'elevenlabs' -> audio hasil kloning ElevenLabs yang diunduh user
   // 'ai' -> audio TTS AI dinamis yang membacakan naskah jawaban SOP perizinan
   const activeAudioUrl = voiceMode === 'asli' 
     ? '/avatar/bupati_talking_audio.mp3' 
-    : (voiceMode === 'voicebox' ? '/avatar/bupati_voicebox_cloned.mp3' : (audioUrl || '/avatar/bupati_talking_audio.mp3'));
+    : voiceMode === 'voicebox'
+    ? '/avatar/bupati_voicebox_real.mp3'
+    : voiceMode === 'elevenlabs'
+    ? '/avatar/bupati_elevenlabs.mp3'
+    : (audioUrl || '/avatar/bupati_voicebox_real.mp3');
 
   // Sync Video and Audio playback
   const togglePlay = () => {
@@ -52,7 +57,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
     }
   };
 
-  const handleModeChange = (mode: 'asli' | 'voicebox' | 'ai') => {
+  const handleModeChange = (mode: 'asli' | 'voicebox' | 'elevenlabs' | 'ai') => {
     if (isPlaying) {
       if (videoRef.current) videoRef.current.pause();
       if (audioRef.current) audioRef.current.pause();
@@ -176,8 +181,36 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
             </p>
           </div>
 
-          {/* Voice Mode Selector Tabs: Suara Asli Bupati vs Kloning AI Voicebox vs Suara AI Standar */}
+          {/* Voice Mode Selector Tabs: Video Bupati vs Voicebox Open Source vs ElevenLabs vs Jawaban SOP */}
           <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs">
+            <button
+              onClick={() => handleModeChange('voicebox')}
+              type="button"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                voiceMode === 'voicebox'
+                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+              title="Hasil Kloning 100% Open Source Lokal Voicebox Qwen-TTS dari Wawancara Asli Bupati"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>Voicebox Open-Source (Lokal GPU)</span>
+            </button>
+
+            <button
+              onClick={() => handleModeChange('elevenlabs')}
+              type="button"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                voiceMode === 'elevenlabs'
+                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+              title="Hasil Uji Coba Kloning ElevenLabs"
+            >
+              <Mic className="w-3.5 h-3.5 text-blue-300" />
+              <span>ElevenLabs (Preview)</span>
+            </button>
+
             <button
               onClick={() => handleModeChange('asli')}
               type="button"
@@ -187,22 +220,8 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
-              <Mic className="w-3.5 h-3.5" />
-              <span>Sambutan Video Bupati</span>
-            </button>
-
-            <button
-              onClick={() => handleModeChange('voicebox')}
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                voiceMode === 'voicebox'
-                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
-              }`}
-              title="Hasil Kloning Vokal Asli Bapak Bupati Madiun via ElevenLabs"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>Suara Kloning Asli Bupati (ElevenLabs)</span>
+              <Play className="w-3.5 h-3.5" />
+              <span>Video D-ID</span>
             </button>
 
             <button
@@ -215,17 +234,19 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               }`}
             >
               <Bot className="w-3.5 h-3.5" />
-              <span>Bacakan Jawaban SOP</span>
+              <span>Bacakan SOP</span>
             </button>
           </div>
 
           {/* Descriptive Text */}
           <div className="p-2.5 rounded-xl bg-slate-950/40 border border-emerald-500/20">
             <p className="text-xs text-slate-200 font-medium leading-relaxed italic">
-              {voiceMode === 'asli' 
+              {voiceMode === 'voicebox'
+                ? '“Halo, selamat datang di Mal Pelayanan Publik Kabupaten Madiun. Saya H. Hari Wuryanto siap melayani seluruh perizinan Anda secara mudah dan cepat.” (Hasil Kloning 100% Open Source Voicebox via GPU RTX 3050)'
+                : voiceMode === 'elevenlabs'
+                ? '“Selamat malam. Badai yang melanda wilayah pesisir sejak Selasa dini hari mengakibatkan kerusakan di sedikitnya empat kabupaten.” (Hasil Uji Coba ElevenLabs)'
+                : voiceMode === 'asli'
                 ? '“Halo, selamat datang di buku saku digital Mal Pelayanan Publik Kabupaten Madiun. Saya siap membantu Anda.”'
-                : voiceMode === 'voicebox'
-                ? '“Selamat malam. Badai yang melanda wilayah pesisir sejak Selasa dini hari mengakibatkan kerusakan di sedikitnya empat kabupaten.” (Hasil Uji Kloning Vokal Asli Bapak Bupati Madiun via ElevenLabs)'
                 : (fallbackText ? `Membacakan ringkasan: ${fallbackText.slice(0, 140)}...` : "Membacakan panduan standar pelayanan resmi MPP Kabupaten Madiun.")
               }
             </p>
@@ -247,10 +268,12 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
                 <>
                   <Play className="w-4 h-4 fill-current ml-0.5" />
                   <span>
-                    {voiceMode === 'asli' 
-                      ? 'Putar Sambutan Video Bupati' 
-                      : voiceMode === 'voicebox' 
-                      ? 'Putar Suara Kloning ElevenLabs' 
+                    {voiceMode === 'voicebox' 
+                      ? 'Putar Suara Voicebox (Open Source)' 
+                      : voiceMode === 'elevenlabs' 
+                      ? 'Putar Suara ElevenLabs' 
+                      : voiceMode === 'asli'
+                      ? 'Putar Video D-ID'
                       : 'Bacakan Naskah SOP AI'}
                   </span>
                 </>
