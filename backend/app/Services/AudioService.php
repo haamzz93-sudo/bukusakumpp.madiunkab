@@ -275,24 +275,71 @@ class AudioService
     }
 
     /**
+     * Condense any standard public service SOP answer into a concise, high-impact speech script (200-260 chars)
+     * spoken in the executive voice of Bapak Bupati Madiun ("inti-intinya saja: syarat, alur, waktu, biaya").
+     */
+    public function condenseToBupatiBriefing(string $text): string
+    {
+        $clean = preg_replace('/https?:\/\/\S+/', '', $text);
+        $clean = preg_replace('/[*#_`\[\]\(\)]+/', ' ', $clean);
+        $clean = trim(preg_replace('/\s+/', ' ', $clean));
+        if (mb_strlen($clean) <= 240) {
+            return $clean;
+        }
+
+        $payload = [
+            'contents' => [
+                [
+                    'parts' => [
+                        [
+                            'text' => "Ringkas teks standar pelayanan Mal Pelayanan Publik (MPP) Kabupaten Madiun berikut menjadi naskah narasi lisan resmi yang ramah, padat, dan ringkas (maksimal 2-3 kalimat, sekitar 200-250 karakter) untuk dibacakan langsung oleh suara Bapak Bupati Madiun kepada warga.\n"
+                                    . "Fokus HANYA pada inti-intinya saja: dokumen syarat kunci, alur/waktu layanan, dan kepastian biaya resmi atau gratis Rp 0.\n"
+                                    . "PENTING: Jangan ada URL link, jangan ada simbol markdown/bintang, jangan ada kata pengantar. Langsung kalimat yang akan diucapkan.\n\n"
+                                    . "Teks sumber:\n" . mb_substr($text, 0, 1500)
+                        ]
+                    ]
+                ]
+            ],
+            'generationConfig' => [
+                'temperature' => 0.2,
+                'maxOutputTokens' => 150
+            ]
+        ];
+
+        $models = [$this->model, 'gemini-1.5-flash'];
+        foreach ($models as $m) {
+            $result = $this->callGeminiWithPayload($m, $payload);
+            if (!empty($result)) {
+                $condensed = trim(preg_replace('/^["\']|["\']$/u', '', trim($result)));
+                $condensed = preg_replace('/[*#_`]+/', ' ', $condensed);
+                $condensed = trim(preg_replace('/\s+/', ' ', $condensed));
+                if (!empty($condensed) && mb_strlen($condensed) > 40) {
+                    return $condensed;
+                }
+            }
+        }
+
+        // Fallback: rule-based summary
+        if (mb_strlen($clean) > 260) {
+            $cutoff = mb_strrpos(mb_substr($clean, 0, 260), '.');
+            if ($cutoff !== false && $cutoff > 120) {
+                return mb_substr($clean, 0, $cutoff + 1) . ' Rincian berkas lengkap dapat disimak pada teks panduan di layar.';
+            }
+            return mb_substr($clean, 0, 250) . '... Rincian berkas lengkap dapat disimak pada teks panduan di layar.';
+        }
+
+        return $clean;
+    }
+
+    /**
      * Synthesize cloned voice of Bupati Madiun via locally running Voicebox server (RTX 3050 CUDA)
      */
     private function tryGenerateVoiceboxSpeech(string $text, string $filePath): bool
     {
         $voiceboxUrl = 'http://127.0.0.1:17493/v1/audio/speech';
 
-        // Clean text (remove URLs, markdown headers, raw asterisks)
-        $cleanText = preg_replace('/https?:\/\/\S+/', '', $text);
-        $cleanText = preg_replace('/[*#_`]+/', ' ', $cleanText);
-        $cleanText = trim(preg_replace('/\s+/', ' ', $cleanText));
-        if (mb_strlen($cleanText) > 280) {
-            $cutoff = mb_strrpos(mb_substr($cleanText, 0, 280), '.');
-            if ($cutoff !== false && $cutoff > 120) {
-                $cleanText = mb_substr($cleanText, 0, $cutoff + 1);
-            } else {
-                $cleanText = mb_substr($cleanText, 0, 277) . '...';
-            }
-        }
+        // Extract core essentials for Bupati's voice ("inti-intinya saja")
+        $cleanText = $this->condenseToBupatiBriefing($text);
 
         if (empty($cleanText)) {
             return false;
