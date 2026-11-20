@@ -127,7 +127,13 @@ class AudioService
         }
         $publicFilePath = "{$publicDir}/{$filename}";
 
-        // Return cached audio if already generated and non-empty (>1KB)
+        // Return cached audio if already generated and non-empty (>1KB) in storage or public
+        if (file_exists($publicFilePath) && filesize($publicFilePath) > 1024) {
+            if (!file_exists($filePath) || filesize($filePath) !== filesize($publicFilePath)) {
+                @copy($publicFilePath, $filePath);
+            }
+            return "/api/audio/{$filename}";
+        }
         if (file_exists($filePath) && filesize($filePath) > 1024) {
             if (!file_exists($publicFilePath) || filesize($publicFilePath) !== filesize($filePath)) {
                 @copy($filePath, $publicFilePath);

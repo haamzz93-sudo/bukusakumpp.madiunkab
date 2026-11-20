@@ -98,7 +98,25 @@ class ChatController
         $response = $this->rag->search($query);
         if (!empty($response['answer'])) {
             $audioService = new AudioService();
-            $queryKey = 'q_' . substr(md5(mb_strtolower(trim($query))), 0, 16);
+            $cleanQ = mb_strtolower(trim($query));
+
+            // Core SOP Semantic Intent Mapping to Pre-Rendered Bupati Cloned Voice
+            if (preg_match('/warung\s*kopi|warkop|kedai\s*kopi|kopi|56303/u', $cleanQ)) {
+                $queryKey = 'q_d6eb57660a25e9c2';
+            } elseif (preg_match('/skck|catatan\s*kepolisian|sidik\s*jari/u', $cleanQ)) {
+                $queryKey = 'q_b8c10a8285c451cf';
+            } elseif (preg_match('/bphtb/u', $cleanQ)) {
+                $queryKey = 'q_bphtb_official';
+            } elseif (preg_match('/pbb|pajak\s*bumi/u', $cleanQ)) {
+                $queryKey = 'q_pbb_official';
+            } elseif (preg_match('/paspor|imigrasi/u', $cleanQ)) {
+                $queryKey = 'q_paspor_official';
+            } elseif (preg_match('/ktp|kartu\s*keluarga|disdukcapil|kependudukan|akta/u', $cleanQ)) {
+                $queryKey = 'q_ktp_official';
+            } else {
+                $queryKey = 'q_' . substr(md5($cleanQ), 0, 16);
+            }
+
             $response['audio_url'] = $audioService->generateTts($response['answer'], 'id-ID-ArdiNeural', $queryKey);
         }
         echo json_encode($response);

@@ -30,8 +30,6 @@ start_voicebox.bat
 *.log
 backend/storage/logs/*.log
 storage/logs/*.log
-backend/storage/audio/*.mp3
-storage/audio/*.mp3
 .cache
 __pycache__/
 
