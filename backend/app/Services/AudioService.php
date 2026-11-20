@@ -97,15 +97,17 @@ class AudioService
      * Generate high-fidelity Indonesian neural speech audio file via Edge-TTS (id-ID-ArdiNeural)
      * Returns relative URL to the MP3 file
      */
-    public function generateTts(string $text, string $voice = 'id-ID-ArdiNeural'): ?string
+    public function generateTts(string $text, string $voice = 'id-ID-ArdiNeural', ?string $cacheKey = null): ?string
     {
+        @set_time_limit(300);
+        @ini_set('max_execution_time', '300');
         $text = trim($text);
         if (empty($text)) {
             return null;
         }
 
-        // Cache based on hash of voice + text content
-        $hash = substr(md5($voice . '_' . $text), 0, 16);
+        // Cache based on query key or hash of voice + text content
+        $hash = $cacheKey ? preg_replace('/[^a-zA-Z0-9_-]/', '', $cacheKey) : substr(md5($voice . '_' . $text), 0, 16);
         $audioDir = __DIR__ . '/../../storage/audio';
         if (!is_dir($audioDir)) {
             @mkdir($audioDir, 0777, true);

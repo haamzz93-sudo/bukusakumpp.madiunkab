@@ -68,7 +68,8 @@ class ChatController
         $response = $this->rag->search($query);
         if (!empty($response['answer'])) {
             $audioService = new AudioService();
-            $response['audio_url'] = $audioService->generateTts($response['answer']);
+            $queryKey = 'q_' . substr(md5(mb_strtolower(trim($query))), 0, 16);
+            $response['audio_url'] = $audioService->generateTts($response['answer'], 'id-ID-ArdiNeural', $queryKey);
         }
         echo json_encode($response);
     }

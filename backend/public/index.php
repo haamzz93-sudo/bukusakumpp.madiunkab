@@ -1,5 +1,9 @@
 <?php
 
+// Increase execution time limit for local AI & Voicebox GPU inference
+@set_time_limit(300);
+@ini_set('max_execution_time', '300');
+
 // Ensure clean JSON output without HTML warnings/notices corrupting responses
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
