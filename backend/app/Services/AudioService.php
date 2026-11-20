@@ -427,7 +427,15 @@ class AudioService
      */
     private function tryGenerateVoiceboxSpeech(string $briefingText, string $filePath): bool
     {
-        $voiceboxUrl = 'http://127.0.0.1:17493/v1/audio/speech';
+        $voiceboxUrl = getenv('VOICEBOX_URL') ?: ($_ENV['VOICEBOX_URL'] ?? 'http://127.0.0.1:17493/v1/audio/speech');
+        
+        $settingsFile = __DIR__ . '/../../storage/settings.json';
+        if (file_exists($settingsFile)) {
+            $settings = json_decode(file_get_contents($settingsFile), true) ?? [];
+            if (!empty($settings['voiceboxUrl'])) {
+                $voiceboxUrl = trim($settings['voiceboxUrl']);
+            }
+        }
         $cleanText = $this->formatForSpokenSpeech($briefingText);
 
         if (empty($cleanText)) {

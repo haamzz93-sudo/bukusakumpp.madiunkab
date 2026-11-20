@@ -99,30 +99,7 @@ class ChatController
         if (!empty($response['answer'])) {
             $audioService = new AudioService();
             $cleanQ = mb_strtolower(trim($query));
-
-            // Core SOP Semantic Intent Mapping to Pre-Rendered Bupati Cloned Voice
-            if (preg_match('/warung\s*kopi|warkop|kedai\s*kopi|kopi|56303/u', $cleanQ)) {
-                $queryKey = 'q_d6eb57660a25e9c2';
-            } elseif (preg_match('/skck|catatan\s*kepolisian|sidik\s*jari/u', $cleanQ)) {
-                $queryKey = 'q_b8c10a8285c451cf';
-            } elseif (preg_match('/bphtb/u', $cleanQ)) {
-                $queryKey = 'q_bphtb_official';
-            } elseif (preg_match('/pbb|pajak\s*bumi/u', $cleanQ)) {
-                $queryKey = 'q_pbb_official';
-            } elseif (preg_match('/paspor|imigrasi/u', $cleanQ)) {
-                $queryKey = 'q_paspor_official';
-            } elseif (preg_match('/ktp|kartu\s*keluarga|disdukcapil|kependudukan|akta|kia|anak|identitas\s*anak/u', $cleanQ)) {
-                $queryKey = 'q_ktp_official';
-            } elseif (preg_match('/oss|nib|usaha|izin|perizinan|dagang|iumk/u', $cleanQ)) {
-                $queryKey = 'q_oss_official';
-            } elseif (preg_match('/halal|kemenag|bpjph/u', $cleanQ)) {
-                $queryKey = 'q_halal_official';
-            } elseif (preg_match('/sim|surat\s*izin\s*mengemudi|satlantas|polres/u', $cleanQ)) {
-                $queryKey = 'q_sim_official';
-            } else {
-                $queryKey = 'bupati_general_sop';
-            }
-
+            $queryKey = 'q_' . substr(md5($cleanQ), 0, 16);
             $response['audio_url'] = $audioService->generateTts($response['answer'], 'id-ID-ArdiNeural', $queryKey);
         }
         echo json_encode($response);
