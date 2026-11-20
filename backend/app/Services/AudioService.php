@@ -141,13 +141,46 @@ class AudioService
             return "/api/audio/{$filename}";
         }
 
-        // 1. Try local Voicebox AI engine (RTX 3050 CUDA local open-source voice cloning of Bupati Madiun)
+        // 1. Try local/remote Voicebox AI engine (RTX 3050 CUDA local open-source voice cloning of Bupati Madiun)
         if ($this->tryGenerateVoiceboxSpeech($briefingText, $filePath)) {
             @copy($filePath, $publicFilePath);
             return "/api/audio/{$filename}";
         }
 
-        // 2. High-Fidelity Bupati Voice Fallback: If on VPS without Voicebox GPU, serve the authentic Bupati guidance audio
+        // 2. High-Performance Dynamic Neural Speech (Edge-TTS) with Dignified Bupati Tone
+        // Speaks the EXACT dynamic briefing for the citizen's specific question
+        $scriptPath = __DIR__ . '/generate_tts.py';
+        if (file_exists($scriptPath)) {
+            $pythonCmd = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'python' : 'python3';
+            $tempTextFile = tempnam(sys_get_temp_dir(), 'tts_');
+            file_put_contents($tempTextFile, $briefingText);
+
+            $cmd = sprintf(
+                '%s %s --text-file %s --output %s --voice %s 2>&1',
+                $pythonCmd,
+                escapeshellarg($scriptPath),
+                escapeshellarg($tempTextFile),
+                escapeshellarg($filePath),
+                escapeshellarg($voice)
+            );
+
+            if (function_exists('safeRunCliCommand')) {
+                $output = safeRunCliCommand($cmd);
+            } elseif (function_exists('shell_exec')) {
+                $output = @shell_exec($cmd);
+            } else {
+                $output = '';
+            }
+
+            @unlink($tempTextFile);
+
+            if (file_exists($filePath) && filesize($filePath) > 500) {
+                @copy($filePath, $publicFilePath);
+                return "/api/audio/{$filename}";
+            }
+        }
+
+        // 3. Fallback: If both Voicebox and Edge-TTS are unavailable, serve the universal Bupati audio
         $bupatiUniversal = file_exists("{$publicDir}/tts_bupati_general_sop.mp3") 
             ? "{$publicDir}/tts_bupati_general_sop.mp3" 
             : "{$audioDir}/tts_bupati_general_sop.mp3";
@@ -156,47 +189,6 @@ class AudioService
                 @copy($bupatiUniversal, "{$publicDir}/tts_bupati_general_sop.mp3");
             }
             return "/api/audio/tts_bupati_general_sop.mp3";
-        }
-
-        // 3. Fallback to Edge-TTS if Voicebox is offline and no pre-rendered Bupati audio available
-        $scriptPath = __DIR__ . '/generate_tts.py';
-        if (!file_exists($scriptPath)) {
-            return null;
-        }
-
-        // Choose python executable (check python3 or python)
-        $pythonCmd = 'python3';
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $pythonCmd = 'python';
-        }
-
-        // Use temporary file to safely pass standardized executive briefing text
-        $tempTextFile = tempnam(sys_get_temp_dir(), 'tts_');
-        file_put_contents($tempTextFile, $briefingText);
-
-        $cmd = sprintf(
-            '%s %s --text-file %s --output %s --voice %s 2>&1',
-            $pythonCmd,
-            escapeshellarg($scriptPath),
-            escapeshellarg($tempTextFile),
-            escapeshellarg($filePath),
-            escapeshellarg($voice)
-        );
-
-        // Execute via safeRunCliCommand helper
-        if (function_exists('safeRunCliCommand')) {
-            $output = safeRunCliCommand($cmd);
-        } elseif (function_exists('shell_exec')) {
-            $output = @shell_exec($cmd);
-        } else {
-            $output = '';
-        }
-
-        @unlink($tempTextFile);
-
-        if (file_exists($filePath) && filesize($filePath) > 500) {
-            @copy($filePath, $publicFilePath);
-            return "/api/audio/{$filename}";
         }
 
         return null;

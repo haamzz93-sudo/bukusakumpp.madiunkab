@@ -41,8 +41,8 @@ async def main():
     parser.add_argument('--text-file', default=None, help='Path to file containing text')
     parser.add_argument('--output', required=True, help='Output MP3 file path')
     parser.add_argument('--voice', default='id-ID-ArdiNeural', help='Edge TTS Voice')
-    parser.add_argument('--rate', default='-3%', help='Speech rate for calm dignified speech')
-    parser.add_argument('--pitch', default='-5Hz', help='Pitch adjustment for deep baritone Bupati voice')
+    parser.add_argument('--rate', default='-4%', help='Speech rate for calm dignified speech')
+    parser.add_argument('--pitch', default='-8Hz', help='Pitch adjustment for deep baritone Bupati voice')
     args = parser.parse_args()
 
     raw_text = ''
