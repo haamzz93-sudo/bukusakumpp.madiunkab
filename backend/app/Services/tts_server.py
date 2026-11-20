@@ -28,7 +28,7 @@ def clean_markdown_for_speech(text: str) -> str:
             text = text[:2500] + "... Informasi lengkap tertera pada teks panduan di layar."
     return text
 
-async def synthesize_speech(text: str, voice='id-ID-ArdiNeural', rate='-4%', pitch='-8Hz') -> bytes:
+async def synthesize_speech(text: str, voice='id-ID-ArdiNeural', rate='-2%', pitch='-3Hz') -> bytes:
     import edge_tts
     clean = clean_markdown_for_speech(text)
     communicate = edge_tts.Communicate(clean, voice=voice, rate=rate, pitch=pitch)

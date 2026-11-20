@@ -5,8 +5,8 @@ namespace App\Services;
 class AudioService
 {
     private string $apiKey;
-    private string $model = 'gemini-3.1-flash-lite';
-    private string $fallbackModel = 'gemini-1.5-flash';
+    private string $model = 'gemini-flash-lite-latest';
+    private string $fallbackModel = 'gemini-flash-latest';
 
     public function __construct()
     {
@@ -307,42 +307,38 @@ class AudioService
                 [
                     'parts' => [
                         [
-                            'text' => "Susun naskah narasi lisan resmi, sopan, santun, dan profesional dengan alur paten untuk dibacakan langsung oleh suara Bapak Bupati Madiun kepada warga terkait standar pelayanan ini:\n\n"
-                                    . "Gunakan struktur baku berikut:\n"
-                                    . "1. Sapaan hangat: 'Halo Bapak dan Ibu warga Kabupaten Madiun.'\n"
-                                    . "2. Layanan & Syarat Utama: 'Terkait [nama layanan], silakan siapkan dokumen utama seperti [2-3 syarat penting].'\n"
-                                    . "3. Alur & Mekanisme: 'Prosedurnya [mekanisme singkat: datang langsung ke loket MPP Madiun / daftar mandiri online].'\n"
-                                    . "4. Waktu & Biaya: 'Waktu layanan [sebutkan waktu] dengan biaya [sebutkan biaya resmi / gratis seratus persen].'\n"
-                                    . "5. Penutup santun: 'Rincian selengkapnya dapat disimak pada teks panduan di layar. Terima kasih.'\n\n"
-                                    . "PENTING:\n"
-                                    . "- Panjang sekitar 240-300 karakter.\n"
-                                    . "- Tuliskan angka dengan ejaan lisan (misal: 'lima belas menit', 'tiga puluh ribu rupiah', 'nol menit atau langsung terbit').\n"
-                                    . "- Jangan ada URL link, jangan ada simbol markdown (*), jangan ada kata pengantar tambahan. Langsung kalimat siap dibaca audio.\n"
-                                    . "- PENTING SEKALI: Pastikan kalimat terakhir selesai secara tuntas dengan tanda titik (.). JANGAN terpotong di tengah kalimat!\n\n"
-                                    . "Teks sumber:\n" . mb_substr($text, 0, 1500)
+                            'text' => "Rangkum teks jawaban resmi berikut menjadi naskah narasi lisan yang RINGKAS, PADAT, dan TEPAT SASARAN (120-220 karakter) untuk dibacakan langsung sebagai narasi suara resmi:\n\n"
+                                    . "ATURAN MUTLAK:\n"
+                                    . "1. Naskah lisan WAJIB 100% SINKRON dan SESUAI dengan INTI JAWABAN pada teks sumber di bawah. DILARANG KERAS mengarang nama layanan, berkas, atau hal lain yang tidak ada di teks sumber!\n"
+                                    . "2. Jika teks sumber menjawab pertanyaan umum (misal: siapa presiden, jam operasional, lokasi gedung, sapaan), langsung bacakan inti jawabannya secara santun dan lugas.\n"
+                                    . "3. Jika teks sumber menjelaskan layanan perizinan/SOP, sebutkan nama layanan, syarat utama, dan biaya resminya secara ringkas.\n"
+                                    . "4. Tuliskan angka dalam kata ejaan lisan (misal: 'lima belas menit', 'tiga puluh ribu rupiah', 'nol rupiah atau gratis').\n"
+                                    . "5. Akhiri dengan santun (misal: 'Rincian lengkap dapat disimak pada teks panduan di layar. Terima kasih.') dan pastikan kalimat terakhir ditutup tanda titik (.).\n"
+                                    . "6. Dilarang menggunakan simbol markdown (*), dilarang menyertakan URL link, dan dilarang membuat kata pengantar. Langsung kalimat siap dibaca audio.\n\n"
+                                    . "Teks sumber jawaban:\n" . mb_substr($text, 0, 1500)
                         ]
                     ]
                 ]
             ],
             'generationConfig' => [
-                'temperature' => 0.2,
-                'maxOutputTokens' => 400
+                'temperature' => 0.1,
+                'maxOutputTokens' => 300
             ]
         ];
 
-        $models = [$this->model, 'gemini-1.5-flash'];
+        $models = [$this->model, $this->fallbackModel, 'gemini-flash-latest'];
         foreach ($models as $m) {
             $result = $this->callGeminiWithPayload($m, $payload);
             if (!empty($result)) {
                 $condensed = trim(preg_replace('/^["\']|["\']$/u', '', trim($result)));
                 $condensed = preg_replace('/[*#_`]+/', ' ', $condensed);
                 $condensed = trim(preg_replace('/\s+/', ' ', $condensed));
-                if (!empty($condensed) && mb_strlen($condensed) > 40) {
+                if (!empty($condensed) && mb_strlen($condensed) > 20) {
                     // Check if truncated at the end
                     $lastChar = mb_substr($condensed, -1);
                     if (!in_array($lastChar, ['.', '!', '?'])) {
                         $lastPeriod = mb_strrpos($condensed, '.');
-                        if ($lastPeriod !== false && $lastPeriod > 80) {
+                        if ($lastPeriod !== false && $lastPeriod > 40) {
                             $condensed = mb_substr($condensed, 0, $lastPeriod + 1);
                         } else {
                             $condensed .= '.';
@@ -356,13 +352,13 @@ class AudioService
             }
         }
 
-        // Fallback: rule-based summary
-        if (mb_strlen($clean) > 260) {
-            $cutoff = mb_strrpos(mb_substr($clean, 0, 260), '.');
-            if ($cutoff !== false && $cutoff > 120) {
-                return $this->formatForSpokenSpeech(mb_substr($clean, 0, $cutoff + 1) . ' Rincian berkas lengkap dapat disimak pada teks panduan di layar. Terima kasih.');
+        // Fallback: rule-based summary strictly extracted from the actual text (first 1-2 sentences)
+        if (mb_strlen($clean) > 220) {
+            $cutoff = mb_strrpos(mb_substr($clean, 0, 220), '.');
+            if ($cutoff !== false && $cutoff > 60) {
+                return $this->formatForSpokenSpeech(mb_substr($clean, 0, $cutoff + 1) . ' Rincian selengkapnya dapat disimak pada teks panduan di layar. Terima kasih.');
             }
-            return $this->formatForSpokenSpeech(mb_substr($clean, 0, 220) . ' Rincian berkas lengkap dapat disimak pada teks panduan di layar. Terima kasih.');
+            return $this->formatForSpokenSpeech(mb_substr($clean, 0, 180) . '... Rincian selengkapnya dapat disimak pada teks panduan di layar. Terima kasih.');
         }
 
         return $this->formatForSpokenSpeech($clean);
@@ -453,7 +449,7 @@ class AudioService
                 CURLOPT_POSTFIELDS => $payload,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-                CURLOPT_TIMEOUT => 60,
+                CURLOPT_TIMEOUT => 4,
                 CURLOPT_CONNECTTIMEOUT => 2
             ]);
 
