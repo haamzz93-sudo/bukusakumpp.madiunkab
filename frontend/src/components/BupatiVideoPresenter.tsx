@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, ShieldCheck, Sparkles } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Sparkles, Mic, Bot } from 'lucide-react';
 
 interface BupatiVideoPresenterProps {
   audioUrl?: string;
@@ -17,9 +17,15 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  const [voiceMode, setVoiceMode] = useState<'asli' | 'ai'>('asli');
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Active audio URL based on selected mode
+  const activeAudioUrl = voiceMode === 'asli' 
+    ? '/avatar/bupati_suara_asli.wav' 
+    : (audioUrl || '/avatar/bupati_suara_asli.wav');
 
   // Sync Video and Audio playback
   const togglePlay = () => {
@@ -41,6 +47,15 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
       setIsPlaying(true);
       if (onAudioPlay) onAudioPlay();
     }
+  };
+
+  const handleModeChange = (mode: 'asli' | 'ai') => {
+    if (isPlaying) {
+      if (videoRef.current) videoRef.current.pause();
+      if (audioRef.current) audioRef.current.pause();
+      setIsPlaying(false);
+    }
+    setVoiceMode(mode);
   };
 
   const toggleMute = () => {
@@ -88,14 +103,17 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/40 via-slate-950/80 to-slate-950 pointer-events-none" />
 
-      {/* Hidden Audio Element if custom audio is provided */}
-      {audioUrl && (
-        <audio ref={audioRef} src={audioUrl} preload="auto" />
-      )}
+      {/* Synchronized Audio Element */}
+      <audio 
+        key={activeAudioUrl} 
+        ref={audioRef} 
+        src={activeAudioUrl} 
+        preload="auto" 
+      />
 
       <div className="relative z-10 flex flex-col md:flex-row items-center gap-5 sm:gap-6">
         
-        {/* VIDEO AVATAR STAGE (Large, Unmissable 1080p Digital Human Box) */}
+        {/* VIDEO AVATAR STAGE (Large 1080p Digital Human Box) */}
         <div className="relative w-44 h-44 sm:w-52 sm:h-52 shrink-0 rounded-2xl overflow-hidden border-2 border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.35)] group bg-slate-900">
           
           {/* Active Speaking Video */}
@@ -104,7 +122,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
             src="/avatar/bupati_talking.mp4"
             loop
             playsInline
-            muted={isMuted || !audioUrl}
+            muted={true}
             className={`w-full h-full object-cover transition-opacity duration-300 ${
               isPlaying ? 'opacity-100 scale-105' : 'opacity-0 absolute inset-0 pointer-events-none'
             }`}
@@ -125,7 +143,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               onClick={togglePlay}
               type="button"
               className="absolute inset-0 flex items-center justify-center bg-black/35 hover:bg-black/20 transition-all cursor-pointer group"
-              title="Klik untuk mendengarkan sambutan Bapak Bupati"
+              title="Klik untuk mendengarkan suara Bapak Bupati"
             >
               <div className="w-14 h-14 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.7)] group-hover:scale-110 active:scale-95 transition-transform">
                 <Play className="w-6 h-6 fill-current ml-1" />
@@ -140,10 +158,10 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
           </div>
         </div>
 
-        {/* DETAILS & PLAYBACK BAR */}
-        <div className="flex-1 text-center md:text-left space-y-2.5 min-w-0">
+        {/* DETAILS & PLAYBACK CONTROLS */}
+        <div className="flex-1 text-center md:text-left space-y-3 min-w-0 w-full">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold mb-1.5">
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
               <span>Asisten Virtual Resmi Mal Pelayanan Publik</span>
             </div>
@@ -155,8 +173,41 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
             </p>
           </div>
 
+          {/* Voice Mode Selector Tabs: Suara Asli Bupati vs Suara AI Standar */}
+          <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs">
+            <button
+              onClick={() => handleModeChange('asli')}
+              type="button"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                voiceMode === 'asli'
+                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Mic className="w-3.5 h-3.5" />
+              <span>Suara Asli Bapak Bupati</span>
+            </button>
+
+            <button
+              onClick={() => handleModeChange('ai')}
+              type="button"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                voiceMode === 'ai'
+                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Bot className="w-3.5 h-3.5" />
+              <span>Suara AI Panduan SOP</span>
+            </button>
+          </div>
+
+          {/* Descriptive Text */}
           <p className="text-xs text-slate-300 font-normal leading-relaxed line-clamp-3">
-            {fallbackText || "Selamat datang di Mal Pelayanan Publik Kabupaten Madiun. Klik tombol putar untuk mendengarkan penjelasan standar pelayanan langsung dari Asisten AI resmi."}
+            {voiceMode === 'asli' 
+              ? "Memutar rekaman suara asli Bapak Bupati Madiun (H. Hari Wuryanto) saat memberikan arahan langsung kepada masyarakat Madiun."
+              : (fallbackText || "Memutar jawaban panduan perizinan dan dokumen standar pelayanan resmi MPP Kabupaten Madiun.")
+            }
           </p>
 
           {/* Action Button Row */}
@@ -174,7 +225,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               ) : (
                 <>
                   <Play className="w-4 h-4 fill-current ml-0.5" />
-                  <span>{hasStarted ? 'Lanjutkan Bicara' : 'Dengarkan Jawaban Bupati'}</span>
+                  <span>{voiceMode === 'asli' ? 'Putar Suara Asli Bupati' : 'Dengarkan Jawaban AI'}</span>
                 </>
               )}
             </button>
