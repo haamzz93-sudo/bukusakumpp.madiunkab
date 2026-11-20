@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Volume2, VolumeX, Pause, Play, AudioLines, ArrowUp, ArrowDown } from 'lucide-react';
+import { BupatiAiAvatar } from './BupatiAiAvatar';
 
 export interface TourStep {
   id: string;
@@ -491,13 +492,13 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
           }}
         >
           
-          {/* DESKTOP LAYOUT (sm+): 1-Line Sleek Cinema Bar */}
+          {/* DESKTOP LAYOUT (sm+): 1-Line Sleek Cinema Bar with Live Bupati Avatar */}
           <div className="hidden sm:flex items-center gap-3 sm:gap-4">
-            {/* Step Pill & Pulsing Audio Icon */}
+            {/* Live Talking Bupati Avatar */}
+            <BupatiAiAvatar isSpeaking={isPlaying} size="sm" />
+
+            {/* Step Pill */}
             <div className="flex items-center gap-2 shrink-0">
-              <div className="p-1.5 rounded-full bg-emerald-500 text-slate-950 shadow-[0_0_12px_#10b981]">
-                <AudioLines className="w-3.5 h-3.5 animate-pulse stroke-[3]" />
-              </div>
               <span 
                 className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full whitespace-nowrap"
                 style={{
@@ -551,12 +552,10 @@ export const VoiceAiWelcomeTour: React.FC<VoiceAiWelcomeTourProps> = ({
 
           {/* MOBILE LAYOUT (< sm): Clean 2-Row Native Mobile Card */}
           <div className="flex flex-col gap-2 sm:hidden">
-            {/* Row 1: Header with Step, Category, and Controls */}
+            {/* Row 1: Header with Avatar, Step, Category, and Controls */}
             <div className="flex items-center justify-between gap-2 border-b border-white/15 pb-2">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="p-1 rounded-full bg-emerald-500 text-slate-950 shrink-0">
-                  <AudioLines className="w-3 h-3 animate-pulse stroke-[3]" />
-                </div>
+                <BupatiAiAvatar isSpeaking={isPlaying} size="xs" />
                 <span 
                   className="font-mono text-[11px] font-black px-2 py-0.5 rounded-full shrink-0"
                   style={{

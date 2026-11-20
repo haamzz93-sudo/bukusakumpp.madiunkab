@@ -253,11 +253,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           {onStartTour && (
             <button
               onClick={onStartTour}
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer shrink-0"
-              title="Putar Panduan Suara Interaktif (VoiceAI Tour)"
+              className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer shrink-0"
+              title="Putar Panduan Suara Interaktif (VoiceAI Bupati Madiun)"
             >
-              <AudioLines className="w-3.5 h-3.5 text-emerald-400 animate-pulse shrink-0" />
-              <span className="hidden xl:inline">Panduan Suara</span>
+              <div className="w-4 h-4 rounded-full overflow-hidden border border-emerald-400/80 shrink-0">
+                <img src="/avatar/bupati_photo1.png" alt="Bupati Madiun" className="w-full h-full object-cover" />
+              </div>
+              <AudioLines className="w-3.5 h-3.5 text-emerald-400 animate-pulse shrink-0 hidden sm:inline-block" />
+              <span className="hidden xl:inline">Panduan Suara Bupati</span>
             </button>
           )}
 
