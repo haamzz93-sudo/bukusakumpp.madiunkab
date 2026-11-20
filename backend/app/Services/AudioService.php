@@ -119,7 +119,12 @@ class AudioService
             return "/api/audio/{$filename}";
         }
 
-        // 1. Try local Voicebox AI engine if active (RTX 3050 CUDA local voice cloning for Bupati Madiun)
+        // 1. Try ElevenLabs official API if key & voice_id configured (Ultra Realistic)
+        if ($this->tryGenerateElevenLabsSpeech($text, $filePath)) {
+            return "/api/audio/{$filename}";
+        }
+
+        // 2. Try local Voicebox AI engine if active (RTX 3050 CUDA local voice cloning for Bupati Madiun)
         if ($this->tryGenerateVoiceboxSpeech($text, $filePath)) {
             return "/api/audio/{$filename}";
         }
@@ -192,6 +197,73 @@ class AudioService
 
         $res = json_decode($raw, true);
         return $res['candidates'][0]['content']['parts'][0]['text'] ?? null;
+    }
+
+    /**
+     * Synthesize ultra-realistic speech via ElevenLabs API using cloned Bupati Madiun voice
+     */
+    private function tryGenerateElevenLabsSpeech(string $text, string $filePath): bool
+    {
+        $apiKey = getenv('ELEVENLABS_API_KEY') ?: ($_ENV['ELEVENLABS_API_KEY'] ?? '');
+        $voiceId = getenv('ELEVENLABS_VOICE_ID') ?: ($_ENV['ELEVENLABS_VOICE_ID'] ?? '');
+
+        $settingsFile = __DIR__ . '/../../storage/settings.json';
+        if (file_exists($settingsFile)) {
+            $settings = json_decode(file_get_contents($settingsFile), true) ?? [];
+            if (!empty($settings['elevenLabsApiKey'])) $apiKey = trim($settings['elevenLabsApiKey']);
+            if (!empty($settings['elevenLabsVoiceId'])) $voiceId = trim($settings['elevenLabsVoiceId']);
+        }
+
+        if (empty($apiKey) || empty($voiceId)) {
+            return false;
+        }
+
+        // Clean text for speech
+        $cleanText = preg_replace('/https?:\/\/\S+/', '', $text);
+        $cleanText = preg_replace('/[*#_`]+/', ' ', $cleanText);
+        $cleanText = trim(preg_replace('/\s+/', ' ', $cleanText));
+        if (mb_strlen($cleanText) > 600) {
+            $cleanText = mb_substr($cleanText, 0, 597) . '...';
+        }
+
+        $url = "https://api.elevenlabs.io/v1/text-to-speech/{$voiceId}";
+        $payload = json_encode([
+            'text' => $cleanText,
+            'model_id' => 'eleven_multilingual_v2',
+            'voice_settings' => [
+                'stability' => 0.55,
+                'similarity_boost' => 0.85,
+                'style' => 0.15,
+                'use_speaker_boost' => true
+            ]
+        ]);
+
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $payload,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                "xi-api-key: {$apiKey}",
+                'Accept: audio/mpeg'
+            ],
+            CURLOPT_TIMEOUT => 25,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
+        ]);
+
+        $audioBytes = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 && !empty($audioBytes) && strlen($audioBytes) > 1024) {
+            file_put_contents($filePath, $audioBytes);
+            return true;
+        }
+
+        return false;
     }
 
     /**

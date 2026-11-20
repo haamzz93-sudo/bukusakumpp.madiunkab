@@ -199,10 +199,10 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
                   ? 'bg-emerald-500 text-slate-950 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
-              title="Suara Kloning AI Voicebox Qwen-TTS yang berjalan lokal di GPU RTX 3050"
+              title="Hasil Kloning Vokal Asli Bapak Bupati Madiun via ElevenLabs"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>Suara Kloning AI Bupati (GPU)</span>
+              <span>Suara Kloning Asli Bupati (ElevenLabs)</span>
             </button>
 
             <button
@@ -225,7 +225,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               {voiceMode === 'asli' 
                 ? '“Halo, selamat datang di buku saku digital Mal Pelayanan Publik Kabupaten Madiun. Saya siap membantu Anda.”'
                 : voiceMode === 'voicebox'
-                ? '“Halo, saya Haji Hari Wuryanto, Bupati Madiun. Selamat datang di Mal Pelayanan Publik.” (Hasil Kloning Voicebox Qwen-TTS via GPU RTX 3050)'
+                ? '“Selamat malam. Badai yang melanda wilayah pesisir sejak Selasa dini hari mengakibatkan kerusakan di sedikitnya empat kabupaten.” (Hasil Uji Kloning Vokal Asli Bapak Bupati Madiun via ElevenLabs)'
                 : (fallbackText ? `Membacakan ringkasan: ${fallbackText.slice(0, 140)}...` : "Membacakan panduan standar pelayanan resmi MPP Kabupaten Madiun.")
               }
             </p>
@@ -250,7 +250,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
                     {voiceMode === 'asli' 
                       ? 'Putar Sambutan Video Bupati' 
                       : voiceMode === 'voicebox' 
-                      ? 'Dengarkan Suara Kloning Bupati' 
+                      ? 'Putar Suara Kloning ElevenLabs' 
                       : 'Bacakan Naskah SOP AI'}
                   </span>
                 </>
