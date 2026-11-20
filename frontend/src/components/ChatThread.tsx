@@ -27,6 +27,7 @@ import { WA_NUM_MPP, TELP_MPP, fetchTtsAudio } from '../services/hybridAiService
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { VoiceNotePlayer } from './VoiceNotePlayer';
 import { VoiceNoteRecorder } from './VoiceNoteRecorder';
+import { BupatiAiAvatar } from './BupatiAiAvatar';
 
 interface ChatThreadProps {
   messages: ChatMessage[];
@@ -357,13 +358,23 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
               return (
                 <div id="tour-chat-result" key={msg.id} className="liquid-glass-sidebar rounded-2xl p-6 space-y-4">
                   
-                  {/* Assistant Identity Tag & Typography Controls */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                      <span className="text-xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-400 font-display">
-                        Buku Saku · Panduan Resmi MPP
-                      </span>
+                  {/* Assistant Identity Tag with Bupati AI Avatar */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center gap-3">
+                      <BupatiAiAvatar size="md" />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-slate-900 dark:text-white">
+                            H. Hari Wuryanto, S.H., M.Ak.
+                          </span>
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+                            Bupati Madiun
+                          </span>
+                        </div>
+                        <span className="text-xs text-slate-500 dark:text-slate-400 block leading-tight">
+                          Asisten AI Resmi · Standar Pelayanan Mal Pelayanan Publik (MPP)
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-2">

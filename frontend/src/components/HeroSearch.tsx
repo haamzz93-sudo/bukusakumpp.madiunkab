@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Search, ArrowRight, ShieldCheck } from 'lucide-react';
 import { getStoredSettings, subscribeSettings, AppSettings } from '../services/settingsStore';
 import { VoiceNoteRecorder } from './VoiceNoteRecorder';
-import { BupatiAiAvatar } from './BupatiAiAvatar';
 
 interface HeroSearchProps {
   onSearch: (query: string) => void;
@@ -170,19 +169,6 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
 
       <div id="tour-brand" className="relative max-w-4xl mx-auto text-center z-10 w-full">
         
-        {/* Official Bupati AI Avatar Pill & Greeting */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full liquid-glass-dark border border-emerald-400/40 shadow-lg mb-4 text-left backdrop-blur-md">
-          <BupatiAiAvatar isSpeaking={false} size="xs" />
-          <div className="text-left pr-1">
-            <span className="text-xs font-bold text-white block leading-tight">
-              H. Hari Wuryanto, S.H., M.Ak.
-            </span>
-            <span className="text-[10px] text-emerald-300 font-semibold block leading-tight">
-              Bupati Madiun · Siaga Melayani
-            </span>
-          </div>
-        </div>
-
         {/* Official Service Notice */}
         <p className="text-xs sm:text-sm font-semibold tracking-widest text-white/90 uppercase mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
           {settings.heroBadge}
