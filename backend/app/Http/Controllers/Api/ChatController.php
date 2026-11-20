@@ -111,10 +111,16 @@ class ChatController
                 $queryKey = 'q_pbb_official';
             } elseif (preg_match('/paspor|imigrasi/u', $cleanQ)) {
                 $queryKey = 'q_paspor_official';
-            } elseif (preg_match('/ktp|kartu\s*keluarga|disdukcapil|kependudukan|akta/u', $cleanQ)) {
+            } elseif (preg_match('/ktp|kartu\s*keluarga|disdukcapil|kependudukan|akta|kia|anak|identitas\s*anak/u', $cleanQ)) {
                 $queryKey = 'q_ktp_official';
+            } elseif (preg_match('/oss|nib|usaha|izin|perizinan|dagang|iumk/u', $cleanQ)) {
+                $queryKey = 'q_oss_official';
+            } elseif (preg_match('/halal|kemenag|bpjph/u', $cleanQ)) {
+                $queryKey = 'q_halal_official';
+            } elseif (preg_match('/sim|surat\s*izin\s*mengemudi|satlantas|polres/u', $cleanQ)) {
+                $queryKey = 'q_sim_official';
             } else {
-                $queryKey = 'q_' . substr(md5($cleanQ), 0, 16);
+                $queryKey = 'bupati_general_sop';
             }
 
             $response['audio_url'] = $audioService->generateTts($response['answer'], 'id-ID-ArdiNeural', $queryKey);

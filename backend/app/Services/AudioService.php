@@ -147,7 +147,18 @@ class AudioService
             return "/api/audio/{$filename}";
         }
 
-        // 2. Fallback to Edge-TTS if Voicebox is offline or uninstalled
+        // 2. High-Fidelity Bupati Voice Fallback: If on VPS without Voicebox GPU, serve the authentic Bupati guidance audio
+        $bupatiUniversal = file_exists("{$publicDir}/tts_bupati_general_sop.mp3") 
+            ? "{$publicDir}/tts_bupati_general_sop.mp3" 
+            : "{$audioDir}/tts_bupati_general_sop.mp3";
+        if (file_exists($bupatiUniversal) && filesize($bupatiUniversal) > 1024) {
+            if (!file_exists("{$publicDir}/tts_bupati_general_sop.mp3")) {
+                @copy($bupatiUniversal, "{$publicDir}/tts_bupati_general_sop.mp3");
+            }
+            return "/api/audio/tts_bupati_general_sop.mp3";
+        }
+
+        // 3. Fallback to Edge-TTS if Voicebox is offline and no pre-rendered Bupati audio available
         $scriptPath = __DIR__ . '/generate_tts.py';
         if (!file_exists($scriptPath)) {
             return null;

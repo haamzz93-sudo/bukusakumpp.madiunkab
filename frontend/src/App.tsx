@@ -119,8 +119,8 @@ export const App: React.FC = () => {
       setMessages(prev => [...prev, userMsg]);
     } else {
       setMessages([userMsg]);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
       const historyToSend = isFollowup ? [...messages, userMsg] : [];
@@ -186,8 +186,8 @@ export const App: React.FC = () => {
       setMessages(prev => [...prev, userVoiceMsg]);
     } else {
       setMessages([userVoiceMsg]);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
       const result = await sendVoiceNoteAi(audioBlob);

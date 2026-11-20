@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   ArrowLeft, 
   Search, 
@@ -204,6 +204,15 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   const [votes, setVotes] = useState<{ [key: string]: 'up' | 'down' }>({});
   const [localAudioUrls, setLocalAudioUrls] = useState<Record<string, string>>({});
   const [loadingSpeech, setLoadingSpeech] = useState<Record<string, boolean>>({});
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages.length, isLoading]);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -235,16 +244,18 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   const handleHeaderSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (headerSearchText.trim() && !isLoading) {
-      onSendFollowup(headerSearchText.trim(), false);
+      onSendFollowup(headerSearchText.trim(), true);
       setHeaderSearchText('');
+      setTimeout(scrollToBottom, 100);
     }
   };
 
   const handleBottomSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (bottomFollowupText.trim() && !isLoading) {
-      onSendFollowup(bottomFollowupText.trim(), false);
+      onSendFollowup(bottomFollowupText.trim(), true);
       setBottomFollowupText('');
+      setTimeout(scrollToBottom, 100);
     }
   };
 
@@ -519,7 +530,10 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                   {latestAssistantMessage.relatedQuestions.map((q, idx) => (
                     <button
                       key={idx}
-                      onClick={() => onSendFollowup(q, false)}
+                      onClick={() => {
+                        onSendFollowup(q, true);
+                        setTimeout(scrollToBottom, 100);
+                      }}
                       className="text-left text-xs px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/20 text-slate-800 dark:text-slate-200 hover:border-emerald-500 dark:hover:border-emerald-400 hover:text-emerald-700 dark:hover:text-white hover:bg-emerald-50/70 dark:hover:bg-slate-800 shadow-xs transition-all cursor-pointer font-medium"
                     >
                       {q}
@@ -528,6 +542,9 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
                 </div>
               </div>
             )}
+
+            {/* Anchor for Auto-Scrolling to bottom of conversation */}
+            <div ref={messagesEndRef} className="h-2" />
 
             {/* Follow-up input form */}
             <form onSubmit={handleBottomSubmit} className="pt-4">
