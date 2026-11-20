@@ -28,6 +28,7 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 import { VoiceNotePlayer } from './VoiceNotePlayer';
 import { VoiceNoteRecorder } from './VoiceNoteRecorder';
 import { BupatiAiAvatar } from './BupatiAiAvatar';
+import { BupatiVideoPresenter } from './BupatiVideoPresenter';
 
 interface ChatThreadProps {
   messages: ChatMessage[];
@@ -358,63 +359,11 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
               return (
                 <div id="tour-chat-result" key={msg.id} className="liquid-glass-sidebar rounded-2xl p-6 space-y-4">
                   
-                  {/* Assistant Identity Tag with Bupati AI Avatar */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center gap-3">
-                      <BupatiAiAvatar size="md" />
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-slate-900 dark:text-white">
-                            H. Hari Wuryanto, S.H., M.Ak.
-                          </span>
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
-                            Bupati Madiun
-                          </span>
-                        </div>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 block leading-tight">
-                          Asisten AI Resmi · Standar Pelayanan Mal Pelayanan Publik (MPP)
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                        <span>Dokumen Standar Pelayanan Resmi</span>
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Spider-Man / Karen AI Voice Note Player */}
-                  {audioToPlay ? (
-                    <VoiceNotePlayer
-                      audioUrl={audioToPlay}
-                      fallbackText={msg.text}
-                      sender="assistant"
-                      autoPlay={!msg.id.startsWith('tour-') && msg.id === latestAssistantMessage?.id}
-                    />
-                  ) : (
-                    <div className="py-1">
-                      <button
-                        onClick={() => handleGenerateSpeech(msg.id, msg.text)}
-                        disabled={loadingSpeech[msg.id]}
-                        type="button"
-                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 text-white text-xs font-semibold hover:bg-slate-800 transition-all cursor-pointer shadow-sm hover:shadow-md border border-emerald-500/30 active:scale-95"
-                      >
-                        {loadingSpeech[msg.id] ? (
-                          <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-400" />
-                            <span>Menyiapkan VoiceAI Buku Saku...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Putar VoiceAI Buku Saku</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  )}
+                  {/* Big Interactive Bupati AI Video Presenter Stage */}
+                  <BupatiVideoPresenter
+                    audioUrl={audioToPlay}
+                    fallbackText={msg.text}
+                  />
 
                   {/* Clean Formatted Message Content (Zero Raw Asterisks, Times New Roman Typo) */}
                   <div className="pt-1">
