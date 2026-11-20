@@ -23,6 +23,8 @@ frontend/dist/
 *.zip
 update_frontend.zip
 update_backend.zip
+voicebox-main/
+start_voicebox.bat
 
 # Logs & temp
 *.log

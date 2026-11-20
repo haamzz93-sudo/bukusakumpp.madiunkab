@@ -119,6 +119,11 @@ class AudioService
             return "/api/audio/{$filename}";
         }
 
+        // 1. Try local Voicebox AI engine if active (RTX 3050 CUDA local voice cloning for Bupati Madiun)
+        if ($this->tryGenerateVoiceboxSpeech($text, $filePath)) {
+            return "/api/audio/{$filename}";
+        }
+
         $scriptPath = __DIR__ . '/generate_tts.py';
         if (!file_exists($scriptPath)) {
             return null;
@@ -187,5 +192,53 @@ class AudioService
 
         $res = json_decode($raw, true);
         return $res['candidates'][0]['content']['parts'][0]['text'] ?? null;
+    }
+
+    /**
+     * Synthesize cloned voice of Bupati Madiun via locally running Voicebox server (RTX 3050 CUDA)
+     */
+    private function tryGenerateVoiceboxSpeech(string $text, string $filePath): bool
+    {
+        $voiceboxUrl = 'http://127.0.0.1:17493/v1/audio/speech';
+
+        // Clean text (remove URLs, raw asterisks)
+        $cleanText = preg_replace('/https?:\/\/\S+/', '', $text);
+        $cleanText = preg_replace('/[*#_`]+/', ' ', $cleanText);
+        $cleanText = trim(preg_replace('/\s+/', ' ', $cleanText));
+        if (mb_strlen($cleanText) > 600) {
+            $cleanText = mb_substr($cleanText, 0, 597) . '...';
+        }
+
+        if (empty($cleanText)) {
+            return false;
+        }
+
+        $payload = json_encode([
+            'model' => 'tts-1',
+            'voice' => 'Bupati Madiun',
+            'input' => $cleanText,
+            'response_format' => 'mp3'
+        ]);
+
+        $ch = curl_init($voiceboxUrl);
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $payload,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_CONNECTTIMEOUT => 2
+        ]);
+
+        $audioBytes = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 && !empty($audioBytes) && strlen($audioBytes) > 1024) {
+            file_put_contents($filePath, $audioBytes);
+            return true;
+        }
+
+        return false;
     }
 }
