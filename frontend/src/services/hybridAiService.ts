@@ -47,7 +47,7 @@ Silakan sampaikan pertanyaan Anda seputar perizinan usaha (OSS), BPHTB, PBB-P2, 
   for (const endpoint of endpoints) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout for live LLM + TTS inference
+      const timeoutId = setTimeout(() => controller.abort(), 180000); // 180s timeout for live LLM + Voicebox GPU TTS inference
 
       const apiRes = await fetch(endpoint, {
         method: 'POST',

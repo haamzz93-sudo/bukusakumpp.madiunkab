@@ -113,18 +113,27 @@ class AudioService
 
         $filename = "tts_{$hash}.mp3";
         $filePath = "{$audioDir}/{$filename}";
+        $publicDir = __DIR__ . '/../../public/api/audio';
+        if (!is_dir($publicDir)) {
+            @mkdir($publicDir, 0777, true);
+        }
+        $publicFilePath = "{$publicDir}/{$filename}";
 
         // Return cached audio if already generated and non-empty
         if (file_exists($filePath) && filesize($filePath) > 1024) {
+            if (!file_exists($publicFilePath)) {
+                @copy($filePath, $publicFilePath);
+            }
             return "/api/audio/{$filename}";
         }
 
-        // 1. Try ElevenLabs official API if key & voice_id configured (Ultra Realistic)
-        if ($this->tryGenerateElevenLabsSpeech($text, $filePath)) {
+        // 1. Try local Voicebox AI engine (RTX 3050 CUDA local open-source voice cloning of Bupati Madiun)
+        if ($this->tryGenerateVoiceboxSpeech($text, $filePath)) {
+            @copy($filePath, $publicFilePath);
             return "/api/audio/{$filename}";
         }
 
-        // Fast & crisp neural TTS synthesis via Edge-TTS (id-ID-ArdiNeural) for instant 2-3s response
+        // 2. Fallback to Edge-TTS if Voicebox is offline or uninstalled
         $scriptPath = __DIR__ . '/generate_tts.py';
         if (!file_exists($scriptPath)) {
             return null;
@@ -161,6 +170,7 @@ class AudioService
         @unlink($tempTextFile);
 
         if (file_exists($filePath) && filesize($filePath) > 500) {
+            @copy($filePath, $publicFilePath);
             return "/api/audio/{$filename}";
         }
 
@@ -273,12 +283,12 @@ class AudioService
         $cleanText = preg_replace('/https?:\/\/\S+/', '', $text);
         $cleanText = preg_replace('/[*#_`]+/', ' ', $cleanText);
         $cleanText = trim(preg_replace('/\s+/', ' ', $cleanText));
-        if (mb_strlen($cleanText) > 350) {
-            $cutoff = mb_strrpos(mb_substr($cleanText, 0, 350), '.');
-            if ($cutoff !== false && $cutoff > 150) {
+        if (mb_strlen($cleanText) > 280) {
+            $cutoff = mb_strrpos(mb_substr($cleanText, 0, 280), '.');
+            if ($cutoff !== false && $cutoff > 120) {
                 $cleanText = mb_substr($cleanText, 0, $cutoff + 1);
             } else {
-                $cleanText = mb_substr($cleanText, 0, 347) . '...';
+                $cleanText = mb_substr($cleanText, 0, 277) . '...';
             }
         }
 
@@ -299,8 +309,8 @@ class AudioService
             CURLOPT_POSTFIELDS => $payload,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-            CURLOPT_TIMEOUT => 90,
-            CURLOPT_CONNECTTIMEOUT => 2
+            CURLOPT_TIMEOUT => 240,
+            CURLOPT_CONNECTTIMEOUT => 3
         ]);
 
         $audioBytes = curl_exec($ch);

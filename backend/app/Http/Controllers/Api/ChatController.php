@@ -46,7 +46,7 @@ class ChatController
         // Layer 0: Guardrail Check
         $modelInquiry = $this->guardrail->checkModelInquiry($query);
         if ($modelInquiry) {
-            if ($withAudio && !empty($modelInquiry['answer'])) {
+            if (!empty($modelInquiry['answer'])) {
                 $audioService = new AudioService();
                 $modelInquiry['audio_url'] = $audioService->generateTts($modelInquiry['answer']);
             }
@@ -56,7 +56,7 @@ class ChatController
 
         $outDomain = $this->guardrail->checkOutOfDomain($query);
         if ($outDomain) {
-            if ($withAudio && !empty($outDomain['answer'])) {
+            if (!empty($outDomain['answer'])) {
                 $audioService = new AudioService();
                 $outDomain['audio_url'] = $audioService->generateTts($outDomain['answer']);
             }
@@ -66,7 +66,7 @@ class ChatController
 
         // Layer 1 & 2: RAG & Catalog Search
         $response = $this->rag->search($query);
-        if ($withAudio && !empty($response['answer'])) {
+        if (!empty($response['answer'])) {
             $audioService = new AudioService();
             $response['audio_url'] = $audioService->generateTts($response['answer']);
         }
