@@ -419,17 +419,22 @@ class AudioService
      */
     private function tryGenerateVoiceboxSpeech(string $briefingText, string $filePath): bool
     {
-        $voiceboxUrl = getenv('VOICEBOX_URL') ?: ($_ENV['VOICEBOX_URL'] ?? 'http://127.0.0.1:17493/v1/audio/speech');
-        
+        $customUrl = getenv('VOICEBOX_URL') ?: ($_ENV['VOICEBOX_URL'] ?? null);
         $settingsFile = __DIR__ . '/../../storage/settings.json';
         if (file_exists($settingsFile)) {
             $settings = json_decode(file_get_contents($settingsFile), true) ?? [];
             if (!empty($settings['voiceboxUrl'])) {
-                $voiceboxUrl = trim($settings['voiceboxUrl']);
+                $customUrl = trim($settings['voiceboxUrl']);
             }
         }
-        $cleanText = $this->formatForSpokenSpeech($briefingText);
 
+        $endpoints = array_values(array_filter([
+            $customUrl,
+            'http://127.0.0.1:17493/v1/audio/speech', // Local CUDA Voicebox (RTX 3050)
+            'http://127.0.0.1:17494/v1/audio/speech'  // VPS Lightweight Dynamic Bupati TTS Service
+        ]));
+
+        $cleanText = $this->formatForSpokenSpeech($briefingText);
         if (empty($cleanText)) {
             return false;
         }
@@ -441,23 +446,25 @@ class AudioService
             'response_format' => 'mp3'
         ]);
 
-        $ch = curl_init($voiceboxUrl);
-        curl_setopt_array($ch, [
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $payload,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-            CURLOPT_TIMEOUT => 240,
-            CURLOPT_CONNECTTIMEOUT => 3
-        ]);
+        foreach ($endpoints as $voiceboxUrl) {
+            $ch = curl_init($voiceboxUrl);
+            curl_setopt_array($ch, [
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $payload,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+                CURLOPT_TIMEOUT => 60,
+                CURLOPT_CONNECTTIMEOUT => 2
+            ]);
 
-        $audioBytes = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+            $audioBytes = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
 
-        if ($httpCode === 200 && !empty($audioBytes) && strlen($audioBytes) > 1024) {
-            file_put_contents($filePath, $audioBytes);
-            return true;
+            if ($httpCode === 200 && !empty($audioBytes) && strlen($audioBytes) > 1024) {
+                file_put_contents($filePath, $audioBytes);
+                return true;
+            }
         }
 
         return false;
