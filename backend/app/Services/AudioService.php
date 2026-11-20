@@ -214,7 +214,7 @@ class AudioService
         }
 
         $payload = json_encode([
-            'model' => 'tts-1',
+            'model' => 'qwen-tts-0.6B',
             'voice' => 'Bupati Madiun',
             'input' => $cleanText,
             'response_format' => 'mp3'
@@ -226,7 +226,7 @@ class AudioService
             CURLOPT_POSTFIELDS => $payload,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-            CURLOPT_TIMEOUT => 30,
+            CURLOPT_TIMEOUT => 60,
             CURLOPT_CONNECTTIMEOUT => 2
         ]);
 

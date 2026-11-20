@@ -17,17 +17,18 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
-  const [voiceMode, setVoiceMode] = useState<'asli' | 'ai'>('asli');
+  const [voiceMode, setVoiceMode] = useState<'asli' | 'voicebox' | 'ai'>('asli');
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Active audio URL based on selected mode
-  // 'asli' -> audio asli dari video D-ID avatar bupati (sesuai naskah greeting & gerak bibir)
+  // 'asli' -> audio asli dari video D-ID avatar bupati
+  // 'voicebox' -> audio kloning suara Bupati Madiun via Voicebox (RTX 3050 CUDA lokal)
   // 'ai' -> audio TTS AI dinamis yang membacakan naskah jawaban SOP perizinan
   const activeAudioUrl = voiceMode === 'asli' 
     ? '/avatar/bupati_talking_audio.mp3' 
-    : (audioUrl || '/avatar/bupati_talking_audio.mp3');
+    : (voiceMode === 'voicebox' ? '/avatar/bupati_voicebox_cloned.mp3' : (audioUrl || '/avatar/bupati_talking_audio.mp3'));
 
   // Sync Video and Audio playback
   const togglePlay = () => {
@@ -51,7 +52,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
     }
   };
 
-  const handleModeChange = (mode: 'asli' | 'ai') => {
+  const handleModeChange = (mode: 'asli' | 'voicebox' | 'ai') => {
     if (isPlaying) {
       if (videoRef.current) videoRef.current.pause();
       if (audioRef.current) audioRef.current.pause();
@@ -175,8 +176,8 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
             </p>
           </div>
 
-          {/* Voice Mode Selector Tabs: Suara Asli Bupati vs Suara AI Standar */}
-          <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs">
+          {/* Voice Mode Selector Tabs: Suara Asli Bupati vs Kloning AI Voicebox vs Suara AI Standar */}
+          <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs">
             <button
               onClick={() => handleModeChange('asli')}
               type="button"
@@ -187,7 +188,21 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               }`}
             >
               <Mic className="w-3.5 h-3.5" />
-              <span>Sambutan Avatar Bupati</span>
+              <span>Sambutan Video Bupati</span>
+            </button>
+
+            <button
+              onClick={() => handleModeChange('voicebox')}
+              type="button"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                voiceMode === 'voicebox'
+                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+              title="Suara Kloning AI Voicebox Qwen-TTS yang berjalan lokal di GPU RTX 3050"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>Suara Kloning AI Bupati (GPU)</span>
             </button>
 
             <button
@@ -209,6 +224,8 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
             <p className="text-xs text-slate-200 font-medium leading-relaxed italic">
               {voiceMode === 'asli' 
                 ? '“Halo, selamat datang di buku saku digital Mal Pelayanan Publik Kabupaten Madiun. Saya siap membantu Anda.”'
+                : voiceMode === 'voicebox'
+                ? '“Halo, saya Haji Hari Wuryanto, Bupati Madiun. Selamat datang di Mal Pelayanan Publik.” (Hasil Kloning Voicebox Qwen-TTS via GPU RTX 3050)'
                 : (fallbackText ? `Membacakan ringkasan: ${fallbackText.slice(0, 140)}...` : "Membacakan panduan standar pelayanan resmi MPP Kabupaten Madiun.")
               }
             </p>
@@ -229,7 +246,13 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               ) : (
                 <>
                   <Play className="w-4 h-4 fill-current ml-0.5" />
-                  <span>{voiceMode === 'asli' ? 'Putar Sambutan Avatar Bupati' : 'Bacakan Naskah SOP AI'}</span>
+                  <span>
+                    {voiceMode === 'asli' 
+                      ? 'Putar Sambutan Video Bupati' 
+                      : voiceMode === 'voicebox' 
+                      ? 'Dengarkan Suara Kloning Bupati' 
+                      : 'Bacakan Naskah SOP AI'}
+                  </span>
                 </>
               )}
             </button>
