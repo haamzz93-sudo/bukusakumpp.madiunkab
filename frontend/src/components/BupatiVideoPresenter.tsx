@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Sparkles, Mic, Bot } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Sparkles } from 'lucide-react';
 
 interface BupatiVideoPresenterProps {
   audioUrl?: string;
@@ -16,24 +16,17 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-  const [voiceMode, setVoiceMode] = useState<'asli' | 'voicebox' | 'elevenlabs' | 'ai'>('voicebox');
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Active audio URL based on selected mode
-  // 'asli' -> audio asli dari video D-ID avatar bupati
-  // 'voicebox' -> audio kloning suara Bupati Madiun via Voicebox Open Source (RTX 3050 CUDA lokal dari rekaman wawancara asli)
-  // 'elevenlabs' -> audio hasil kloning ElevenLabs yang diunduh user
-  // 'ai' -> audio TTS AI dinamis yang membacakan naskah jawaban SOP perizinan
-  const activeAudioUrl = voiceMode === 'asli' 
-    ? '/avatar/bupati_talking_audio.mp3' 
-    : voiceMode === 'voicebox'
-    ? '/avatar/bupati_voicebox_real.mp3'
-    : voiceMode === 'elevenlabs'
-    ? '/avatar/bupati_elevenlabs.mp3'
-    : (audioUrl || '/avatar/bupati_voicebox_real.mp3');
+  // Audio source: answers with dynamic SOP audio, fallback to authentic cloned Bupati voice
+  const activeAudioUrl = audioUrl || '/avatar/bupati_voicebox_real.mp3';
+
+  // Clean description for subtitle preview
+  const displaySummary = fallbackText
+    ? fallbackText.replace(/[*#_`]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160) + '...'
+    : 'Panduan resmi standar pelayanan perizinan Mal Pelayanan Publik Kabupaten Madiun.';
 
   // Sync Video and Audio playback
   const togglePlay = () => {
@@ -47,7 +40,6 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
       if (audio) audio.pause();
       setIsPlaying(false);
     } else {
-      setHasStarted(true);
       video.play().catch(e => console.warn('Video play error:', e));
       if (audio) {
         audio.play().catch(e => console.warn('Audio play error:', e));
@@ -55,15 +47,6 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
       setIsPlaying(true);
       if (onAudioPlay) onAudioPlay();
     }
-  };
-
-  const handleModeChange = (mode: 'asli' | 'voicebox' | 'elevenlabs' | 'ai') => {
-    if (isPlaying) {
-      if (videoRef.current) videoRef.current.pause();
-      if (audioRef.current) audioRef.current.pause();
-      setIsPlaying(false);
-    }
-    setVoiceMode(mode);
   };
 
   const toggleMute = () => {
@@ -89,6 +72,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
       }
     };
 
+    // When audio finishes, return avatar to calm listening/idle state
     const onAudioEnded = () => {
       setIsPlaying(false);
       if (video) {
@@ -121,7 +105,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
 
       <div className="relative z-10 flex flex-col md:flex-row items-center gap-5 sm:gap-6">
         
-        {/* VIDEO AVATAR STAGE (Large 1080p Digital Human Box) */}
+        {/* VIDEO AVATAR STAGE (Digital Human Box) */}
         <div className="relative w-44 h-44 sm:w-52 sm:h-52 shrink-0 rounded-2xl overflow-hidden border-2 border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.35)] group bg-slate-900">
           
           {/* Active Speaking Video */}
@@ -136,7 +120,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
             }`}
           />
 
-          {/* Idle Photo Fallback */}
+          {/* Idle Photo State (Avatar tenang saat selesai berbicara) */}
           <img
             src="/avatar/bupati_photo1.png"
             alt="Bapak Bupati Madiun"
@@ -151,7 +135,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               onClick={togglePlay}
               type="button"
               className="absolute inset-0 flex items-center justify-center bg-black/35 hover:bg-black/20 transition-all cursor-pointer group"
-              title="Klik untuk mendengarkan suara Bapak Bupati"
+              title="Klik untuk mendengarkan penjelasan suara Bapak Bupati"
             >
               <div className="w-14 h-14 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.7)] group-hover:scale-110 active:scale-95 transition-transform">
                 <Play className="w-6 h-6 fill-current ml-1" />
@@ -160,9 +144,9 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
           )}
 
           {/* Micro Status Badge */}
-          <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-emerald-400/40 text-[10px] font-bold text-emerald-300 flex items-center gap-1.5">
+          <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-slate-950/85 backdrop-blur-md border border-emerald-400/40 text-[10px] font-bold text-emerald-300 flex items-center gap-1.5">
             <span className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'bg-emerald-400 animate-pulse' : 'bg-emerald-500'}`} />
-            <span>{isPlaying ? 'Sedang Berbicara' : 'AI Digital Human'}</span>
+            <span>{isPlaying ? 'Sedang Menjelaskan...' : 'Siaga Melayani Warga'}</span>
           </div>
         </div>
 
@@ -171,84 +155,20 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold mb-1.5">
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Asisten Virtual Resmi Mal Pelayanan Publik</span>
+              <span>Digital Human · Suara Resmi Bapak Bupati Madiun</span>
             </div>
             <h3 className="text-lg sm:text-xl font-display font-black text-white tracking-tight">
               H. Hari Wuryanto, S.H., M.Ak.
             </h3>
             <p className="text-xs sm:text-sm text-emerald-400 font-semibold">
-              Bupati Madiun · Siaga Menjawab Pertanyaan Warga
+              Bupati Madiun · Panduan Standar Pelayanan MPP
             </p>
           </div>
 
-          {/* Voice Mode Selector Tabs: Video Bupati vs Voicebox Open Source vs ElevenLabs vs Jawaban SOP */}
-          <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs">
-            <button
-              onClick={() => handleModeChange('voicebox')}
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                voiceMode === 'voicebox'
-                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
-              }`}
-              title="Hasil Kloning 100% Open Source Lokal Voicebox Qwen-TTS dari Wawancara Asli Bupati"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>Voicebox Open-Source (Lokal GPU)</span>
-            </button>
-
-            <button
-              onClick={() => handleModeChange('elevenlabs')}
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                voiceMode === 'elevenlabs'
-                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
-              }`}
-              title="Hasil Uji Coba Kloning ElevenLabs"
-            >
-              <Mic className="w-3.5 h-3.5 text-blue-300" />
-              <span>ElevenLabs (Preview)</span>
-            </button>
-
-            <button
-              onClick={() => handleModeChange('asli')}
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                voiceMode === 'asli'
-                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Play className="w-3.5 h-3.5" />
-              <span>Video D-ID</span>
-            </button>
-
-            <button
-              onClick={() => handleModeChange('ai')}
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                voiceMode === 'ai'
-                  ? 'bg-emerald-500 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Bot className="w-3.5 h-3.5" />
-              <span>Bacakan SOP</span>
-            </button>
-          </div>
-
-          {/* Descriptive Text */}
-          <div className="p-2.5 rounded-xl bg-slate-950/40 border border-emerald-500/20">
+          {/* Subtitle / Ringkasan Penjelasan */}
+          <div className="p-3 rounded-xl bg-slate-950/50 border border-emerald-500/20 shadow-inner">
             <p className="text-xs text-slate-200 font-medium leading-relaxed italic">
-              {voiceMode === 'voicebox'
-                ? '“Halo, selamat datang di Mal Pelayanan Publik Kabupaten Madiun. Saya H. Hari Wuryanto siap melayani seluruh perizinan Anda secara mudah dan cepat.” (Hasil Kloning 100% Open Source Voicebox via GPU RTX 3050)'
-                : voiceMode === 'elevenlabs'
-                ? '“Selamat malam. Badai yang melanda wilayah pesisir sejak Selasa dini hari mengakibatkan kerusakan di sedikitnya empat kabupaten.” (Hasil Uji Coba ElevenLabs)'
-                : voiceMode === 'asli'
-                ? '“Halo, selamat datang di buku saku digital Mal Pelayanan Publik Kabupaten Madiun. Saya siap membantu Anda.”'
-                : (fallbackText ? `Membacakan ringkasan: ${fallbackText.slice(0, 140)}...` : "Membacakan panduan standar pelayanan resmi MPP Kabupaten Madiun.")
-              }
+              “{displaySummary}”
             </p>
           </div>
 
@@ -257,25 +177,17 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
             <button
               onClick={togglePlay}
               type="button"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400 text-slate-950 font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(52,211,153,0.45)] hover:from-emerald-300 hover:to-teal-300 transition-all cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400 text-slate-950 font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(52,211,153,0.45)] hover:from-emerald-300 hover:to-teal-300 transition-all cursor-pointer active:scale-95"
             >
               {isPlaying ? (
                 <>
                   <Pause className="w-4 h-4 fill-current" />
-                  <span>Jeda Video & Suara</span>
+                  <span>Jeda Audio & Video</span>
                 </>
               ) : (
                 <>
                   <Play className="w-4 h-4 fill-current ml-0.5" />
-                  <span>
-                    {voiceMode === 'voicebox' 
-                      ? 'Putar Suara Voicebox (Open Source)' 
-                      : voiceMode === 'elevenlabs' 
-                      ? 'Putar Suara ElevenLabs' 
-                      : voiceMode === 'asli'
-                      ? 'Putar Video D-ID'
-                      : 'Bacakan Naskah SOP AI'}
-                  </span>
+                  <span>Dengarkan Penjelasan Bupati</span>
                 </>
               )}
             </button>

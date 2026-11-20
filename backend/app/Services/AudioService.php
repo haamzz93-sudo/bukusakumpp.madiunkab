@@ -273,12 +273,17 @@ class AudioService
     {
         $voiceboxUrl = 'http://127.0.0.1:17493/v1/audio/speech';
 
-        // Clean text (remove URLs, raw asterisks)
+        // Clean text (remove URLs, markdown headers, raw asterisks)
         $cleanText = preg_replace('/https?:\/\/\S+/', '', $text);
         $cleanText = preg_replace('/[*#_`]+/', ' ', $cleanText);
         $cleanText = trim(preg_replace('/\s+/', ' ', $cleanText));
-        if (mb_strlen($cleanText) > 600) {
-            $cleanText = mb_substr($cleanText, 0, 597) . '...';
+        if (mb_strlen($cleanText) > 350) {
+            $cutoff = mb_strrpos(mb_substr($cleanText, 0, 350), '.');
+            if ($cutoff !== false && $cutoff > 150) {
+                $cleanText = mb_substr($cleanText, 0, $cutoff + 1);
+            } else {
+                $cleanText = mb_substr($cleanText, 0, 347) . '...';
+            }
         }
 
         if (empty($cleanText)) {
@@ -287,7 +292,7 @@ class AudioService
 
         $payload = json_encode([
             'model' => 'qwen-tts-0.6B',
-            'voice' => 'Bupati Madiun',
+            'voice' => 'Bupati Madiun Asli',
             'input' => $cleanText,
             'response_format' => 'mp3'
         ]);
@@ -298,7 +303,7 @@ class AudioService
             CURLOPT_POSTFIELDS => $payload,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-            CURLOPT_TIMEOUT => 60,
+            CURLOPT_TIMEOUT => 90,
             CURLOPT_CONNECTTIMEOUT => 2
         ]);
 
