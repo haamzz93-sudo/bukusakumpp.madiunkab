@@ -23,9 +23,11 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Active audio URL based on selected mode
+  // 'asli' -> audio asli dari video D-ID avatar bupati (sesuai naskah greeting & gerak bibir)
+  // 'ai' -> audio TTS AI dinamis yang membacakan naskah jawaban SOP perizinan
   const activeAudioUrl = voiceMode === 'asli' 
-    ? '/avatar/bupati_suara_asli.wav' 
-    : (audioUrl || '/avatar/bupati_suara_asli.wav');
+    ? '/avatar/bupati_talking_audio.mp3' 
+    : (audioUrl || '/avatar/bupati_talking_audio.mp3');
 
   // Sync Video and Audio playback
   const togglePlay = () => {
@@ -185,7 +187,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               }`}
             >
               <Mic className="w-3.5 h-3.5" />
-              <span>Suara Asli Bapak Bupati</span>
+              <span>Sambutan Avatar Bupati</span>
             </button>
 
             <button
@@ -198,17 +200,19 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               }`}
             >
               <Bot className="w-3.5 h-3.5" />
-              <span>Suara AI Panduan SOP</span>
+              <span>Bacakan Jawaban SOP</span>
             </button>
           </div>
 
           {/* Descriptive Text */}
-          <p className="text-xs text-slate-300 font-normal leading-relaxed line-clamp-3">
-            {voiceMode === 'asli' 
-              ? "Memutar rekaman suara asli Bapak Bupati Madiun (H. Hari Wuryanto) saat memberikan arahan langsung kepada masyarakat Madiun."
-              : (fallbackText || "Memutar jawaban panduan perizinan dan dokumen standar pelayanan resmi MPP Kabupaten Madiun.")
-            }
-          </p>
+          <div className="p-2.5 rounded-xl bg-slate-950/40 border border-emerald-500/20">
+            <p className="text-xs text-slate-200 font-medium leading-relaxed italic">
+              {voiceMode === 'asli' 
+                ? '“Halo, selamat datang di buku saku digital Mal Pelayanan Publik Kabupaten Madiun. Saya siap membantu Anda.”'
+                : (fallbackText ? `Membacakan ringkasan: ${fallbackText.slice(0, 140)}...` : "Membacakan panduan standar pelayanan resmi MPP Kabupaten Madiun.")
+              }
+            </p>
+          </div>
 
           {/* Action Button Row */}
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1">
@@ -225,7 +229,7 @@ export const BupatiVideoPresenter: React.FC<BupatiVideoPresenterProps> = ({
               ) : (
                 <>
                   <Play className="w-4 h-4 fill-current ml-0.5" />
-                  <span>{voiceMode === 'asli' ? 'Putar Suara Asli Bupati' : 'Dengarkan Jawaban AI'}</span>
+                  <span>{voiceMode === 'asli' ? 'Putar Sambutan Avatar Bupati' : 'Bacakan Naskah SOP AI'}</span>
                 </>
               )}
             </button>
