@@ -31,7 +31,7 @@ class RagSearchService
             preg_match('/(jam|jadwal|operasional|waktu|hari|buka|tutup|kapan|alamat|lokasi|telepon|kontak|nomor|call center|kantor|gedung)/u', $cleanQ)
             && (
                 preg_match('/(mpp|mal pelayanan|dpmptsp|kabupaten madiun|pelayanan|kantor|gedung)/u', $cleanQ)
-                || preg_match('/(jam berapa|buka jam|tutup jam|hari apa|kapan buka|jam layanan|jam operasional|jam kerja)/u', $cleanQ)
+                || preg_match('/(jam berapa|buka jam|tutup jam|hari apa|kapan buka|jam layanan|jam operasional|jam kerja|tanya jadwal|jadwal)/u', $cleanQ)
             )
         );
 

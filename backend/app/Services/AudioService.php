@@ -94,20 +94,26 @@ class AudioService
     }
 
     /**
-     * Generate high-fidelity Indonesian neural speech audio file via Edge-TTS (id-ID-ArdiNeural)
+     * Generate high-fidelity Indonesian neural speech audio file via Voicebox or Edge-TTS
      * Returns relative URL to the MP3 file
      */
-    public function generateTts(string $text, string $voice = 'id-ID-ArdiNeural', ?string $cacheKey = null): ?string
+    public function generateTts(string $text, string $voice = 'id-ID-ArdiNeural', ?string $cacheKey = null, ?string $explicitScript = null): ?string
     {
         @set_time_limit(300);
         @ini_set('max_execution_time', '300');
         $text = trim($text);
-        if (empty($text)) {
+        if (empty($text) && empty($explicitScript)) {
             return null;
         }
 
-        // Cache based on query key or hash of voice + text content
-        $hash = $cacheKey ? preg_replace('/[^a-zA-Z0-9_-]/', '', $cacheKey) : substr(md5($voice . '_' . $text), 0, 16);
+        // Prepare briefing text: use explicit script if provided, else condense
+        $briefingText = !empty($explicitScript) ? trim($explicitScript) : $this->condenseToBupatiBriefing($text);
+        if (empty($briefingText)) {
+            return null;
+        }
+
+        // Cache based on query key or hash of voice + briefingText content
+        $hash = $cacheKey ? preg_replace('/[^a-zA-Z0-9_-]/', '', $cacheKey) : substr(md5($voice . '_' . $briefingText), 0, 16);
         $audioDir = __DIR__ . '/../../storage/audio';
         if (!is_dir($audioDir)) {
             @mkdir($audioDir, 0777, true);
@@ -121,16 +127,16 @@ class AudioService
         }
         $publicFilePath = "{$publicDir}/{$filename}";
 
-        // Return cached audio if already generated and non-empty
+        // Return cached audio if already generated and non-empty (>1KB)
         if (file_exists($filePath) && filesize($filePath) > 1024) {
-            if (!file_exists($publicFilePath)) {
+            if (!file_exists($publicFilePath) || filesize($publicFilePath) !== filesize($filePath)) {
                 @copy($filePath, $publicFilePath);
             }
             return "/api/audio/{$filename}";
         }
 
         // 1. Try local Voicebox AI engine (RTX 3050 CUDA local open-source voice cloning of Bupati Madiun)
-        if ($this->tryGenerateVoiceboxSpeech($text, $filePath)) {
+        if ($this->tryGenerateVoiceboxSpeech($briefingText, $filePath)) {
             @copy($filePath, $publicFilePath);
             return "/api/audio/{$filename}";
         }
@@ -148,7 +154,6 @@ class AudioService
         }
 
         // Use temporary file to safely pass standardized executive briefing text
-        $briefingText = $this->condenseToBupatiBriefing($text);
         $tempTextFile = tempnam(sys_get_temp_dir(), 'tts_');
         file_put_contents($tempTextFile, $briefingText);
 
@@ -276,7 +281,7 @@ class AudioService
     }
 
     /**
-     * Condense any standard public service SOP answer into a concise, high-impact speech script (200-260 chars)
+     * Condense any standard public service SOP answer into a concise, high-impact speech script (200-300 chars)
      * spoken in the executive voice of Bapak Bupati Madiun ("inti-intinya saja: syarat, alur, waktu, biaya").
      */
     public function condenseToBupatiBriefing(string $text): string
@@ -285,7 +290,7 @@ class AudioService
         $clean = preg_replace('/[*#_`\[\]\(\)]+/', ' ', $clean);
         $clean = trim(preg_replace('/\s+/', ' ', $clean));
         if (mb_strlen($clean) <= 240) {
-            return $clean;
+            return $this->formatForSpokenSpeech($clean);
         }
 
         $payload = [
@@ -302,8 +307,9 @@ class AudioService
                                     . "5. Penutup santun: 'Rincian selengkapnya dapat disimak pada teks panduan di layar. Terima kasih.'\n\n"
                                     . "PENTING:\n"
                                     . "- Panjang sekitar 240-300 karakter.\n"
-                                    . "- Tuliskan angka dengan ejaan lisan (misal: 'lima belas menit', 'tiga puluh ribu rupiah', 'nol menit').\n"
-                                    . "- Jangan ada URL link, jangan ada simbol markdown bintang (*), jangan ada kata pengantar tambahan. Langsung kalimat siap dibaca audio.\n\n"
+                                    . "- Tuliskan angka dengan ejaan lisan (misal: 'lima belas menit', 'tiga puluh ribu rupiah', 'nol menit atau langsung terbit').\n"
+                                    . "- Jangan ada URL link, jangan ada simbol markdown (*), jangan ada kata pengantar tambahan. Langsung kalimat siap dibaca audio.\n"
+                                    . "- PENTING SEKALI: Pastikan kalimat terakhir selesai secara tuntas dengan tanda titik (.). JANGAN terpotong di tengah kalimat!\n\n"
                                     . "Teks sumber:\n" . mb_substr($text, 0, 1500)
                         ]
                     ]
@@ -311,7 +317,7 @@ class AudioService
             ],
             'generationConfig' => [
                 'temperature' => 0.2,
-                'maxOutputTokens' => 180
+                'maxOutputTokens' => 400
             ]
         ];
 
@@ -323,7 +329,20 @@ class AudioService
                 $condensed = preg_replace('/[*#_`]+/', ' ', $condensed);
                 $condensed = trim(preg_replace('/\s+/', ' ', $condensed));
                 if (!empty($condensed) && mb_strlen($condensed) > 40) {
-                    return $condensed;
+                    // Check if truncated at the end
+                    $lastChar = mb_substr($condensed, -1);
+                    if (!in_array($lastChar, ['.', '!', '?'])) {
+                        $lastPeriod = mb_strrpos($condensed, '.');
+                        if ($lastPeriod !== false && $lastPeriod > 80) {
+                            $condensed = mb_substr($condensed, 0, $lastPeriod + 1);
+                        } else {
+                            $condensed .= '.';
+                        }
+                    }
+                    if (!str_contains($condensed, 'Terima kasih')) {
+                        $condensed .= ' Terima kasih.';
+                    }
+                    return $this->formatForSpokenSpeech($condensed);
                 }
             }
         }
@@ -332,23 +351,67 @@ class AudioService
         if (mb_strlen($clean) > 260) {
             $cutoff = mb_strrpos(mb_substr($clean, 0, 260), '.');
             if ($cutoff !== false && $cutoff > 120) {
-                return mb_substr($clean, 0, $cutoff + 1) . ' Rincian berkas lengkap dapat disimak pada teks panduan di layar.';
+                return $this->formatForSpokenSpeech(mb_substr($clean, 0, $cutoff + 1) . ' Rincian berkas lengkap dapat disimak pada teks panduan di layar. Terima kasih.');
             }
-            return mb_substr($clean, 0, 250) . '... Rincian berkas lengkap dapat disimak pada teks panduan di layar.';
+            return $this->formatForSpokenSpeech(mb_substr($clean, 0, 220) . ' Rincian berkas lengkap dapat disimak pada teks panduan di layar. Terima kasih.');
         }
 
-        return $clean;
+        return $this->formatForSpokenSpeech($clean);
+    }
+
+    /**
+     * Format and normalize text for flawless spoken speech synthesis (prevent TTS hiccups and cutting off)
+     */
+    public function formatForSpokenSpeech(string $text): string
+    {
+        $text = preg_replace('/https?:\/\/\S+/', '', $text);
+        $text = preg_replace('/[*#_`\[\]\(\)\{\}\<\>\"\']+/u', ' ', $text);
+        
+        // Ejaan lisan angka & singkatan umum
+        $replacements = [
+            '/\bKBLI\s*56303\b/i' => 'KBLI lima enam tiga nol tiga',
+            '/\bOSS[-\s]*RBA\b/i' => 'O S S R B A',
+            '/\bOSS\b/i' => 'O S S',
+            '/\bNIB\b/i' => 'N I B',
+            '/\bSKCK\b/i' => 'S K C K',
+            '/\bMPP\b/i' => 'M P P',
+            '/\bDPMPTSP\b/i' => 'D P M P T S P',
+            '/\bBPHTB\b/i' => 'B P H T B',
+            '/\bPBB[-\s]*P2\b/i' => 'P B B P 2',
+            '/\b0\s*menit\b/i' => 'nol menit atau langsung terbit',
+            '/\b15\s*menit\b/i' => 'lima belas menit',
+            '/\bRp\.?\s*0\b/i' => 'nol rupiah atau gratis',
+            '/\bRp\.?\s*30\.?000\b/i' => 'tiga puluh ribu rupiah',
+            '/\bRp\.?\s*([0-9\.]+)\b/i' => 'rupiah $1',
+            '/\bs\/d\b/i' => 'sampai dengan',
+            '/\bdll\b/i' => 'dan lain-lain',
+            '/\s+/' => ' '
+        ];
+
+        foreach ($replacements as $pat => $rep) {
+            $text = preg_replace($pat, $rep, $text);
+        }
+
+        $text = trim($text);
+        if (!empty($text)) {
+            $last = mb_substr($text, -1);
+            if (!in_array($last, ['.', '!', '?'])) {
+                $text .= '.';
+            }
+            // Add trailing space for codec padding so the final phoneme is never clipped
+            $text .= ' ';
+        }
+
+        return $text;
     }
 
     /**
      * Synthesize cloned voice of Bupati Madiun via locally running Voicebox server (RTX 3050 CUDA)
      */
-    private function tryGenerateVoiceboxSpeech(string $text, string $filePath): bool
+    private function tryGenerateVoiceboxSpeech(string $briefingText, string $filePath): bool
     {
         $voiceboxUrl = 'http://127.0.0.1:17493/v1/audio/speech';
-
-        // Extract core essentials for Bupati's voice ("inti-intinya saja")
-        $cleanText = $this->condenseToBupatiBriefing($text);
+        $cleanText = $this->formatForSpokenSpeech($briefingText);
 
         if (empty($cleanText)) {
             return false;

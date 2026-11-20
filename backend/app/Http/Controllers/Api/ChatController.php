@@ -43,12 +43,42 @@ class ChatController
             return;
         }
 
-        // Layer 0: Guardrail Check
+        // Layer 0.1: Fast Sapaan & Salam (Greeting)
+        $greeting = $this->guardrail->checkGreeting($query);
+        if ($greeting) {
+            $audioService = new AudioService();
+            $cacheKey = $greeting['audio_cache_key'] ?? 'greeting_official';
+            $greeting['audio_url'] = $audioService->generateTts(
+                $greeting['answer'],
+                'id-ID-ArdiNeural',
+                $cacheKey,
+                $greeting['spoken_briefing'] ?? null
+            );
+            echo json_encode($greeting);
+            return;
+        }
+
+        // Layer 0.2: Fast Jadwal & Jam Operasional Pelayanan MPP
+        $schedule = $this->guardrail->checkScheduleInquiry($query);
+        if ($schedule) {
+            $audioService = new AudioService();
+            $cacheKey = $schedule['audio_cache_key'] ?? 'schedule_official';
+            $schedule['audio_url'] = $audioService->generateTts(
+                $schedule['answer'],
+                'id-ID-ArdiNeural',
+                $cacheKey,
+                $schedule['spoken_briefing'] ?? null
+            );
+            echo json_encode($schedule);
+            return;
+        }
+
+        // Layer 0.3: Guardrail Check Model Inquiry
         $modelInquiry = $this->guardrail->checkModelInquiry($query);
         if ($modelInquiry) {
             if (!empty($modelInquiry['answer'])) {
                 $audioService = new AudioService();
-                $modelInquiry['audio_url'] = $audioService->generateTts($modelInquiry['answer']);
+                $modelInquiry['audio_url'] = $audioService->generateTts($modelInquiry['answer'], 'id-ID-ArdiNeural', 'model_inquiry');
             }
             echo json_encode($modelInquiry);
             return;
@@ -58,7 +88,7 @@ class ChatController
         if ($outDomain) {
             if (!empty($outDomain['answer'])) {
                 $audioService = new AudioService();
-                $outDomain['audio_url'] = $audioService->generateTts($outDomain['answer']);
+                $outDomain['audio_url'] = $audioService->generateTts($outDomain['answer'], 'id-ID-ArdiNeural', 'out_of_domain');
             }
             echo json_encode($outDomain);
             return;
