@@ -147,9 +147,10 @@ class AudioService
             $pythonCmd = 'python';
         }
 
-        // Use temporary file to safely pass text without shell argument truncation/escaping bugs
+        // Use temporary file to safely pass standardized executive briefing text
+        $briefingText = $this->condenseToBupatiBriefing($text);
         $tempTextFile = tempnam(sys_get_temp_dir(), 'tts_');
-        file_put_contents($tempTextFile, $text);
+        file_put_contents($tempTextFile, $briefingText);
 
         $cmd = sprintf(
             '%s %s --text-file %s --output %s --voice %s 2>&1',
@@ -292,9 +293,17 @@ class AudioService
                 [
                     'parts' => [
                         [
-                            'text' => "Ringkas teks standar pelayanan Mal Pelayanan Publik (MPP) Kabupaten Madiun berikut menjadi naskah narasi lisan resmi yang ramah, padat, dan ringkas (maksimal 2-3 kalimat, sekitar 200-250 karakter) untuk dibacakan langsung oleh suara Bapak Bupati Madiun kepada warga.\n"
-                                    . "Fokus HANYA pada inti-intinya saja: dokumen syarat kunci, alur/waktu layanan, dan kepastian biaya resmi atau gratis Rp 0.\n"
-                                    . "PENTING: Jangan ada URL link, jangan ada simbol markdown/bintang, jangan ada kata pengantar. Langsung kalimat yang akan diucapkan.\n\n"
+                            'text' => "Susun naskah narasi lisan resmi, sopan, santun, dan profesional dengan alur paten untuk dibacakan langsung oleh suara Bapak Bupati Madiun kepada warga terkait standar pelayanan ini:\n\n"
+                                    . "Gunakan struktur baku berikut:\n"
+                                    . "1. Sapaan hangat: 'Halo Bapak dan Ibu warga Kabupaten Madiun.'\n"
+                                    . "2. Layanan & Syarat Utama: 'Terkait [nama layanan], silakan siapkan dokumen utama seperti [2-3 syarat penting].'\n"
+                                    . "3. Alur & Mekanisme: 'Prosedurnya [mekanisme singkat: datang langsung ke loket MPP Madiun / daftar mandiri online].'\n"
+                                    . "4. Waktu & Biaya: 'Waktu layanan [sebutkan waktu] dengan biaya [sebutkan biaya resmi / gratis seratus persen].'\n"
+                                    . "5. Penutup santun: 'Rincian selengkapnya dapat disimak pada teks panduan di layar. Terima kasih.'\n\n"
+                                    . "PENTING:\n"
+                                    . "- Panjang sekitar 240-300 karakter.\n"
+                                    . "- Tuliskan angka dengan ejaan lisan (misal: 'lima belas menit', 'tiga puluh ribu rupiah', 'nol menit').\n"
+                                    . "- Jangan ada URL link, jangan ada simbol markdown bintang (*), jangan ada kata pengantar tambahan. Langsung kalimat siap dibaca audio.\n\n"
                                     . "Teks sumber:\n" . mb_substr($text, 0, 1500)
                         ]
                     ]
@@ -302,7 +311,7 @@ class AudioService
             ],
             'generationConfig' => [
                 'temperature' => 0.2,
-                'maxOutputTokens' => 150
+                'maxOutputTokens' => 180
             ]
         ];
 
