@@ -5,7 +5,7 @@
  *   which avoids mixed-content or CORS issues and routes directly via Nginx reverse proxy / FastCGI.
  */
 export const getApiBaseUrl = (): string => {
-  if (typeof window !== 'undefined' && window.location.port === '3002') {
+  if (typeof window !== 'undefined' && (window.location.port === '3002' || window.location.port === '5173')) {
     return 'http://127.0.0.1:8002';
   }
   return '';
