@@ -498,13 +498,13 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
               );
             })}
 
-            {/* Typing Loader with Voicebox Progress Status */}
+            {/* Clean Official Typing Loader */}
             {isLoading && (
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-emerald-500/30 p-5 flex items-center gap-4 text-sm text-slate-600 dark:text-slate-300 shadow-sm animate-pulse">
                 <div className="w-5 h-5 rounded-full border-2 border-emerald-600 border-t-transparent animate-spin shrink-0" />
                 <div>
-                  <div className="font-semibold text-slate-900 dark:text-white">Buku Saku sedang merumuskan jawaban resmi...</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Memproses suara kloningan Bapak Bupati (Voicebox GPU). Jawaban & suara akan muncul bersamaan...</div>
+                  <div className="font-semibold text-slate-900 dark:text-white">Buku Saku sedang menyiapkan jawaban resmi...</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Memverifikasi dokumen standar pelayanan & menyiapkan pesan suara panduan.</div>
                 </div>
               </div>
             )}
