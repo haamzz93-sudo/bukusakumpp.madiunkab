@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Mic } from 'lucide-react';
 import { getApiBaseUrl } from '../services/apiConfig';
-import { BupatiAiAvatar } from './BupatiAiAvatar';
 
 interface VoiceNotePlayerProps {
   audioUrl?: string;
@@ -64,16 +63,17 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
     audio.addEventListener('ended', onEnded);
     audio.addEventListener('error', onError);
 
-    // Auto-play when audio is ready
+    // Auto-play cleanly when audio is ready (cancel any speech synthesis to prevent echo/doubling)
     if (autoPlay && resolvedUrl && !hasAudioError) {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
       const timer = setTimeout(() => {
         audio.play().then(() => {
           setIsPlaying(true);
-        }).catch(() => {
-          // Fallback to Web Speech if audio element autoplay is blocked
-          if (fallbackText && 'speechSynthesis' in window) {
-            playWebSpeechFallback();
-          }
+        }).catch((e) => {
+          // Silent catch: browser autoplay policy prevented unmuted autoplay before interaction
+          console.log('Autoplay prevented by browser, ready for user click:', e);
         });
       }, 300);
       return () => clearTimeout(timer);
@@ -97,27 +97,15 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
     } else {
       setHasAudioError(false);
       audio.playbackRate = playbackRate;
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
       audio.play().then(() => {
         setIsPlaying(true);
-      }).catch(() => {
-        // Fallback to Web Speech API if audio file fails
-        if (fallbackText && 'speechSynthesis' in window) {
-          playWebSpeechFallback();
-        }
+      }).catch((e) => {
+        console.warn('Playback error:', e);
       });
     }
-  };
-
-  const playWebSpeechFallback = () => {
-    window.speechSynthesis.cancel();
-    const cleanText = fallbackText?.replace(/[*#_\[\]\(\)]/g, ' ') || '';
-    const utterance = new SpeechSynthesisUtterance(cleanText.substring(0, 400));
-    utterance.lang = 'id-ID';
-    utterance.rate = playbackRate;
-    utterance.onend = () => setIsPlaying(false);
-    utterance.onerror = () => setIsPlaying(false);
-    window.speechSynthesis.speak(utterance);
-    setIsPlaying(true);
   };
 
   const toggleSpeed = () => {
@@ -174,7 +162,20 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
       <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-2.5">
           {isAssistant ? (
-            <BupatiAiAvatar isSpeaking={isPlaying} size="sm" />
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-400 text-slate-950 font-bold shadow-[0_0_16px_rgba(16,185,129,0.55)]">
+              {/* Clean Civic Audio Lines Icon */}
+              <svg className="w-4 h-4 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 10v4" />
+                <path d="M6 7v10" />
+                <path d="M10 4v16" />
+                <path d="M14 7v10" />
+                <path d="M18 10v4" />
+                <path d="M22 10v4" />
+              </svg>
+              {isPlaying && (
+                <span className="absolute -inset-1 rounded-full border border-emerald-400/70 animate-ping pointer-events-none" />
+              )}
+            </div>
           ) : (
             <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/15 text-emerald-300 border border-white/25">
               <Mic className="w-4 h-4" />
@@ -183,13 +184,11 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
 
           <div>
             <div className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-              <span>{isAssistant ? 'Bupati Madiun (VoiceAI Resmi MPP)' : 'Pesan Suara Anda'}</span>
-              {isAssistant && (
-                <span className="text-[10px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_10px_rgba(52,211,153,0.3)]">
-                  Avatar Resmi
-                </span>
-              )}
+              <span>{isAssistant ? 'VoiceAI Buku Saku' : 'Pesan Suara Anda'}</span>
             </div>
+            <span className="text-[10px] text-emerald-400 font-medium">
+              {isAssistant ? 'Standar Pelayanan Resmi MPP' : 'Rekaman Suara Pengguna'}
+            </span>
           </div>
         </div>
 

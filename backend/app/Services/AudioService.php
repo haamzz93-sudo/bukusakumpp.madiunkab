@@ -124,11 +124,7 @@ class AudioService
             return "/api/audio/{$filename}";
         }
 
-        // 2. Try local Voicebox AI engine if active (RTX 3050 CUDA local voice cloning for Bupati Madiun)
-        if ($this->tryGenerateVoiceboxSpeech($text, $filePath)) {
-            return "/api/audio/{$filename}";
-        }
-
+        // Fast & crisp neural TTS synthesis via Edge-TTS (id-ID-ArdiNeural) for instant 2-3s response
         $scriptPath = __DIR__ . '/generate_tts.py';
         if (!file_exists($scriptPath)) {
             return null;

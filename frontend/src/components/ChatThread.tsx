@@ -27,8 +27,6 @@ import { WA_NUM_MPP, TELP_MPP, fetchTtsAudio } from '../services/hybridAiService
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { VoiceNotePlayer } from './VoiceNotePlayer';
 import { VoiceNoteRecorder } from './VoiceNoteRecorder';
-import { BupatiAiAvatar } from './BupatiAiAvatar';
-import { BupatiVideoPresenter } from './BupatiVideoPresenter';
 
 interface ChatThreadProps {
   messages: ChatMessage[];
@@ -359,11 +357,53 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
               return (
                 <div id="tour-chat-result" key={msg.id} className="liquid-glass-sidebar rounded-2xl p-6 space-y-4">
                   
-                  {/* Big Interactive Bupati AI Video Presenter Stage */}
-                  <BupatiVideoPresenter
-                    audioUrl={audioToPlay}
-                    fallbackText={msg.text}
-                  />
+                  {/* Assistant Identity Tag & Status */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-400 font-display">
+                        Buku Saku · Panduan Resmi MPP
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                        <span>Dokumen Standar Pelayanan Resmi</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Clean Voice Note Player */}
+                  {audioToPlay ? (
+                    <VoiceNotePlayer
+                      audioUrl={audioToPlay}
+                      fallbackText={msg.text}
+                      sender="assistant"
+                      autoPlay={!msg.id.startsWith('tour-') && msg.id === latestAssistantMessage?.id}
+                    />
+                  ) : (
+                    <div className="py-1">
+                      <button
+                        onClick={() => handleGenerateSpeech(msg.id, msg.text)}
+                        disabled={loadingSpeech[msg.id]}
+                        type="button"
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 text-white text-xs font-semibold hover:bg-slate-800 transition-all cursor-pointer shadow-sm hover:shadow-md border border-emerald-500/30 active:scale-95"
+                      >
+                        {loadingSpeech[msg.id] ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-400" />
+                            <span>Menyiapkan VoiceAI Buku Saku...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Putar VoiceAI Buku Saku</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
 
                   {/* Clean Formatted Message Content (Zero Raw Asterisks, Times New Roman Typo) */}
                   <div className="pt-1">

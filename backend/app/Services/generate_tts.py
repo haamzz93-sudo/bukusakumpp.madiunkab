@@ -25,13 +25,13 @@ def clean_markdown_for_speech(text: str) -> str:
     # 7. Normalize whitespace
     text = re.sub(r'\s+', ' ', text).strip()
     
-    # Keep it comfortable for audio (max ~750 characters for fast responsive speech)
-    if len(text) > 750:
-        cutoff = text[:750].rfind('.')
-        if cutoff > 350:
+    # Keep it comfortable for audio (up to ~2500 characters so it reads the complete SOP answer)
+    if len(text) > 2500:
+        cutoff = text[:2500].rfind('.')
+        if cutoff > 1200:
             text = text[:cutoff + 1] + " Informasi lengkap dokumen tertera pada teks panduan di layar."
         else:
-            text = text[:750] + "... Informasi lengkap tertera pada teks panduan di layar."
+            text = text[:2500] + "... Informasi lengkap tertera pada teks panduan di layar."
             
     return text
 
